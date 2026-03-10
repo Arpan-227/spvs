@@ -4,9 +4,11 @@ import Preloader from './components/common/Preloader'
 import { AuthProvider } from './context/AuthContext'
 import './index.css'
 
+const basename = import.meta.env.PROD ? '/spvs-frontend' : '/'
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <AuthProvider>
         <Preloader />
         <AppRoutes />
@@ -14,4 +16,5 @@ function App() {
     </BrowserRouter>
   )
 }
+
 export default App
