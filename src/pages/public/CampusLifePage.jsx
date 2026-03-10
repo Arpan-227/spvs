@@ -1,0 +1,146 @@
+import { useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import CampusLife    from '../../components/campus/CampusLife'
+import JobCard       from '../../components/campus/JobCard'
+import JobApplyForm  from '../../components/campus/JobApplyForm'
+
+var JOBS = [
+  { title:'PGT Mathematics',        type:'Full Time', dept:'Senior Secondary', qual:'M.Sc. Mathematics, B.Ed', exp:'3+ years', posted:'March 2026', status:'Open'   },
+  { title:'TGT English',            type:'Full Time', dept:'Secondary',        qual:'M.A. English, B.Ed',     exp:'2+ years', posted:'March 2026', status:'Open'   },
+  { title:'TGT Science',            type:'Full Time', dept:'Secondary',        qual:'B.Sc., B.Ed',            exp:'1+ years', posted:'Feb 2026',   status:'Open'   },
+  { title:'PRT (Primary Teacher)',  type:'Full Time', dept:'Primary Wing',     qual:'D.El.Ed / B.Ed',         exp:'Fresher',  posted:'Feb 2026',   status:'Open'   },
+  { title:'Computer Lab Assistant', type:'Full Time', dept:'IT Department',    qual:'B.Tech / BCA / MCA',     exp:'1+ years', posted:'Jan 2026',   status:'Open'   },
+  { title:'Hostel Warden',          type:'Full Time', dept:'Hostel',           qual:'Any Graduate',           exp:'2+ years', posted:'Jan 2026',   status:'Filled' },
+  { title:'Accountant',             type:'Full Time', dept:'Administration',   qual:'B.Com / M.Com',          exp:'3+ years', posted:'Dec 2025',   status:'Filled' },
+]
+
+var TABS = [
+  { id:'campus', label:'🏫 Campus Life'    },
+  { id:'jobs',   label:'💼 Jobs & Careers' },
+]
+
+var STATS = [
+  ['10 Acres', 'Campus Area',         '🌳'],
+  ['1410+',    'Students',            '👨‍🎓'],
+  ['8+',       'Clubs & Activities',  '🎨'],
+  ['22',       'School Buses',        '🚌'],
+  ['Since 1987','Established',        '🏛️'],
+]
+
+export default function CampusLifePage() {
+  var [searchParams] = useSearchParams()
+  var initTab = searchParams.get('tab') === 'jobs' ? 'jobs' : 'campus'
+  var [tab, setTab]           = useState(initTab)
+  var [filter, setFilter]   = useState('All')
+  var [selected, setSelected] = useState(null)
+
+  var filters  = ['All', 'Open', 'Filled']
+  var filtered = filter === 'All' ? JOBS : JOBS.filter(function(j) { return j.status === filter })
+
+  return (
+    <>
+      {/* PAGE BANNER */}
+      <div className="page-banner">
+        <div className="pb-inner">
+          <div className="pb-chip">🏫 Campus</div>
+          <h1 className="pb-title">Campus <span style={{color:'var(--gd2)', fontStyle:'italic'}}>Life & Careers</span></h1>
+          <p className="pb-sub">Experience a vibrant school life — academics, activities, sports and opportunities beyond the classroom</p>
+          <div className="breadcrumb">
+            <Link to="/">Home</Link><span>›</span>
+            <span className="bc-cur">Campus Life & Jobs</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats bar */}
+      <div style={{background:'linear-gradient(90deg,var(--or),var(--or3),var(--gd))', padding:'20px 0'}}>
+        <div style={{maxWidth:'1280px', margin:'0 auto', padding:'0 20px', display:'flex', justifyContent:'space-around', flexWrap:'wrap', gap:'16px'}}>
+          {STATS.map(function(s) {
+            return (
+              <div key={s[1]} style={{textAlign:'center', color:'#fff'}}>
+                <div style={{fontSize:'18px', marginBottom:'2px'}}>{s[2]}</div>
+                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'20px', fontWeight:'700', lineHeight:'1'}}>{s[0]}</div>
+                <div style={{fontSize:'11px', fontWeight:'700', opacity:'.8', letterSpacing:'1px', textTransform:'uppercase', marginTop:'3px'}}>{s[1]}</div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div style={{background:'var(--bg)', padding:'60px 20px', minHeight:'60vh'}}>
+        <div style={{maxWidth:'1200px', margin:'0 auto'}}>
+
+          {/* Tab switcher */}
+          <div style={{display:'flex', gap:'6px', background:'var(--bg2)', padding:'5px', borderRadius:'14px', border:'1.5px solid var(--brd)', marginBottom:'44px', maxWidth:'420px'}}>
+            {TABS.map(function(t) {
+              var active = tab === t.id
+              return (
+                <button key={t.id} onClick={function(){setTab(t.id)}} style={{flex:1, padding:'13px 16px', borderRadius:'10px', border:'none', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'14px', fontWeight:'700', transition:'all .25s cubic-bezier(.34,1.56,.64,1)', background: active ? 'var(--card)' : 'transparent', color: active ? 'var(--or)' : 'var(--txt2)', boxShadow: active ? '0 4px 16px var(--shd)' : 'none', transform: active ? 'scale(1.02)' : 'scale(1)'}}>
+                  {t.label}
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Campus Life tab */}
+          {tab === 'campus' && (
+            <div style={{animation:'fU .3s ease both'}}>
+              <CampusLife />
+            </div>
+          )}
+
+          {/* Jobs tab */}
+          {tab === 'jobs' && (
+            <div style={{animation:'fU .3s ease both'}}>
+
+              {/* Header + filter */}
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'14px', marginBottom:'28px'}}>
+                <div>
+                  <h2 style={{fontFamily:"'Playfair Display',serif", fontSize:'26px', fontWeight:'700', color:'var(--dark)', margin:'0 0 4px'}}>Current <span style={{color:'var(--or)', fontStyle:'italic'}}>Openings</span></h2>
+                  <div style={{fontSize:'13px', color:'var(--txt2)'}}>Join our team of dedicated educators at SPVS</div>
+                </div>
+                <div style={{display:'flex', gap:'6px'}}>
+                  {filters.map(function(f) {
+                    var active = filter === f
+                    return (
+                      <button key={f} onClick={function(){setFilter(f)}} style={{padding:'8px 18px', borderRadius:'50px', border:'none', cursor:'pointer', fontFamily:"'DM Sans',sans-serif", fontSize:'12.5px', fontWeight:'700', transition:'all .2s', background: active ? 'var(--or)' : 'var(--bg2)', color: active ? '#fff' : 'var(--txt2)', boxShadow: active ? '0 4px 14px rgba(232,118,26,.3)' : 'none'}}>
+                        {f}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* Job cards */}
+              <div style={{display:'flex', flexDirection:'column', gap:'12px', marginBottom:'44px'}}>
+                {filtered.map(function(job, i) {
+                  return <JobCard key={i} job={job} onApply={function(j){setSelected(j)}} />
+                })}
+              </div>
+
+              {/* General CTA */}
+              <div style={{background:'linear-gradient(135deg,var(--dark),var(--dark2))', borderRadius:'20px', padding:'36px', textAlign:'center'}}>
+                <div style={{fontSize:'32px', marginBottom:'12px'}}>📩</div>
+                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'22px', fontWeight:'700', color:'#fff', marginBottom:'8px'}}>Don't see your role?</div>
+                <div style={{fontSize:'14px', color:'rgba(255,255,255,.6)', marginBottom:'24px', maxWidth:'480px', margin:'0 auto 24px'}}>
+                  Send your CV to <strong style={{color:'var(--gd2)'}}>spvbrh@gmail.com</strong> or call us. We are always looking for passionate educators.
+                </div>
+                <div style={{display:'flex', gap:'12px', justifyContent:'center', flexWrap:'wrap'}}>
+                  <a href="mailto:spvbrh@gmail.com" style={{padding:'12px 28px', borderRadius:'50px', background:'linear-gradient(135deg,var(--or),var(--gd))', color:'#fff', textDecoration:'none', fontFamily:"'DM Sans',sans-serif", fontSize:'13.5px', fontWeight:'800', boxShadow:'0 6px 20px rgba(232,118,26,.4)'}}>📧 Email Your CV</a>
+                  <a href="tel:+919198783830" style={{padding:'12px 28px', borderRadius:'50px', border:'1.5px solid rgba(255,255,255,.2)', color:'rgba(255,255,255,.85)', textDecoration:'none', fontFamily:"'DM Sans',sans-serif", fontSize:'13.5px', fontWeight:'700'}}>📞 Call +91 9198783830</a>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      {/* Apply modal */}
+      {selected && (
+        <JobApplyForm job={selected} onClose={function(){setSelected(null)}} />
+      )}
+    </>
+  )
+}

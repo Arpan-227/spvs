@@ -1,0 +1,93 @@
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import ClassesInfra           from '../../components/academics/ClassesInfra'
+import SubjectList             from '../../components/academics/SubjectList'
+import FeeStructure            from '../../components/academics/FeeStructure'
+import TeachersQualification   from '../../components/academics/TeachersQualification'
+
+const TABS = [
+  { id:'classes',  label:'🏫 Classes',       short:'Classes'  },
+  { id:'subjects', label:'📚 Subjects',       short:'Subjects' },
+  { id:'fees',     label:'💰 Fee Structure',  short:'Fees'     },
+  { id:'faculty',  label:'👨‍🏫 Faculty',        short:'Faculty'  },
+]
+
+export default function AcademicsPage() {
+  const [activeTab, setActiveTab] = useState('classes')
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target) }
+      }),
+      { threshold: 0.1 }
+    )
+    document.querySelectorAll('.rv, .rv3d').forEach(el => obs.observe(el))
+    return () => obs.disconnect()
+  }, [activeTab])
+
+  return (
+    <>
+      {/* PAGE BANNER */}
+      <div className="page-banner">
+        <div className="pb-inner">
+          <div className="pb-chip">📚 Academics</div>
+          <h1 className="pb-title">
+            Academic <span style={{color:'var(--gd2)', fontStyle:'italic'}}>Excellence</span>
+          </h1>
+          <p className="pb-sub">CBSE curriculum · Experienced faculty · Modern infrastructure · 100% board results</p>
+          <div className="breadcrumb">
+            <Link to="/">Home</Link>
+            <span>›</span>
+            <span className="bc-cur">Academics</span>
+          </div>
+        </div>
+      </div>
+
+      {/* STATS BAR */}
+      <div style={{background:'linear-gradient(90deg,var(--or),var(--or3),var(--gd))', padding:'20px 0'}}>
+        <div style={{maxWidth:'1280px', margin:'0 auto', padding:'0 20px', display:'flex', justifyContent:'space-around', flexWrap:'wrap', gap:'16px'}}>
+          {[['1410+','Students'],['64+','Teachers'],['PG–XII','Classes'],['100%','Board Results'],['8','Laboratories']].map(([n,l]) => (
+            <div key={l} style={{textAlign:'center', color:'#fff'}}>
+              <div style={{fontFamily:"'Playfair Display',serif", fontSize:'24px', fontWeight:'700', lineHeight:'1'}}>{n}</div>
+              <div style={{fontSize:'11px', fontWeight:'700', opacity:'.8', letterSpacing:'1px', textTransform:'uppercase', marginTop:'3px'}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* MAIN */}
+      <div style={{background:'var(--bg)', minHeight:'60vh'}}>
+        <div style={{maxWidth:'1280px', margin:'0 auto', padding:'60px 20px'}}>
+
+          {/* Tab switcher */}
+          <div className="rv" style={{display:'flex', gap:'6px', background:'var(--bg2)', padding:'6px', borderRadius:'16px', border:'1.5px solid var(--brd)', marginBottom:'44px', flexWrap:'wrap'}}>
+            {TABS.map(t => (
+              <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+                flex:1, minWidth:'150px', padding:'13px 16px',
+                borderRadius:'12px', border:'none', cursor:'pointer',
+                fontFamily:"'DM Sans',sans-serif", fontSize:'14px', fontWeight:'700',
+                transition:'all .28s cubic-bezier(.34,1.56,.64,1)',
+                background: activeTab===t.id ? 'var(--card)' : 'transparent',
+                color: activeTab===t.id ? 'var(--or)' : 'var(--txt2)',
+                boxShadow: activeTab===t.id ? '0 4px 20px var(--shd)' : 'none',
+                transform: activeTab===t.id ? 'scale(1.02)' : 'scale(1)',
+              }}>
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Tab content */}
+          <div key={activeTab} style={{animation:'fU .35s ease both'}}>
+            {activeTab === 'classes'  && <ClassesInfra        embedded />}
+            {activeTab === 'subjects' && <SubjectList          embedded />}
+            {activeTab === 'fees'     && <FeeStructure         embedded />}
+            {activeTab === 'faculty'  && <TeachersQualification embedded />}
+          </div>
+
+        </div>
+      </div>
+    </>
+  )
+}
