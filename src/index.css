@@ -532,7 +532,7 @@ footer::before{content:'ॐ';position:absolute;right:-50px;top:-40px;font-size:4
   .lcard,.lead-note{padding:20px}
 }
 @media(max-width:360px){
-  .wa-float,.chat-float{display:none}
+  
   .hero-h1{font-size:28px}
 }
 
@@ -956,7 +956,7 @@ footer::before{content:'ॐ';position:absolute;right:-50px;top:-40px;font-size:4
   .hero-h1 { font-size: 24px; }
   .sec-title { font-size: 21px; }
 
-  .wa-float, .chat-float { display: none; }
+  
   .stbtn { display: none; }
 
   .stat-n { font-size: 28px; }
