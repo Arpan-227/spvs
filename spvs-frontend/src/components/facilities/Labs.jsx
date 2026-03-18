@@ -47,7 +47,6 @@ export default function Labs({ embedded = false }) {
     return () => obs.disconnect()
   }, [])
 
-  
   return (
     <>
       {!embedded && (
@@ -68,71 +67,79 @@ export default function Labs({ embedded = false }) {
       <div style={{background:'var(--bg)', padding: embedded ? '0' : '60px 20px'}}>
         <div style={{maxWidth:'1200px', margin:'0 auto'}}>
 
-          {/* Lab selector tabs */}
-          <div className="" style={{display:'flex', gap:'8px', flexWrap:'wrap', marginBottom:'28px'}}>
+          {/* Lab selector — wraps naturally on mobile */}
+          <div style={{display:'flex', gap:'8px', flexWrap:'wrap', marginBottom:'24px'}}>
             {LABS.map(l => (
               <button key={l.id} onClick={() => setActive(l.id)} style={{
-                display:'flex', alignItems:'center', gap:'8px',
-                padding:'10px 18px', borderRadius:'50px', border:'none', cursor:'pointer',
+                display:'flex', alignItems:'center', gap:'7px',
+                padding:'9px 16px', borderRadius:'50px', border:'none', cursor:'pointer',
                 fontFamily:"'DM Sans',sans-serif", fontSize:'13px', fontWeight:'700', transition:'all .25s',
                 background: active===l.id ? l.color : 'var(--bg2)',
                 color: active===l.id ? '#fff' : 'var(--txt2)',
                 boxShadow: active===l.id ? `0 5px 18px ${l.color}40` : 'none',
               }}>
-                <span>{l.em}</span>{l.name}
+                <span>{l.em}</span><span>{l.name}</span>
               </button>
             ))}
           </div>
 
-          {/* Lab detail */}
-          <div key={active} style={{animation:'fU .35s ease both', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'24px', alignItems:'start'}}>
-            {/* Info */}
-            <div style={{background:`linear-gradient(135deg,${lab.color}10,${lab.color}04)`, border:`1.5px solid ${lab.color}25`, borderRadius:'22px', padding:'32px'}}>
-              <div style={{fontSize:'52px', marginBottom:'16px'}}>{lab.em}</div>
-              <h3 style={{fontFamily:"'Playfair Display',serif", fontSize:'26px', fontWeight:'700', color:'var(--dark)', marginBottom:'10px'}}>{lab.name}</h3>
-              <p style={{fontSize:'14.5px', color:'var(--txt2)', lineHeight:'1.75', marginBottom:'20px'}}>{lab.desc}</p>
-              <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
-                {[['👥', lab.capacity], ['🎓', lab.classes]].map(([ic, val]) => (
-                  <div key={val} style={{display:'flex', alignItems:'center', gap:'8px', padding:'8px 16px', borderRadius:'10px', background:`${lab.color}12`, border:`1px solid ${lab.color}25`}}>
-                    <span>{ic}</span>
-                    <span style={{fontSize:'13px', fontWeight:'700', color:lab.color}}>{val}</span>
-                  </div>
-                ))}
+          {/* Lab detail — stacks on mobile */}
+          <div key={active} style={{animation:'fU .35s ease both'}}>
+            <div className="labs-detail" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'20px', alignItems:'start', marginBottom:'24px'}}>
+              {/* Info */}
+              <div style={{background:`linear-gradient(135deg,${lab.color}10,${lab.color}04)`, border:`1.5px solid ${lab.color}25`, borderRadius:'20px', padding:'28px'}}>
+                <div style={{fontSize:'48px', marginBottom:'14px'}}>{lab.em}</div>
+                <h3 style={{fontFamily:"'Playfair Display',serif", fontSize:'24px', fontWeight:'700', color:'var(--dark)', marginBottom:'10px'}}>{lab.name}</h3>
+                <p style={{fontSize:'14px', color:'var(--txt2)', lineHeight:'1.75', marginBottom:'18px'}}>{lab.desc}</p>
+                <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
+                  {[['👥', lab.capacity], ['🎓', lab.classes]].map(([ic, val]) => (
+                    <div key={val} style={{display:'flex', alignItems:'center', gap:'8px', padding:'8px 14px', borderRadius:'10px', background:`${lab.color}12`, border:`1px solid ${lab.color}25`}}>
+                      <span>{ic}</span>
+                      <span style={{fontSize:'13px', fontWeight:'700', color:lab.color}}>{val}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Equipment */}
+              <div style={{background:'var(--card)', borderRadius:'20px', padding:'28px', border:'1.5px solid var(--brd)'}}>
+                <div style={{fontSize:'11px', fontWeight:'800', letterSpacing:'2px', textTransform:'uppercase', color:'var(--txt3)', marginBottom:'16px'}}>Equipment & Apparatus</div>
+                <div style={{display:'flex', flexDirection:'column', gap:'7px'}}>
+                  {lab.equipment.map((eq, i) => (
+                    <div key={i} style={{display:'flex', alignItems:'center', gap:'10px', padding:'9px 12px', borderRadius:'10px', background:i%2===0?'var(--bg2)':'transparent', fontSize:'13px', color:'var(--txt2)'}}>
+                      <div style={{width:'7px', height:'7px', borderRadius:'50%', background:lab.color, flexShrink:0, boxShadow:`0 0 6px ${lab.color}`}}></div>
+                      {eq}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Equipment */}
-            <div style={{background:'var(--card)', borderRadius:'22px', padding:'32px', border:'1.5px solid var(--brd)'}}>
-              <div style={{fontSize:'12px', fontWeight:'800', letterSpacing:'2px', textTransform:'uppercase', color:'var(--txt3)', marginBottom:'18px'}}>Equipment & Apparatus</div>
-              <div style={{display:'flex', flexDirection:'column', gap:'8px'}}>
-                {lab.equipment.map((eq, i) => (
-                  <div key={i} style={{display:'flex', alignItems:'center', gap:'12px', padding:'10px 14px', borderRadius:'10px', background:i%2===0?'var(--bg2)':'transparent', fontSize:'13.5px', color:'var(--txt2)'}}>
-                    <div style={{width:'8px', height:'8px', borderRadius:'50%', background:lab.color, flexShrink:0, boxShadow:`0 0 6px ${lab.color}`}}></div>
-                    {eq}
-                  </div>
-                ))}
-              </div>
+            {/* Labs summary tiles */}
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))', gap:'10px'}}>
+              {LABS.map(l => (
+                <div key={l.id} onClick={() => setActive(l.id)} style={{
+                  padding:'16px', borderRadius:'14px', textAlign:'center', cursor:'pointer',
+                  background: active===l.id ? `linear-gradient(135deg,${l.color},${l.color}bb)` : 'var(--card)',
+                  border: active===l.id ? 'none' : '1.5px solid var(--brd)',
+                  transition:'all .3s cubic-bezier(.34,1.56,.64,1)',
+                  boxShadow: active===l.id ? `0 8px 24px ${l.color}40` : 'none',
+                  transform: active===l.id ? 'translateY(-4px)' : 'translateY(0)',
+                }}>
+                  <div style={{fontSize:'26px', marginBottom:'7px'}}>{l.em}</div>
+                  <div style={{fontSize:'12px', fontWeight:'700', color: active===l.id ? '#fff' : 'var(--dark)'}}>{l.name}</div>
+                </div>
+              ))}
             </div>
-          </div>
-
-          {/* All labs summary */}
-          <div className="" style={{display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))', gap:'12px', marginTop:'28px'}}>
-            {LABS.map(l => (
-              <div key={l.id} onClick={() => setActive(l.id)} style={{
-                padding:'18px', borderRadius:'16px', textAlign:'center', cursor:'pointer',
-                background: active===l.id ? `linear-gradient(135deg,${l.color},${l.color}bb)` : 'var(--card)',
-                border: active===l.id ? 'none' : '1.5px solid var(--brd)',
-                transition:'all .3s cubic-bezier(.34,1.56,.64,1)',
-                boxShadow: active===l.id ? `0 8px 24px ${l.color}40` : 'none',
-                transform: active===l.id ? 'translateY(-4px)' : 'translateY(0)',
-              }}>
-                <div style={{fontSize:'28px', marginBottom:'8px'}}>{l.em}</div>
-                <div style={{fontSize:'12.5px', fontWeight:'700', color: active===l.id ? '#fff' : 'var(--dark)'}}>{l.name}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .labs-detail { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </>
   )
 }

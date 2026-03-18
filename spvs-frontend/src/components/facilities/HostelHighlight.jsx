@@ -31,7 +31,6 @@ export default function HostelHighlight({ embedded = false }) {
     return () => obs.disconnect()
   }, [])
 
-  
   return (
     <>
       {!embedded && (
@@ -52,70 +51,78 @@ export default function HostelHighlight({ embedded = false }) {
       <div style={{background:'var(--bg)', padding: embedded ? '0' : '60px 20px'}}>
         <div style={{maxWidth:'1200px', margin:'0 auto'}}>
 
-          {/* Bold CTA hero */}
-          <div className="" style={{
+          {/* Bold CTA hero — stacks on mobile */}
+          <div style={{
             background:'linear-gradient(135deg,var(--or),var(--or3),var(--gd))',
-            borderRadius:'24px', padding:'40px', marginBottom:'32px',
-            display:'grid', gridTemplateColumns:'1fr auto', gap:'28px', alignItems:'center',
-            boxShadow:'0 16px 50px rgba(232,118,26,.35)', position:'relative', overflow:'hidden'
+            borderRadius:'22px', padding:'28px', marginBottom:'28px',
+            position:'relative', overflow:'hidden',
+            boxShadow:'0 16px 50px rgba(232,118,26,.35)',
           }}>
             <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(255,255,255,.1),transparent)',pointerEvents:'none'}}></div>
-            <div style={{position:'relative',zIndex:2}}>
-              <div style={{display:'inline-flex',alignItems:'center',gap:'8px',background:'rgba(255,255,255,.2)',borderRadius:'50px',padding:'5px 14px',fontSize:'11px',fontWeight:'800',letterSpacing:'1.5px',textTransform:'uppercase',color:'#fff',marginBottom:'14px'}}>
-                🏠 Boys Only · Outstation Students
-              </div>
-              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'32px',fontWeight:'700',color:'#fff',marginBottom:'12px',lineHeight:'1.25'}}>
-                A Safe Home Away<br/>From Home
-              </h2>
-              <p style={{fontSize:'15px',color:'rgba(255,255,255,.8)',lineHeight:'1.7',marginBottom:'22px',maxWidth:'500px'}}>
-                Our Boys Hostel provides a structured, disciplined and caring environment — ensuring your child gets the best academic support, healthy meals and round-the-clock safety.
-              </p>
-              <div style={{display:'flex',gap:'12px',flexWrap:'wrap'}}>
-                <Link to="/contact" style={{padding:'12px 24px',background:'#fff',color:'var(--or2)',borderRadius:'50px',textDecoration:'none',fontWeight:'800',fontSize:'14px',boxShadow:'0 4px 16px rgba(0,0,0,.15)'}}>
-                  📋 Enquire Now →
-                </Link>
-                <a href="tel:+919198783830" style={{padding:'12px 24px',background:'rgba(255,255,255,.2)',color:'#fff',borderRadius:'50px',textDecoration:'none',fontWeight:'800',fontSize:'14px',border:'1.5px solid rgba(255,255,255,.4)'}}>
-                  📞 Call School
-                </a>
-              </div>
+
+            {/* Stats row — mobile only, shown above content */}
+            <div className="hostel-stats-mob" style={{display:'none', gap:'8px', marginBottom:'20px', flexWrap:'wrap'}}>
+              {[['Boys Only','Hostel Type'],['24×7','Security'],['3 Meals','+ Snacks']].map(([n,l])=>(
+                <div key={l} style={{background:'rgba(255,255,255,.2)',borderRadius:'10px',padding:'8px 14px',backdropFilter:'blur(4px)',display:'flex',gap:'6px',alignItems:'center'}}>
+                  <span style={{fontWeight:'800',color:'#fff',fontSize:'13px'}}>{n}</span>
+                  <span style={{fontSize:'11px',color:'rgba(255,255,255,.75)'}}>{l}</span>
+                </div>
+              ))}
             </div>
-            <div style={{position:'relative',zIndex:2,textAlign:'center',flexShrink:0}}>
-              <div style={{fontSize:'80px',marginBottom:'12px'}}>🏠</div>
-              <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
-                {[['Boys Only','Hostel Type'],['24×7','Security'],['3 Meals','+ Snacks']].map(([n,l])=>(
-                  <div key={l} style={{background:'rgba(255,255,255,.15)',borderRadius:'10px',padding:'8px 16px',textAlign:'center',backdropFilter:'blur(4px)'}}>
-                    <span style={{fontWeight:'800',color:'#fff',fontSize:'14px'}}>{n}</span>
-                    <span style={{fontSize:'11px',color:'rgba(255,255,255,.7)',marginLeft:'6px'}}>{l}</span>
-                  </div>
-                ))}
+
+            <div className="hostel-hero-inner" style={{display:'grid', gridTemplateColumns:'1fr auto', gap:'28px', alignItems:'center', position:'relative', zIndex:2}}>
+              <div>
+                <div style={{display:'inline-flex',alignItems:'center',gap:'8px',background:'rgba(255,255,255,.2)',borderRadius:'50px',padding:'5px 14px',fontSize:'11px',fontWeight:'800',letterSpacing:'1.5px',textTransform:'uppercase',color:'#fff',marginBottom:'14px'}}>
+                  🏠 Boys Only · Outstation Students
+                </div>
+                <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'26px',fontWeight:'700',color:'#fff',marginBottom:'12px',lineHeight:'1.25'}}>
+                  A Safe Home Away From Home
+                </h2>
+                <p style={{fontSize:'14px',color:'rgba(255,255,255,.8)',lineHeight:'1.7',marginBottom:'20px'}}>
+                  Our Boys Hostel provides a structured, disciplined and caring environment — ensuring your child gets the best academic support, healthy meals and round-the-clock safety.
+                </p>
+                <div style={{display:'flex',gap:'10px',flexWrap:'wrap'}}>
+                  <Link to="/contact" style={{padding:'11px 22px',background:'#fff',color:'var(--or2)',borderRadius:'50px',textDecoration:'none',fontWeight:'800',fontSize:'13px',boxShadow:'0 4px 16px rgba(0,0,0,.15)'}}>
+                    📋 Enquire Now →
+                  </Link>
+                  <a href="tel:+919198783830" style={{padding:'11px 22px',background:'rgba(255,255,255,.2)',color:'#fff',borderRadius:'50px',textDecoration:'none',fontWeight:'800',fontSize:'13px',border:'1.5px solid rgba(255,255,255,.4)'}}>
+                    📞 Call School
+                  </a>
+                </div>
+              </div>
+
+              {/* Stats column — desktop only */}
+              <div className="hostel-stats-desk" style={{textAlign:'center',flexShrink:0}}>
+                <div style={{fontSize:'72px',marginBottom:'12px'}}>🏠</div>
+                <div style={{display:'flex',flexDirection:'column',gap:'8px'}}>
+                  {[['Boys Only','Hostel Type'],['24×7','Security'],['3 Meals','+ Snacks']].map(([n,l])=>(
+                    <div key={l} style={{background:'rgba(255,255,255,.15)',borderRadius:'10px',padding:'8px 16px',textAlign:'center',backdropFilter:'blur(4px)'}}>
+                      <span style={{fontWeight:'800',color:'#fff',fontSize:'13px'}}>{n}</span>
+                      <span style={{fontSize:'11px',color:'rgba(255,255,255,.7)',marginLeft:'6px'}}>{l}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Amenities */}
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'14px',marginBottom:'28px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:'14px',marginBottom:'24px'}}>
             {AMENITIES.map((a,i) => (
-              <div key={i} className="" style={{
-                padding:'22px',borderRadius:'16px',background:'var(--card)',
-                border:'1.5px solid var(--brd)',cursor:'default',
-                transition:'all .35s cubic-bezier(.34,1.56,.64,1)'
-              }}
-                onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-6px)';e.currentTarget.style.boxShadow='0 14px 36px var(--shd)';e.currentTarget.style.borderColor='rgba(232,118,26,.3)'}}
-                onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none';e.currentTarget.style.borderColor='var(--brd)'}}
-              >
-                <div style={{fontSize:'34px',marginBottom:'12px'}}>{a.em}</div>
-                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'15px',fontWeight:'700',color:'var(--dark)',marginBottom:'7px'}}>{a.title}</div>
+              <div key={i} style={{padding:'20px',borderRadius:'16px',background:'var(--card)',border:'1.5px solid var(--brd)'}}>
+                <div style={{fontSize:'30px',marginBottom:'10px'}}>{a.em}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'15px',fontWeight:'700',color:'var(--dark)',marginBottom:'6px'}}>{a.title}</div>
                 <div style={{fontSize:'13px',color:'var(--txt2)',lineHeight:'1.65'}}>{a.desc}</div>
               </div>
             ))}
           </div>
 
           {/* Rules */}
-          <div className="" style={{padding:'28px 32px',borderRadius:'18px',background:'var(--bg2)',border:'1.5px solid var(--brd)'}}>
-            <div style={{fontSize:'12px',fontWeight:'800',letterSpacing:'2px',textTransform:'uppercase',color:'var(--txt3)',marginBottom:'16px'}}>📋 Hostel Rules & Discipline</div>
-            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:'10px'}}>
+          <div style={{padding:'24px',borderRadius:'18px',background:'var(--bg2)',border:'1.5px solid var(--brd)'}}>
+            <div style={{fontSize:'11px',fontWeight:'800',letterSpacing:'2px',textTransform:'uppercase',color:'var(--txt3)',marginBottom:'14px'}}>📋 Hostel Rules & Discipline</div>
+            <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:'10px'}}>
               {RULES.map((r,i) => (
-                <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'10px',fontSize:'13.5px',color:'var(--txt2)',padding:'10px 14px',background:'var(--card)',borderRadius:'10px',border:'1px solid var(--brd)'}}>
+                <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'10px',fontSize:'13px',color:'var(--txt2)',padding:'10px 12px',background:'var(--card)',borderRadius:'10px',border:'1px solid var(--brd)'}}>
                   <div style={{width:'20px',height:'20px',borderRadius:'50%',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'10px',fontWeight:'800',color:'var(--or)',flexShrink:0,marginTop:'1px'}}>{i+1}</div>
                   {r}
                 </div>
@@ -124,6 +131,14 @@ export default function HostelHighlight({ embedded = false }) {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hostel-hero-inner { grid-template-columns: 1fr !important; }
+          .hostel-stats-desk { display: none !important; }
+          .hostel-stats-mob  { display: flex !important; }
+        }
+      `}</style>
     </>
   )
 }

@@ -13,10 +13,10 @@ const SPORTS = [
 ]
 
 const ACHIEVEMENTS = [
-  { em:'🥇', title:'Kabaddi Champions', sub:'CBSE Cluster Level', year:'2024' },
-  { em:'🥈', title:'District Sports Champions', sub:'Athletics & Volleyball', year:'2024' },
-  { em:'🏅', title:'CBSE National Essay', sub:'Gold Medal Winner', year:'2023' },
-  { em:'🥇', title:'Inter-School Cricket', sub:'Bahraich District', year:'2023' },
+  { em:'🥇', title:'Kabaddi Champions',      sub:'CBSE Cluster Level',      year:'2024' },
+  { em:'🥈', title:'District Sports Champs', sub:'Athletics & Volleyball',  year:'2024' },
+  { em:'🏅', title:'CBSE National Essay',    sub:'Gold Medal Winner',       year:'2023' },
+  { em:'🥇', title:'Inter-School Cricket',   sub:'Bahraich District',       year:'2023' },
 ]
 
 export default function Playground({ embedded = false }) {
@@ -29,7 +29,6 @@ export default function Playground({ embedded = false }) {
     return () => obs.disconnect()
   }, [])
 
-  
   return (
     <>
       {!embedded && (
@@ -50,53 +49,58 @@ export default function Playground({ embedded = false }) {
       <div style={{background:'var(--bg)', padding: embedded ? '0' : '60px 20px'}}>
         <div style={{maxWidth:'1200px', margin:'0 auto'}}>
 
-          {/* Hero */}
-          <div className="" style={{padding:'32px', borderRadius:'22px', background:'linear-gradient(135deg,var(--dark),var(--dark2))', marginBottom:'32px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:'28px', alignItems:'center', border:'1px solid rgba(245,184,0,.1)'}}>
-            <div>
-              <div style={{fontFamily:"'Playfair Display',serif", fontSize:'30px', fontWeight:'700', color:'#fff', marginBottom:'12px', lineHeight:'1.3'}}>Sports at SPVS — <span style={{color:'var(--gd2)'}}>Beyond the Classroom</span></div>
-              <p style={{fontSize:'14px', color:'rgba(255,255,255,.55)', lineHeight:'1.75', marginBottom:'20px'}}>
-                Our sprawling 10-acre campus provides ample space for all major sports. Physical education is a core part of our curriculum — we believe a healthy body builds a healthy mind.
-              </p>
-              <div style={{display:'flex', gap:'16px', flexWrap:'wrap'}}>
-                {[['10 Acres','Campus'],['8+','Sports'],['22 Buses','Transport'],['Daily PT','& Yoga']].map(([n,l])=>(
-                  <div key={l} style={{textAlign:'center', padding:'12px 16px', background:'rgba(255,255,255,.06)', borderRadius:'12px', border:'1px solid rgba(255,255,255,.08)'}}>
-                    <div style={{fontFamily:"'Playfair Display',serif", fontSize:'18px', fontWeight:'700', color:'var(--gd2)'}}>{n}</div>
-                    <div style={{fontSize:'10px', color:'rgba(255,255,255,.4)', marginTop:'3px', letterSpacing:'.5px'}}>{l}</div>
+          {/* Hero — stacks on mobile */}
+          <div style={{padding:'28px', borderRadius:'22px', background:'linear-gradient(135deg,var(--dark),var(--dark2))', marginBottom:'28px', border:'1px solid rgba(245,184,0,.1)'}}>
+            <div className="pg-hero" style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'24px', alignItems:'center'}}>
+              <div>
+                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'26px', fontWeight:'700', color:'#fff', marginBottom:'12px', lineHeight:'1.3'}}>
+                  Sports at SPVS — <span style={{color:'var(--gd2)'}}>Beyond the Classroom</span>
+                </div>
+                <p style={{fontSize:'14px', color:'rgba(255,255,255,.55)', lineHeight:'1.75', marginBottom:'18px'}}>
+                  Our sprawling 10-acre campus provides ample space for all major sports. Physical education is a core part of our curriculum — we believe a healthy body builds a healthy mind.
+                </p>
+                <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
+                  {[['10 Acres','Campus'],['8+','Sports'],['22 Buses','Transport'],['Daily PT','& Yoga']].map(([n,l])=>(
+                    <div key={l} style={{textAlign:'center', padding:'10px 14px', background:'rgba(255,255,255,.06)', borderRadius:'12px', border:'1px solid rgba(255,255,255,.08)'}}>
+                      <div style={{fontFamily:"'Playfair Display',serif", fontSize:'16px', fontWeight:'700', color:'var(--gd2)'}}>{n}</div>
+                      <div style={{fontSize:'10px', color:'rgba(255,255,255,.4)', marginTop:'3px', letterSpacing:'.5px'}}>{l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Achievements — 2-col on desktop, 2-col on mobile (small cards) */}
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'8px'}}>
+                {ACHIEVEMENTS.map((a,i) => (
+                  <div key={i} style={{padding:'14px', borderRadius:'12px', background:'rgba(245,184,0,.08)', border:'1px solid rgba(245,184,0,.15)', textAlign:'center'}}>
+                    <div style={{fontSize:'24px', marginBottom:'6px'}}>{a.em}</div>
+                    <div style={{fontSize:'11px', fontWeight:'700', color:'var(--gd2)', marginBottom:'2px'}}>{a.title}</div>
+                    <div style={{fontSize:'10px', color:'rgba(255,255,255,.4)'}}>{a.sub}</div>
+                    <div style={{fontSize:'10px', color:'var(--or)', marginTop:'3px', fontWeight:'700'}}>{a.year}</div>
                   </div>
                 ))}
               </div>
             </div>
-            <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'10px'}}>
-              {ACHIEVEMENTS.map((a,i) => (
-                <div key={i} style={{padding:'16px', borderRadius:'14px', background:'rgba(245,184,0,.08)', border:'1px solid rgba(245,184,0,.15)', textAlign:'center'}}>
-                  <div style={{fontSize:'28px', marginBottom:'8px'}}>{a.em}</div>
-                  <div style={{fontSize:'12px', fontWeight:'700', color:'var(--gd2)', marginBottom:'3px'}}>{a.title}</div>
-                  <div style={{fontSize:'10px', color:'rgba(255,255,255,.4)'}}>{a.sub}</div>
-                  <div style={{fontSize:'10px', color:'var(--or)', marginTop:'3px', fontWeight:'700'}}>{a.year}</div>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Sports grid */}
-          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(250px,1fr))', gap:'14px'}}>
+          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(230px,1fr))', gap:'12px'}}>
             {SPORTS.map((s,i) => (
-              <div key={i} className="" style={{
-                padding:'22px', borderRadius:'16px', background:'var(--card)',
-                border:'1.5px solid var(--brd)', cursor:'default',
-                transition:'all .35s cubic-bezier(.34,1.56,.64,1)'
-              }}
-                onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-6px)';e.currentTarget.style.boxShadow='0 14px 36px var(--shd)';e.currentTarget.style.borderColor='rgba(232,118,26,.3)'}}
-                onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none';e.currentTarget.style.borderColor='var(--brd)'}}
-              >
-                <div style={{fontSize:'38px', marginBottom:'12px'}}>{s.em}</div>
-                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'16px', fontWeight:'700', color:'var(--dark)', marginBottom:'7px'}}>{s.name}</div>
-                <div style={{fontSize:'13.5px', color:'var(--txt2)', lineHeight:'1.6'}}>{s.desc}</div>
+              <div key={i} style={{padding:'20px', borderRadius:'16px', background:'var(--card)', border:'1.5px solid var(--brd)'}}>
+                <div style={{fontSize:'34px', marginBottom:'10px'}}>{s.em}</div>
+                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'15px', fontWeight:'700', color:'var(--dark)', marginBottom:'6px'}}>{s.name}</div>
+                <div style={{fontSize:'13px', color:'var(--txt2)', lineHeight:'1.6'}}>{s.desc}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .pg-hero { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </>
   )
 }
