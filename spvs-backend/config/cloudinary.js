@@ -51,7 +51,7 @@ const pdfStorage = new CloudinaryStorage({
     var fileName = (req.body.name || file.originalname || 'document').replace(/[^a-zA-Z0-9]/g, '_')
     return {
       folder:        'spvs/pdfs',
-      resource_type: 'raw',
+      resource_type: 'auto',   // ✅ Changed from 'raw' to 'auto' — fixes browser open
       public_id:     fileName + '_' + Date.now(),
       format:        'pdf',
     }

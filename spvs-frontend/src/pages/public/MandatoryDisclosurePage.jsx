@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { mandatoryAPI } from '../../api'
 
-// ✅ Exact PDFs present in spvs-frontend/public/pdfs/ folder
 var CERT_FILES = {
   'Fire Certificate 2023':                  { file: 'Fire Certificate 2023.pdf',                 ready: true },
   'NEW Bullding Safety Certificate 2023':   { file: 'NEW Bullding Safety Certificate 2023.pdf',  ready: true },
   'No Objection Certificate (NOC)':         { file: 'NOC.pdf',                                   ready: true },
   'Society Update Certificate 2024':        { file: 'Society Update Certificate 2024.pdf',        ready: true },
   'New Land Certtificate 2023-24':          { file: 'New Land Certtificate 2023-24 2.pdf',        ready: true },
-  'New Affliation Cenfermation Letter 2024':{ file: 'New Affliation Cenfermation Letter 2024-29.pdf',ready: true },
+  'New Affliation Cenfermation Letter 2024':{ file: 'New Affliation Cenfermation Letter 2024-29.pdf', ready: true },
   'Society Update Member List 2024':        { file: 'Society Update Member List 2024.pdf',        ready: true },
 }
 
@@ -46,33 +45,89 @@ function SectionTable(props) {
   var rows      = props.rows
   var certFiles = props.certFiles
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-      <tbody>
-        {rows.map(function(row, i) {
-          var certInfo  = certFiles ? certFiles[row[0]] : null
-          var borderTop = i === 0 ? 'none' : '1px solid var(--brd)'
-          var rowBg     = i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,.012)'
-          return (
-            <tr
-              key={row[0] + i}
-              style={{ borderTop: borderTop, background: rowBg, transition: 'background .15s' }}
-              onMouseEnter={function(e) { e.currentTarget.style.background = 'rgba(232,118,26,.03)' }}
-              onMouseLeave={function(e) { e.currentTarget.style.background = rowBg }}
-            >
-              <td style={{ padding: '13px 24px', fontSize: '13.5px', fontWeight: '600', color: 'var(--txt3)', width: '38%', verticalAlign: 'middle' }}>
-                {row[0]}
-              </td>
-              <td style={{ padding: '13px 24px', fontSize: '13.5px', fontWeight: '600', color: 'var(--dark)', verticalAlign: 'middle' }}>
-                {row[1]}
-              </td>
-              <td style={{ padding: '13px 18px', verticalAlign: 'middle', whiteSpace: 'nowrap' }}>
-                {renderCertBtn(certInfo)}
-              </td>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+    <>
+      <style>{`
+        .md-table { width: 100%; border-collapse: collapse; }
+        .md-tr { transition: background .15s; }
+        .md-td-label {
+          padding: 13px 20px;
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--txt3);
+          width: 38%;
+          vertical-align: middle;
+          word-break: break-word;
+        }
+        .md-td-value {
+          padding: 13px 20px;
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--dark);
+          vertical-align: middle;
+          word-break: break-word;
+        }
+        .md-td-action {
+          padding: 10px 14px;
+          vertical-align: middle;
+          white-space: nowrap;
+          text-align: right;
+        }
+        @media (max-width: 600px) {
+          .md-table, .md-table tbody { display: block; width: 100%; }
+          .md-tr {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 11px 16px;
+            border-top: 1px solid var(--brd) !important;
+            box-sizing: border-box;
+          }
+          .md-tr:first-child { border-top: none !important; }
+          .md-td-label {
+            display: block;
+            padding: 0;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--dark);
+            width: auto;
+            flex: 1;
+            min-width: 0;
+            word-break: break-word;
+          }
+          .md-td-value { display: none; }
+          .md-td-action {
+            display: block;
+            padding: 0;
+            flex-shrink: 0;
+            text-align: right;
+          }
+        }
+      `}</style>
+      <table className="md-table">
+        <tbody>
+          {rows.map(function(row, i) {
+            var certInfo  = certFiles ? certFiles[row[0]] : null
+            var borderTop = i === 0 ? 'none' : '1px solid var(--brd)'
+            var rowBg     = i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,.012)'
+            return (
+              <tr
+                key={row[0] + i}
+                className="md-tr"
+                style={{ borderTop: borderTop, background: rowBg }}
+                onMouseEnter={function(e) { e.currentTarget.style.background = 'rgba(232,118,26,.03)' }}
+                onMouseLeave={function(e) { e.currentTarget.style.background = rowBg }}
+              >
+                <td className="md-td-label">{row[0]}</td>
+                <td className="md-td-value">{row[1]}</td>
+                <td className="md-td-action">{renderCertBtn(certInfo)}</td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </>
   )
 }
 
@@ -106,13 +161,39 @@ export default function MandatoryDisclosurePage() {
     { title: 'F. Transport',                icon: '🚌', rows: dbToRows(dbData.transport),      certFiles: null       },
   ] : []
 
-  var secHeaderStyle = {
-    background: 'linear-gradient(135deg,var(--dark),var(--dark2))',
-    padding: '16px 24px', display: 'flex', alignItems: 'center', gap: '12px'
-  }
-
   return (
     <>
+      <style>{`
+        .md-info-box {
+          background: rgba(108,63,197,.06);
+          border: 1.5px solid rgba(108,63,197,.2);
+          border-radius: 16px;
+          padding: 20px 24px;
+          margin-bottom: 44px;
+          display: flex;
+          gap: 14px;
+          align-items: flex-start;
+        }
+        .md-footer-box {
+          margin-top: 40px;
+          padding: 20px 24px;
+          border-radius: 14px;
+          background: rgba(232,118,26,.05);
+          border: 1.5px solid rgba(232,118,26,.15);
+          text-align: center;
+          font-size: 13.5px;
+          color: var(--txt2);
+          line-height: 1.9;
+        }
+        .md-footer-box strong { color: var(--or); }
+        .md-footer-sep { margin: 0 6px; }
+        @media (max-width: 600px) {
+          .md-info-box { padding: 14px 14px; gap: 10px; margin-bottom: 28px; }
+          .md-footer-box { padding: 16px 14px; font-size: 13px; }
+          .md-footer-sep { display: block; height: 4px; margin: 0; }
+        }
+      `}</style>
+
       <div className="page-banner">
         <div className="pb-inner">
           <div className="pb-chip">📋 Mandatory Disclosure</div>
@@ -130,34 +211,38 @@ export default function MandatoryDisclosurePage() {
         </div>
       </div>
 
-      <div style={{ background: 'var(--bg)', padding: '60px 20px' }}>
+      <div style={{ background: 'var(--bg)', padding: 'clamp(32px,6vw,60px) clamp(14px,4vw,20px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
 
-          <div style={{ background: 'rgba(108,63,197,.06)', border: '1.5px solid rgba(108,63,197,.2)', borderRadius: '16px', padding: '20px 24px', marginBottom: '44px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+          {/* Info box */}
+          <div className="md-info-box">
             <div style={{ fontSize: '28px', flexShrink: 0 }}>ℹ️</div>
             <div>
               <div style={{ fontWeight: '700', fontSize: '14px', color: '#6C3FC5', marginBottom: '4px' }}>CBSE Mandatory Disclosure</div>
-              <div style={{ fontSize: '13.5px', color: 'var(--txt2)', lineHeight: '1.6' }}>
+              <div style={{ fontSize: 'clamp(12.5px,2.5vw,13.5px)', color: 'var(--txt2)', lineHeight: '1.6' }}>
                 This disclosure is published as per the requirements of CBSE Affiliation Bye-Laws.
                 Sant Pathik Vidyalaya is affiliated to CBSE, New Delhi. Affiliation No. <strong>2130176</strong>.
               </div>
             </div>
           </div>
 
+          {/* Loading */}
           {loading && (
             <div style={{ textAlign: 'center', padding: '60px', color: 'var(--txt2)', fontSize: '14px', fontWeight: '600' }}>
               ⏳ Loading disclosure data...
             </div>
           )}
 
+          {/* Sections */}
           {!loading && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(16px,3vw,28px)' }}>
               {sections.map(function(sec) {
                 return (
-                  <div key={sec.title} style={{ borderRadius: '20px', overflow: 'hidden', border: '1.5px solid var(--brd)', boxShadow: '0 4px 20px rgba(0,0,0,.04)' }}>
-                    <div style={secHeaderStyle}>
-                      <span style={{ fontSize: '22px' }}>{sec.icon}</span>
-                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: '17px', fontWeight: '700', color: '#fff' }}>
+                  <div key={sec.title} style={{ borderRadius: 'clamp(12px,2vw,20px)', overflow: 'hidden', border: '1.5px solid var(--brd)', boxShadow: '0 4px 20px rgba(0,0,0,.04)' }}>
+                    {/* Section header */}
+                    <div style={{ background: 'linear-gradient(135deg,var(--dark),var(--dark2))', padding: 'clamp(12px,3vw,16px) clamp(14px,3vw,24px)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontSize: 'clamp(18px,4vw,22px)' }}>{sec.icon}</span>
+                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 'clamp(14px,3vw,17px)', fontWeight: '700', color: '#fff' }}>
                         {sec.title}
                       </span>
                     </div>
@@ -168,15 +253,14 @@ export default function MandatoryDisclosurePage() {
             </div>
           )}
 
-          <div style={{ marginTop: '40px', padding: '20px 24px', borderRadius: '14px', background: 'rgba(232,118,26,.05)', border: '1.5px solid rgba(232,118,26,.15)', textAlign: 'center' }}>
-            <div style={{ fontSize: '13.5px', color: 'var(--txt2)', lineHeight: '1.7' }}>
-              For any additional information or document verification, please contact the school office.<br />
-              <strong style={{ color: 'var(--or)' }}>📞 +91 9198783830</strong>
-              &nbsp;|&nbsp;
-              <strong style={{ color: 'var(--or)' }}>📧 spvbrh@gmail.com</strong>
-              &nbsp;|&nbsp;
-              <strong style={{ color: 'var(--or)' }}>🕐 Mon–Sat, 8:00 AM – 3:00 PM</strong>
-            </div>
+          {/* Footer contact */}
+          <div className="md-footer-box">
+            For any additional information or document verification, please contact the school office.<br />
+            <strong>📞 +91 9198783830</strong>
+            <span className="md-footer-sep">|</span>
+            <strong>📧 spvbrh@gmail.com</strong>
+            <span className="md-footer-sep">|</span>
+            <strong>🕐 Mon–Sat, 8:00 AM – 3:00 PM</strong>
           </div>
 
         </div>

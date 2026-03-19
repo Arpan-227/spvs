@@ -121,8 +121,8 @@ export var resultAPI = {
 export var tcAPI = {
   getAll:  () =>            req('GET',    '/tc'),
   getById: (id) =>          req('GET',    '/tc/' + id),
-  create:  (body) =>        req('POST',   '/tc', body),
-  update:  (id, body) =>    req('PUT',    '/tc/' + id, body),
+  create:  (fd) =>          req('POST',   '/tc', fd, true),       // FormData (PDF upload)
+  update:  (id, fd) =>      req('PUT',    '/tc/' + id, fd, true), // FormData (PDF upload)
   delete:  (id) =>          req('DELETE', '/tc/' + id),
   verify:  (body) =>        req('POST',   '/tc/verify', body),
 }
