@@ -55,7 +55,7 @@ export default function SchoolIntro() {
 
           <div>
             <div className="chip rv"><span className="chip-dot"></span>About Our School</div>
-            <h2 className="sec-title rv">A Legacy of <span className="hl">Excellence</span> &amp; Values</h2>
+            <h2 className="sec-title rv">A Legacy of <span className="hl">Excellence</span> & Values</h2>
             <div className="s-bar rv"></div>
             <p className="s-desc rv">
               {name} is a {board} affiliated co-educational Day &amp; Boarding Senior Secondary School, founded in {est} by the visionary Sant Pathik Ji Maharaj. Spread across {area} in Pashupati Nagar, Bahraich, we nurture {students} students from Play Group to Class XII.

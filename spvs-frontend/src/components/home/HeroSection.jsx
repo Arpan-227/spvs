@@ -63,26 +63,37 @@ export default function HeroSection() {
     <section className="hero" id="home">
       <canvas ref={cvRef} className="hero-canvas" />
 
-      {/* DESKTOP */}
+      {/* ── DESKTOP ── */}
       <div className="hero-inner hero-desk">
         <div>
+          {/* hero-badge → index.css: Poppins 700 */}
           <div className="hero-badge">
             <span className="hero-dot"></span>
             {board} Affiliated · Est. {est} · Bahraich
           </div>
+
+          {/* hero-h1 → index.css: Playfair Display 700 */}
           <h1 className="hero-h1">
             <span className="ita">SPVS</span> — The<br />
             <span className="gol">Smart</span> Choice<br />
             for <span className="ita">Excellence</span>
           </h1>
+
+          {/* hero-sub → index.css: Playfair Display 400 italic (tagline/quote) */}
           <p className="hero-sub">"Education with Values and Excellence"</p>
+
+          {/* hero-desc → index.css: Poppins 400 */}
           <p className="hero-desc">
             {name} Senior Secondary School — nurturing curious minds, strong values, and lifelong learners since {est} in Pashupati Nagar, Bahraich.
           </p>
+
+          {/* btn-or, btn-out → index.css: Poppins 600 UPPERCASE */}
           <div className="hero-btns">
-            <Link to="/contact" className="btn-or">{admOpen ? '📋 Enrol Now →' : '📋 Contact Us →'}</Link>
+            <Link to="/contact" className="btn-or">{admOpen ? ' Enroll Now →' : '📋 Contact Us →'}</Link>
             <Link to="/about" className="btn-out">🏫 Explore School</Link>
           </div>
+
+          {/* tr-info, rat-txt → index.css: Poppins 400 */}
           <div className="hero-trust">
             <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
               <div className="avs">
@@ -102,7 +113,6 @@ export default function HeroSection() {
         </div>
 
         <div className="hero-right">
-          {/* ── IMAGE CARD — school_hero.jpg ── */}
           <div className="hero-img-card">
             <div style={{width:'100%',height:'100%',position:'relative',overflow:'hidden'}}>
               <img
@@ -114,20 +124,25 @@ export default function HeroSection() {
                   e.target.nextSibling.style.display='flex'
                 }}
               />
-              {/* Fallback if image not found */}
+              {/* Fallback — school name: Playfair 700, sub: Poppins 400 */}
               <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'16px',background:'linear-gradient(135deg,#FFF8DC,#FFD94A)',position:'absolute',inset:0}}>
                 <div style={{fontSize:'80px'}}>🏫</div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'var(--dark2)',textAlign:'center',padding:'0 20px'}}>{name}</div>
-                <div style={{fontSize:'14px',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
+                <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'14px',fontWeight:'400',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
               </div>
             </div>
             <div className="hero-img-ov"></div>
             <div className="hero-img-txt">
+              {/* h-img-badge → Poppins 600 (sub-heading badge) */}
               <div className="h-img-badge">🏆 Est. {est} · {area} Campus</div>
+              {/* h-img-t → index.css: Playfair Display 700 */}
               <div className="h-img-t">Where Values Meet Excellence</div>
+              {/* h-img-s → index.css: Poppins 400 */}
               <div className="h-img-s">{board} No. {schoolNo} · Affiliation {affNo}</div>
             </div>
           </div>
+
+          {/* fbdg-n → index.css: Playfair Display 700 | fbdg-l → Poppins 400 */}
           <div className="fbdg fb1">
             <div className="fbdg-ic ic-or">🎓</div>
             <div><div className="fbdg-n">{students}</div><div className="fbdg-l">Students Enrolled</div></div>
@@ -139,25 +154,31 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* MOBILE */}
+      {/* ── MOBILE ── */}
       <div className="hero-mob">
         <div className="hm-text">
+          {/* hm-badge → Poppins 700 (via hero-badge in index.css) */}
           <div className="hero-badge hm-badge">
             <span className="hero-dot"></span>
             {board} Affiliated · Est. {est} · Bahraich
           </div>
+
+          {/* hm-h1 → Playfair Display 700 (via hero-h1 in index.css) */}
           <h1 className="hero-h1 hm-h1">
             <span className="ita">SPVS</span> — The<br />
             <span className="gol">Smart</span> Choice<br />
             for <span className="ita">Excellence</span>
           </h1>
+
+          {/* hm-sub → Playfair Display 400 italic (tagline/quote, via hero-sub in index.css) */}
           <p className="hero-sub hm-sub">"Education with Values and Excellence"</p>
+
+          {/* hm-desc → Poppins 400 (via hero-desc in index.css) */}
           <p className="hero-desc hm-desc">
             {name} — nurturing curious minds and strong values since {est} in Pashupati Nagar, Bahraich.
           </p>
         </div>
 
-        {/* ── MOBILE IMAGE CARD — school_hero.jpg ── */}
         <div className="hm-card">
           <img
             src="/images/school_hero.jpg"
@@ -168,50 +189,61 @@ export default function HeroSection() {
               e.target.nextSibling.style.display='flex'
             }}
           />
-          {/* Fallback */}
+          {/* Fallback — Playfair 700 name, Poppins 400 sub */}
           <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'10px',background:'linear-gradient(135deg,#FFF8DC,#FFD94A)',position:'absolute',inset:0}}>
             <div style={{fontSize:'60px'}}>🏫</div>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'18px',fontWeight:'700',color:'var(--dark2)',textAlign:'center',padding:'0 14px'}}>{name}</div>
-            <div style={{fontSize:'12px',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
+            <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
           </div>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(0deg,rgba(28,10,0,.65) 0%,transparent 55%)'}}/>
           <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'12px 14px'}}>
-            <div style={{display:'inline-flex',alignItems:'center',gap:'5px',background:'rgba(245,184,0,.9)',padding:'3px 9px',borderRadius:'50px',fontSize:'10px',fontWeight:700,color:'var(--dark)',marginBottom:'4px'}}>🏆 Est. {est} · {area}</div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'14px',fontWeight:700,color:'#fff',lineHeight:1.3}}>Where Values Meet Excellence</div>
-            <div style={{fontSize:'10px',color:'rgba(255,255,255,.6)',marginTop:'2px'}}>{board} No. {schoolNo} · Affiliation {affNo}</div>
+            {/* Badge pill → Poppins 600 */}
+            <div style={{fontFamily:"'Poppins',sans-serif",display:'inline-flex',alignItems:'center',gap:'5px',background:'rgba(245,184,0,.9)',padding:'3px 9px',borderRadius:'50px',fontSize:'10px',fontWeight:'600',color:'var(--dark)',marginBottom:'4px'}}>🏆 Est. {est} · {area}</div>
+            {/* Overlay title → Playfair Display 700 */}
+            <div style={{fontFamily:"'Playfair Display',serif",fontSize:'14px',fontWeight:'700',color:'#fff',lineHeight:1.3}}>Where Values Meet Excellence</div>
+            {/* Overlay sub → Poppins 400 */}
+            <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'10px',fontWeight:'400',color:'rgba(255,255,255,.6)',marginTop:'2px'}}>{board} No. {schoolNo} · Affiliation {affNo}</div>
           </div>
+          {/* Mini badge top-right */}
           <div style={{position:'absolute',top:'10px',right:'10px',background:'rgba(255,255,255,.92)',borderRadius:'9px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
             <span style={{fontSize:'14px'}}>🎓</span>
             <div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'13px',fontWeight:700,color:'var(--dark)'}}>{students}</div>
-              <div style={{fontSize:'9px',color:'var(--txt3)',fontWeight:600}}>Students</div>
+              {/* Number → Playfair Display 700 */}
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'13px',fontWeight:'700',color:'var(--dark)'}}>{students}</div>
+              {/* Label → Poppins 500 */}
+              <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'9px',fontWeight:'500',color:'var(--txt3)'}}>Students</div>
             </div>
           </div>
         </div>
 
+        {/* Stats row */}
         <div className="hm-stats">
           {[[students,'Students'],['100%','Pass Rate'],[est.substring(2)+'yrs','Years'],[(school.classrooms||'73'),'Classes']].map(([n,l],i) => (
             <div key={i} className="hm-stat">
+              {/* hm-stat-n → Playfair Display 700 (number) */}
               <div className="hm-stat-n">{n}</div>
+              {/* hm-stat-l → Poppins 500 (label) */}
               <div className="hm-stat-l">{l}</div>
             </div>
           ))}
         </div>
 
+        {/* btn-or, btn-out → index.css: Poppins 600 UPPERCASE */}
         <div className="hm-btns">
           <Link to="/contact" className="btn-or hm-btn">{admOpen ? '📋 Enrol Now →' : '📋 Contact Us'}</Link>
           <Link to="/about"   className="btn-out hm-btn">🏫 Explore School</Link>
         </div>
 
+        {/* Trust bar → Poppins 400 */}
         <div className="hm-trust">
           <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
             <span style={{color:'#F5B800',fontSize:'12px'}}>★★★★★</span>
-            <strong style={{fontSize:'12px',color:'var(--dark2)'}}>4.9/5</strong>
+            <strong style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'700',color:'var(--dark2)'}}>4.9/5</strong>
           </div>
           <div className="hm-tdiv"/>
-          <div style={{fontSize:'12px',color:'var(--dark2)'}}><strong>{students}</strong> Students</div>
+          <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--dark2)'}}><strong>{students}</strong> Students</div>
           <div className="hm-tdiv"/>
-          <div style={{fontSize:'12px',color:'var(--dark2)'}}>🏆 <strong>100%</strong> Pass</div>
+          <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--dark2)'}}>🏆 <strong>100%</strong> Pass</div>
         </div>
       </div>
 
@@ -220,28 +252,43 @@ export default function HeroSection() {
 
       <style>{`
         .hero-mob { display: none; }
+
         @media (max-width: 768px) {
           .hero-desk   { display: none !important; }
           .scroll-hint { display: none !important; }
           .hero-dots   { display: none !important; }
           .hero        { min-height: auto !important; padding-bottom: 28px; }
           .hero-mob    { display: flex; flex-direction: column; gap: 16px; padding: 24px 16px 4px; position: relative; z-index: 4; }
+
           .hm-badge  { font-size: 10px !important; padding: 5px 12px !important; margin-bottom: 10px !important; display: inline-flex !important; }
           .hm-h1     { font-size: 32px !important; line-height: 1.2 !important; margin-bottom: 8px !important; }
           .hm-sub    { font-size: 13px !important; margin-bottom: 6px !important; }
           .hm-desc   { font-size: 13px !important; line-height: 1.6 !important; margin: 0 !important; }
+
           .hm-card   { border-radius: 18px; overflow: hidden; height: 215px; position: relative; box-shadow: 0 12px 36px rgba(232,118,26,.22); border: 1.5px solid rgba(232,118,26,.2); }
+
           .hm-stats  { display: flex; align-items: center; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px 6px; border: 1.5px solid rgba(232,118,26,.14); box-shadow: 0 4px 18px rgba(232,118,26,.08); }
           .hm-stat   { flex: 1; text-align: center; }
           .hm-stat + .hm-stat { border-left: 1px solid rgba(232,118,26,.15); }
+
+          /* stat number → Playfair Display 700 */
           .hm-stat-n { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--or); line-height: 1; margin-bottom: 2px; }
-          .hm-stat-l { font-size: 9px; font-weight: 600; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.4px; }
+          /* stat label → Poppins 500 */
+          .hm-stat-l { font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.4px; }
+
           .hm-btns   { display: flex; flex-direction: row; gap: 10px; }
           .hm-btn    { flex: 1 !important; justify-content: center !important; text-align: center !important; font-size: 13px !important; padding: 12px 8px !important; }
+
           .hm-trust  { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 14px; background: rgba(255,255,255,.85); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(232,118,26,.12); margin-bottom: 4px; }
           .hm-tdiv   { width: 1px; height: 16px; background: rgba(232,118,26,.2); flex-shrink: 0; }
         }
-        @media (max-width: 480px) { .hm-h1 { font-size: 27px !important; } .hm-card { height: 185px; } .hm-stat-n { font-size: 15px; } .hm-btn { font-size: 12px !important; padding: 11px 5px !important; } }
+
+        @media (max-width: 480px) {
+          .hm-h1     { font-size: 27px !important; }
+          .hm-card   { height: 185px; }
+          .hm-stat-n { font-size: 15px; }
+          .hm-btn    { font-size: 12px !important; padding: 11px 5px !important; }
+        }
       `}</style>
     </section>
   )

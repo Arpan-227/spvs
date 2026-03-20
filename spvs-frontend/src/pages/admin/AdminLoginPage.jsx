@@ -88,12 +88,12 @@ export default function AdminLoginPage() {
             </div>
             <button type="submit" disabled={loading}
               style={{marginTop:'4px', padding:'14px', borderRadius:'12px', border:'none', cursor: loading ? 'wait' : 'pointer', background: loading ? 'rgba(232,118,26,.5)' : 'linear-gradient(135deg,#E8761A,#F5B800)', color:'#fff', fontFamily:"'DM Sans',sans-serif", fontSize:'15px', fontWeight:'800', boxShadow:'0 8px 24px rgba(232,118,26,.3)', transition:'all .2s'}}>
-              {loading ? '⏳ Signing in...' : '🔐 Sign In to Dashboard'}
+              {loading ? '⏳ Signing in...' : 'Sign In to Dashboard'}
             </button>
           </form>
 
           <div style={{marginTop:'18px', padding:'12px', borderRadius:'10px', background:'#FFF6EA', border:'1px solid rgba(232,118,26,.12)', textAlign:'center'}}>
-            <div style={{fontSize:'11px', color:'#B87832', fontWeight:'600'}}>🔒 Secure Admin Access · SPVS 2026</div>
+            <div style={{fontSize:'11px', color:'#B87832', fontWeight:'600'}}>Secure Admin Access · SPVS 2026</div>
           </div>
         </div>
 

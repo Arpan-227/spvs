@@ -143,7 +143,7 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div style={s.card}>
-        <div style={s.h2}>⚡ Quick Actions</div>
+        <div style={s.h2}> Quick Actions</div>
         <div className="dp-quick">
           {QUICK.map(function(q) {
             return (

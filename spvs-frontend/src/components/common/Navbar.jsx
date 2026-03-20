@@ -31,6 +31,24 @@ function SchoolLogo({ size = 58 }) {
   )
 }
 
+/* ── Real social links ── */
+const SOCIAL_LINKS = {
+  instagram: 'https://www.instagram.com/sant.pathikvidyalaya?igsh=MXRhMGY5ZzA2OGlvZg==',
+  facebook:  'https://www.facebook.com/61584920274763/',
+  youtube:   'https://youtube.com/@santpathikvidyalayabahraic9459?si=NccPMOyCjrsklcoc',
+}
+
+/* ── SVG icons ── */
+function IgIcon() {
+  return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+}
+function FbIcon() {
+  return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+}
+function YtIcon() {
+  return <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+}
+
 const ABOUT_DROPDOWN = [
   { to:'/about#history',    emoji:'🏛️', label:'School History',      desc:'Our journey since 1987' },
   { to:'/about#vision',     emoji:'🎯', label:'Vision & Mission',     desc:'Our guiding principles' },
@@ -49,16 +67,6 @@ const FACILITIES_DROPDOWN = [
   { to:'/facilities#sports',     emoji:'⚽', label:'Sports Ground',    desc:'Cricket · Football · Athletics' },
 ]
 
-const STATIC_ANNOUNCEMENTS = [
-  '🎉 Admissions Open 2024–25 — Apply Now!',
-  '🏆 100% Board Results — Science, Commerce & Humanities',
-  '📚 CBSE Affiliated · Est. 1987 · Bahraich UP',
-  '🚌 Transport Available on All Routes · 22 Buses',
-  '📞 Enquire: +91 9198783830 · spvbrh@gmail.com',
-  '🏠 Boys Hostel Available · Limited Seats',
-  '🎓 1410+ Students · 73 Classrooms · 8 Labs',
-]
-
 function DropPanel({ items, onClose }) {
   return (
     <div style={{position:'absolute',top:'calc(100% + 14px)',left:'50%',transform:'translateX(-50%)',background:'#ffffff',border:'1.5px solid rgba(232,118,26,.15)',borderRadius:'20px',boxShadow:'0 28px 70px rgba(232,118,26,.18),0 6px 24px rgba(0,0,0,.07)',padding:'10px',minWidth:'290px',zIndex:500,animation:'dropIn 0.28s cubic-bezier(.34,1.56,.64,1) both'}}>
@@ -71,11 +79,11 @@ function DropPanel({ items, onClose }) {
         >
           <span style={{width:'38px',height:'38px',borderRadius:'11px',flexShrink:0,background:highlight?'linear-gradient(135deg,#E8761A,#F5B800)':'linear-gradient(135deg,#FFF3E0,#FEF0D4)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',boxShadow:highlight?'0 4px 14px rgba(232,118,26,.4)':'none'}}>{emoji}</span>
           <div style={{flex:1}}>
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:'13.5px',fontWeight:highlight?800:600,color:highlight?'#C45F0A':'#2C1500',display:'flex',alignItems:'center',gap:'7px'}}>
+            <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'13.5px',fontWeight:highlight?700:600,color:highlight?'#C45F0A':'#2C1500',display:'flex',alignItems:'center',gap:'7px'}}>
               {label}
-              {highlight && <span style={{fontSize:'9px',fontWeight:900,letterSpacing:'1px',textTransform:'uppercase',color:'#fff',background:'linear-gradient(135deg,#E8761A,#F5B800)',padding:'2px 8px',borderRadius:'50px'}}>⭐ TOP</span>}
+              {highlight && <span style={{fontSize:'9px',fontWeight:700,letterSpacing:'1px',textTransform:'uppercase',color:'#fff',background:'linear-gradient(135deg,#E8761A,#F5B800)',padding:'2px 8px',borderRadius:'50px'}}>⭐ TOP</span>}
             </div>
-            <div style={{fontFamily:"'DM Sans',sans-serif",fontSize:'11.5px',color:'#B87832',marginTop:'2px'}}>{desc}</div>
+            <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'11.5px',fontWeight:400,color:'#B87832',marginTop:'2px'}}>{desc}</div>
           </div>
         </Link>
       ))}
@@ -89,7 +97,8 @@ function NavItem({ to, label, dropdown, isActive, onClose }) {
   const enter = () => { clearTimeout(timerRef.current); setOpen(true) }
   const leave = () => { timerRef.current = setTimeout(() => setOpen(false), 160) }
   useEffect(() => () => clearTimeout(timerRef.current), [])
-  const baseStyle = {fontFamily:"'DM Sans',sans-serif",fontSize:'13.5px',fontWeight:600,color:isActive?'#E8761A':'#7A4010',padding:'7px 13px',borderRadius:'10px',textDecoration:'none',transition:'all 0.2s',display:'inline-flex',alignItems:'center',gap:'4px',background:'transparent',border:'none',cursor:'pointer',position:'relative'}
+  /* nav links → Poppins 500 */
+  const baseStyle = {fontFamily:"'Poppins',sans-serif",fontSize:'13.5px',fontWeight:500,color:isActive?'#E8761A':'#7A4010',padding:'7px 13px',borderRadius:'10px',textDecoration:'none',transition:'all 0.2s',display:'inline-flex',alignItems:'center',gap:'4px',background:'transparent',border:'none',cursor:'pointer',position:'relative'}
   const activeBar = isActive ? <span style={{position:'absolute',bottom:'2px',left:'13px',right:'13px',height:'2.5px',borderRadius:'2px',background:'linear-gradient(90deg,#E8761A,#F5B800)'}}/> : null
   if (!dropdown) {
     return (
@@ -153,7 +162,7 @@ function MobNavRow({ item, isActive, onClose }) {
   return (
     <div>
       <div style={{display:'flex',alignItems:'center',borderRadius:'12px',marginBottom:'3px',overflow:'hidden',background:isActive(item.to)?'rgba(232,118,26,.08)':'transparent',transition:'background .15s'}}>
-        <Link to={item.to} onClick={onClose} style={{flex:1,display:'flex',alignItems:'center',gap:'12px',padding:'11px 14px',textDecoration:'none',fontFamily:"'DM Sans',sans-serif",fontSize:'15px',fontWeight:600,color:isActive(item.to)?'#E8761A':'#2C1500'}}>
+        <Link to={item.to} onClick={onClose} style={{flex:1,display:'flex',alignItems:'center',gap:'12px',padding:'11px 14px',textDecoration:'none',fontFamily:"'Poppins',sans-serif",fontSize:'15px',fontWeight:600,color:isActive(item.to)?'#E8761A':'#2C1500'}}>
           <span style={{width:'36px',height:'36px',borderRadius:'10px',background:isActive(item.to)?'rgba(232,118,26,.15)':'rgba(232,118,26,.07)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>{item.emoji}</span>
           {item.label}
           {isActive(item.to) && <span style={{marginLeft:'auto',width:'6px',height:'6px',borderRadius:'50%',background:'#E8761A',flexShrink:0}} />}
@@ -171,7 +180,7 @@ function MobNavRow({ item, isActive, onClose }) {
           {item.sub.map(function(s){
             return (
               <Link key={s.to} to={s.to} onClick={onClose}
-                style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 12px',borderRadius:'10px',marginBottom:'2px',textDecoration:'none',fontFamily:"'DM Sans',sans-serif",fontSize:'13.5px',fontWeight:600,color:isActive(s.to)?'#E8761A':'#4A2C00',background:isActive(s.to)?'rgba(232,118,26,.08)':'transparent',transition:'all .15s'}}
+                style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 12px',borderRadius:'10px',marginBottom:'2px',textDecoration:'none',fontFamily:"'Poppins',sans-serif",fontSize:'13.5px',fontWeight:500,color:isActive(s.to)?'#E8761A':'#4A2C00',background:isActive(s.to)?'rgba(232,118,26,.08)':'transparent',transition:'all .15s'}}
                 onMouseEnter={function(e){e.currentTarget.style.background='rgba(232,118,26,.06)';e.currentTarget.style.paddingLeft='16px'}}
                 onMouseLeave={function(e){e.currentTarget.style.background=isActive(s.to)?'rgba(232,118,26,.08)':'transparent';e.currentTarget.style.paddingLeft='12px'}}>
                 <span style={{fontSize:'15px'}}>{s.emoji}</span>{s.label}
@@ -191,11 +200,15 @@ export default function Navbar() {
   const location = useLocation()
   const { settings } = useSettings()
 
-  // Live contact from settings
   const phone   = settings.contact?.phone1  || '9198783830'
   const email   = settings.contact?.email   || 'spvbrh@gmail.com'
   const students= settings.school?.students || '1410+'
   const buses   = settings.school?.buses    || '22'
+
+  /* real links — fall back to SOCIAL_LINKS constants */
+  const igLink = settings.contact?.instagram || SOCIAL_LINKS.instagram
+  const fbLink = settings.contact?.facebook  || SOCIAL_LINKS.facebook
+  const ytLink = settings.contact?.youtube   || SOCIAL_LINKS.youtube
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 60)
@@ -223,7 +236,6 @@ export default function Navbar() {
     { to:'/contact',    label:'Contact Us' },
   ]
 
-  // Use live announcements if available, else build from settings
   const fallback = [
     '🎉 Admissions Open — Apply Now!',
     '🏆 100% Board Results — Science, Commerce & Humanities',
@@ -238,8 +250,10 @@ export default function Navbar() {
 
   return (
     <>
-      {/* TOPBAR */}
+      {/* ── TOPBAR ── */}
       <div style={{background:'linear-gradient(90deg,#1C0A00,#3D1A00)',position:'relative',zIndex:100}}>
+
+        {/* Desktop topbar */}
         <div className="tb-inner tb-desktop">
           <div className="tb-contacts">
             <span className="tb-c">📞 <span style={{color:'#FFCF40'}}>+91 {phone}</span></span>
@@ -249,37 +263,38 @@ export default function Navbar() {
           <div className="tb-marquee">
             <div className="tb-mq-track">
               {marqueeItems.map((t,i) => (
-                <span key={i} style={{color:'#FFCF40',margin:'0 32px',fontSize:'12px',fontWeight:600,fontFamily:"'DM Sans',sans-serif",whiteSpace:'nowrap'}}>{t}</span>
+                <span key={i} style={{color:'#FFCF40',margin:'0 32px',fontSize:'12px',fontWeight:600,fontFamily:"'Poppins',sans-serif",whiteSpace:'nowrap'}}>{t}</span>
               ))}
             </div>
           </div>
+          {/* Desktop social — Instagram, Facebook, YouTube (no WhatsApp) */}
           <div className="tb-social">
-            {[['f', settings.contact?.facebook||'#'],['▶', settings.contact?.youtube||'#'],['in', settings.contact?.instagram||'#']].map(([l,h]) => (
-              <a key={l} href={h} style={{width:'24px',height:'24px',borderRadius:'5px',background:'rgba(255,255,255,.1)',display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,.7)',fontSize:'11px',fontWeight:700,textDecoration:'none',transition:'all .2s',fontFamily:"'DM Sans',sans-serif"}}
-                onMouseEnter={e=>{e.currentTarget.style.background='#E8761A';e.currentTarget.style.color='#fff'}}
-                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,.1)';e.currentTarget.style.color='rgba(255,255,255,.7)'}}
-              >{l}</a>
-            ))}
+            <a href={igLink} target="_blank" rel="noopener noreferrer" className="tb-soc-a tb-soc-ig" aria-label="Instagram"><IgIcon/></a>
+            <a href={fbLink} target="_blank" rel="noopener noreferrer" className="tb-soc-a tb-soc-fb" aria-label="Facebook"><FbIcon/></a>
+            <a href={ytLink} target="_blank" rel="noopener noreferrer" className="tb-soc-a tb-soc-yt" aria-label="YouTube"><YtIcon/></a>
           </div>
         </div>
+
+        {/* Mobile topbar */}
         <div className="tb-mobile">
+          {/* Mobile social — Instagram, Facebook, YouTube (no WhatsApp) */}
           <div className="tb-mob-social">
-            {[['f','#'],['▶','#'],['in','#']].map(([l,h]) => (
-              <a key={l} href={h} className="tb-mob-soc-btn">{l}</a>
-            ))}
+            <a href={igLink} target="_blank" rel="noopener noreferrer" className="tb-mob-soc-btn tb-mob-ig" aria-label="Instagram"><IgIcon/></a>
+            <a href={fbLink} target="_blank" rel="noopener noreferrer" className="tb-mob-soc-btn tb-mob-fb" aria-label="Facebook"><FbIcon/></a>
+            <a href={ytLink} target="_blank" rel="noopener noreferrer" className="tb-mob-soc-btn tb-mob-yt" aria-label="YouTube"><YtIcon/></a>
           </div>
           <div className="tb-mob-divider"/>
           <div className="tb-mob-mq-wrap">
             <div className="tb-mob-mq-track">
               {marqueeItems.map((t,i) => (
-                <span key={i} style={{color:'#FFCF40',margin:'0 18px',fontSize:'11px',fontWeight:600,fontFamily:"'DM Sans',sans-serif",whiteSpace:'nowrap'}}>{t}</span>
+                <span key={i} style={{color:'#FFCF40',margin:'0 18px',fontSize:'11px',fontWeight:600,fontFamily:"'Poppins',sans-serif",whiteSpace:'nowrap'}}>{t}</span>
               ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* STICKY HEADER */}
+      {/* ── STICKY HEADER ── */}
       <header style={{position:'sticky',top:0,zIndex:200,background:'rgba(255,253,248,.97)',backdropFilter:'blur(20px)',WebkitBackdropFilter:'blur(20px)',borderBottom:'1px solid rgba(232,118,26,.13)',boxShadow:scrolled?'0 4px 40px rgba(232,118,26,.18)':'0 2px 16px rgba(232,118,26,.06)',transition:'all .3s'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'0 20px',display:'flex',alignItems:'center',gap:'16px',height:'76px'}}>
           <Link to="/" style={{display:'flex',alignItems:'center',gap:'13px',flexShrink:0,textDecoration:'none'}}>
@@ -288,19 +303,25 @@ export default function Navbar() {
               onMouseLeave={e=>{e.currentTarget.style.transform='';e.currentTarget.style.borderColor='rgba(245,184,0,.4)'}}
             ><SchoolLogo size={58}/></div>
             <div>
+              {/* School name → Playfair Display 700 */}
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'17px',fontWeight:700,color:'#C45F0A',lineHeight:1.2}}>{settings.school?.name || 'Sant Pathik Vidyalaya'}</div>
-              <div style={{fontSize:'10px',color:'#F5B800',fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',fontFamily:"'DM Sans',sans-serif"}}>Work is Worship — ॐ</div>
-              <div style={{fontSize:'10px',color:'#B87832',fontFamily:"'DM Sans',sans-serif"}}>{settings.school?.board||'CBSE'} Affiliated · Est. {settings.school?.established||'1987'} · Bahraich, UP</div>
+              {/* Tagline → Playfair Display 400 italic */}
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'10px',fontStyle:'italic',fontWeight:400,color:'#F5B800',letterSpacing:'.5px'}}>Work is Worship — ॐ</div>
+              {/* Sub info → Poppins 400 */}
+              <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'10px',fontWeight:400,color:'#B87832'}}>{settings.school?.board||'CBSE'} Affiliated · Est. {settings.school?.established||'1987'} · Bahraich, UP</div>
             </div>
           </Link>
+
+          {/* nav links → Poppins 500 (applied inside NavItem) */}
           <nav className="spvs-dnav" style={{marginLeft:'auto',display:'flex',alignItems:'center',gap:'2px'}}>
             {NAV.map(item => <NavItem key={item.to} {...item} isActive={isActive(item.to)}/>)}
             <div style={{marginLeft:'12px',position:'relative'}}>
               <div className="cta-pulse-ring"/>
+              {/* CTA button → Poppins 600 UPPERCASE */}
               <Link to="/contact" className="spvs-cta-btn">
-                <span style={{fontSize:'16px'}}>📋</span>
-                Enroll Now
-                <span style={{background:'rgba(255,255,255,.22)',backdropFilter:'blur(4px)',fontSize:'9px',fontWeight:900,letterSpacing:'1.2px',padding:'3px 8px',borderRadius:'50px',textTransform:'uppercase',border:'1px solid rgba(255,255,255,.3)'}}>{settings.admission?.open !== false ? 'OPEN' : 'LIMITED'}</span>
+                <span style={{fontSize:'16px'}}></span>
+                ENROLL NOW
+                <span style={{background:'rgba(255,255,255,.22)',backdropFilter:'blur(4px)',fontSize:'9px',fontWeight:700,letterSpacing:'1.2px',padding:'3px 8px',borderRadius:'50px',textTransform:'uppercase',border:'1px solid rgba(255,255,255,.3)'}}>{settings.admission?.open !== false ? 'OPEN' : 'LIMITED'}</span>
               </Link>
             </div>
           </nav>
@@ -310,36 +331,68 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* MOBILE MENU */}
+      {/* ── MOBILE MENU ── */}
       {mobileOpen && (
         <div style={{position:'fixed',inset:0,zIndex:1000,background:'#FFFDF8',display:'flex',flexDirection:'column',overflowY:'hidden'}}>
+          {/* Header */}
           <div style={{background:'linear-gradient(135deg,#1C0A00,#3D1A00)',padding:'18px 16px',display:'flex',alignItems:'center',gap:'13px',flexShrink:0}}>
             <div style={{width:'52px',height:'52px',borderRadius:'50%',overflow:'hidden',border:'2.5px solid rgba(245,184,0,.5)',background:'#FFF8DC',flexShrink:0,display:'flex',alignItems:'center',justifyContent:'center'}}>
               <SchoolLogo size={48}/>
             </div>
             <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:'10px',fontWeight:'700',color:'rgba(255,210,130,.6)',letterSpacing:'1.2px',textTransform:'uppercase',fontFamily:"'DM Sans',sans-serif",marginBottom:'2px'}}>Welcome to</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'15px',fontWeight:'700',color:'#FFCF40',lineHeight:1.25}}>{settings.school?.name || 'Sant Pathik Vidyalaya'}</div>
-              <div style={{fontSize:'10px',color:'rgba(255,210,130,.5)',fontFamily:"'DM Sans',sans-serif",marginTop:'2px'}}>{settings.school?.board||'CBSE'} Affiliated · Est. {settings.school?.established||'1987'} · Bahraich</div>
+              <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'10px',fontWeight:500,color:'rgba(255,210,130,.6)',letterSpacing:'1.2px',textTransform:'uppercase',marginBottom:'2px'}}>Welcome to</div>
+              {/* School name → Playfair Display 700 */}
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'15px',fontWeight:700,color:'#FFCF40',lineHeight:1.25}}>{settings.school?.name || 'Sant Pathik Vidyalaya'}</div>
+              {/* Sub → Poppins 400 */}
+              <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'10px',fontWeight:400,color:'rgba(255,210,130,.5)',marginTop:'2px'}}>{settings.school?.board||'CBSE'} Affiliated · Est. {settings.school?.established||'1987'} · Bahraich</div>
             </div>
             <button onClick={() => setMobile(false)} style={{width:'36px',height:'36px',borderRadius:'10px',border:'1.5px solid rgba(255,255,255,.15)',background:'rgba(255,255,255,.08)',cursor:'pointer',fontSize:'16px',display:'flex',alignItems:'center',justifyContent:'center',color:'rgba(255,255,255,.8)',flexShrink:0}}>✕</button>
           </div>
+
+          {/* Nav links */}
           <div style={{flex:1,overflowY:'auto',padding:'10px 14px 20px'}}>
             {MOB_NAV.map(function(item){ return <MobNavRow key={item.to} item={item} isActive={isActive} onClose={function(){setMobile(false)}} /> })}
           </div>
+
+          {/* Footer of mobile menu */}
           <div style={{padding:'14px 16px 18px',borderTop:'1px solid rgba(232,118,26,.1)',flexShrink:0}}>
-            <div style={{display:'flex',flexDirection:'column',gap:'7px',marginBottom:'16px'}}>
-              <a href={'tel:+91' + phone} style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 14px',borderRadius:'10px',background:'rgba(232,118,26,.07)',border:'1px solid rgba(232,118,26,.15)',color:'#7A4010',textDecoration:'none',fontSize:'13px',fontWeight:700,fontFamily:"'DM Sans',sans-serif"}}>
+            {/* Contact links */}
+            <div style={{display:'flex',flexDirection:'column',gap:'7px',marginBottom:'14px'}}>
+              <a href={'tel:+91' + phone} style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 14px',borderRadius:'10px',background:'rgba(232,118,26,.07)',border:'1px solid rgba(232,118,26,.15)',color:'#7A4010',textDecoration:'none',fontFamily:"'Poppins',sans-serif",fontSize:'13px',fontWeight:600}}>
                 <span style={{fontSize:'16px'}}>📞</span> +91 {phone}
               </a>
-              <a href={'mailto:' + email} style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 14px',borderRadius:'10px',background:'rgba(232,118,26,.07)',border:'1px solid rgba(232,118,26,.15)',color:'#7A4010',textDecoration:'none',fontSize:'13px',fontWeight:700,fontFamily:"'DM Sans',sans-serif"}}>
+              <a href={'mailto:' + email} style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 14px',borderRadius:'10px',background:'rgba(232,118,26,.07)',border:'1px solid rgba(232,118,26,.15)',color:'#7A4010',textDecoration:'none',fontFamily:"'Poppins',sans-serif",fontSize:'13px',fontWeight:600}}>
                 <span style={{fontSize:'16px'}}>✉️</span> {email}
               </a>
             </div>
-            <div style={{textAlign:'center',paddingTop:'12px',borderTop:'1px solid rgba(232,118,26,.08)'}}>
-              <div style={{fontSize:'9px',color:'#C8A06A',fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:'5px'}}>Powered by</div>
-              <a href="https://www.welltechup.com" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
-                <span style={{fontFamily:"'Playfair Display',serif",fontSize:'18px',fontWeight:700,background:'linear-gradient(135deg,#0F1B3D,#1a6bbf)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',backgroundClip:'text',letterSpacing:'.5px'}}>Welltechup</span>
+
+            {/* Social icons row — Instagram, Facebook, YouTube (no WhatsApp) */}
+            <div style={{display:'flex',gap:'8px',marginBottom:'14px',justifyContent:'center'}}>
+              <a href={igLink} target="_blank" rel="noopener noreferrer" className="mob-soc-btn mob-soc-ig" aria-label="Instagram"><IgIcon/></a>
+              <a href={fbLink} target="_blank" rel="noopener noreferrer" className="mob-soc-btn mob-soc-fb" aria-label="Facebook"><FbIcon/></a>
+              <a href={ytLink} target="_blank" rel="noopener noreferrer" className="mob-soc-btn mob-soc-yt" aria-label="YouTube"><YtIcon/></a>
+            </div>
+
+            {/* Welltechup credit */}
+            <div style={{paddingTop:'12px',borderTop:'1px solid rgba(232,118,26,.08)',display:'flex',justifyContent:'center'}}>
+              <a href="https://www.welltechup.com" target="_blank" rel="noopener noreferrer"
+                style={{display:'flex',alignItems:'center',gap:'10px',textDecoration:'none',transition:'all .25s',paddingLeft:'20px'}}
+                onMouseEnter={function(e){e.currentTarget.style.transform='translateY(-2px)'}}
+                onMouseLeave={function(e){e.currentTarget.style.transform='none'}}>
+                <img
+                  src="/images/welltechup_logo.jpg"
+                  alt="Welltechup"
+                  style={{width:'36px',height:'36px',borderRadius:'10px',objectFit:'cover',flexShrink:0,boxShadow:'0 2px 8px rgba(0,0,0,.15)'}}
+                  onError={function(e){
+                    e.target.style.display='none'
+                    e.target.nextSibling.style.display='flex'
+                  }}
+                />
+                <div style={{display:'none',width:'36px',height:'36px',borderRadius:'10px',background:'linear-gradient(135deg,#6C3FC5,#9B59F5)',alignItems:'center',justifyContent:'center',fontSize:'15px',fontWeight:900,color:'#fff',flexShrink:0}}>W</div>
+                <div>
+                  <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'9px',fontWeight:500,color:'#B87832',letterSpacing:'1.5px',textTransform:'uppercase',marginBottom:'2px'}}>Designed &amp; Developed by</div>
+                  <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'15px',fontWeight:700,color:'#FF3B3B',letterSpacing:'.8px',textTransform:'uppercase',lineHeight:1}}>WELLTECHUP</div>
+                </div>
               </a>
             </div>
           </div>
@@ -352,23 +405,57 @@ export default function Navbar() {
         @keyframes dropIn  { from{opacity:0;transform:translateX(-50%) translateY(-12px) scale(.95)} to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)} }
         @keyframes ctaRing { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.08);opacity:1} }
         @keyframes ctaShine{ 0%{left:-60%} 100%{left:130%} }
+
         .tb-inner    { max-width:1280px; margin:0 auto; padding:7px 20px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
         .tb-contacts { display:flex; gap:16px; flex-wrap:wrap; }
-        .tb-c        { display:flex; align-items:center; gap:5px; font-size:12px; color:rgba(255,255,255,.6); font-family:'DM Sans',sans-serif; }
+        .tb-c        { display:flex; align-items:center; gap:5px; font-size:12px; color:rgba(255,255,255,.6); font-family:'Poppins',sans-serif; }
         .tb-marquee  { flex:1; overflow:hidden; min-width:0; max-width:400px; }
         .tb-mq-track { display:inline-block; white-space:nowrap; animation:tbmq 30s linear infinite; }
         .tb-social   { display:flex; gap:6px; }
-        .tb-desktop { display:flex; }
-        .tb-mobile  { display:none; }
+        .tb-desktop  { display:flex; }
+        .tb-mobile   { display:none; }
+
+        /* Desktop topbar social icons */
+        .tb-soc-a {
+          width:26px; height:26px; border-radius:6px;
+          background:rgba(255,255,255,.1);
+          display:flex; align-items:center; justify-content:center;
+          color:rgba(255,255,255,.75); text-decoration:none; transition:all .22s;
+        }
+        .tb-soc-a:hover { transform:translateY(-2px); color:#fff; }
+        .tb-soc-ig:hover { background:linear-gradient(135deg,#f09433,#dc2743,#bc1888); }
+        .tb-soc-fb:hover { background:#1877F2; }
+        .tb-soc-yt:hover { background:#FF0000; }
+
+        /* Mobile topbar */
         .tb-mob-social   { display:flex; align-items:center; gap:6px; padding:0 10px; flex-shrink:0; }
-        .tb-mob-soc-btn  { width:26px; height:26px; border-radius:6px; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.8); font-size:11px; font-weight:700; text-decoration:none; font-family:'DM Sans',sans-serif; }
+        .tb-mob-soc-btn  { width:28px; height:28px; border-radius:7px; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.8); text-decoration:none; transition:all .22s; }
+        .tb-mob-soc-btn:hover { transform:translateY(-2px); }
+        .tb-mob-ig:hover { background:linear-gradient(135deg,#f09433,#dc2743,#bc1888); color:#fff; }
+        .tb-mob-fb:hover { background:#1877F2; color:#fff; }
+        .tb-mob-yt:hover { background:#FF0000; color:#fff; }
         .tb-mob-divider  { width:1px; height:18px; background:rgba(255,255,255,.2); flex-shrink:0; }
         .tb-mob-mq-wrap  { flex:1; overflow:hidden; min-width:0; padding:0 8px; }
         .tb-mob-mq-track { display:inline-block; white-space:nowrap; animation:tbmqmob 25s linear infinite; }
+
+        /* CTA button */
         .cta-pulse-ring { position:absolute; inset:-4px; border-radius:15px; background:linear-gradient(135deg,#E8761A,#F5B800,#FF9A3C); animation:ctaRing 2.4s ease-in-out infinite; z-index:0; }
-        .spvs-cta-btn   { position:relative; z-index:1; overflow:hidden; display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#E8761A,#C45F0A); color:#fff !important; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:800; padding:11px 20px; border-radius:12px; text-decoration:none; white-space:nowrap; box-shadow:0 6px 24px rgba(232,118,26,.5); transition:all .25s; }
+        .spvs-cta-btn   { position:relative; z-index:1; overflow:hidden; display:inline-flex; align-items:center; gap:8px; background:linear-gradient(135deg,#E8761A,#C45F0A); color:#fff !important; font-family:'Poppins',sans-serif; font-size:13px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; padding:11px 20px; border-radius:12px; text-decoration:none; white-space:nowrap; box-shadow:0 6px 24px rgba(232,118,26,.5); transition:all .25s; }
         .spvs-cta-btn:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 12px 36px rgba(232,118,26,.6); }
         .spvs-cta-btn::after { content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent); transform:skewX(-20deg); animation:ctaShine 3s ease-in-out infinite; }
+
+        /* Mobile social icons in hamburger */
+        .mob-soc-btn {
+          width:40px; height:40px; border-radius:10px;
+          background:rgba(232,118,26,.08); border:1px solid rgba(232,118,26,.15);
+          display:flex; align-items:center; justify-content:center;
+          color:#7A4010; text-decoration:none; transition:all .22s;
+        }
+        .mob-soc-btn:hover { transform:translateY(-2px); color:#fff; }
+        .mob-soc-ig:hover { background:linear-gradient(135deg,#f09433,#dc2743,#bc1888); border-color:transparent; }
+        .mob-soc-fb:hover { background:#1877F2; border-color:transparent; }
+        .mob-soc-yt:hover { background:#FF0000; border-color:transparent; }
+
         @media (max-width:960px) { .spvs-dnav { display:none !important; } .spvs-hamburger { display:flex !important; } }
         @media (max-width:768px) { .tb-desktop { display:none !important; } .tb-mobile { display:flex !important; align-items:center; width:100%; height:40px; overflow:hidden; } }
       `}</style>
