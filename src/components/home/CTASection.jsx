@@ -1,9 +1,23 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Link } from 'react-router-dom'
+import useSettings from '../../hooks/useSettings'
 
 export default function CTASection() {
   const cvRef = useRef(null)
+  const { settings } = useSettings()
+
+  const school    = settings.school    || {}
+  const admission = settings.admission || {}
+  const contact   = settings.contact   || {}
+
+  const name     = school.name     || 'Sant Pathik Vidyalaya'
+  const students = school.students || '1,410+'
+  const phone    = contact.phone1  || '9198783830'
+  const admOpen  = admission.open !== false
+  const session  = admission.session || '2025–26'
+  const notice   = admission.notice || 'Join ' + students + ' students at ' + name + ' — where academic excellence meets strong values. CBSE affiliated, experienced faculty, modern facilities. Play Group to Class XII.'
+
   useEffect(() => {
     const canvas = cvRef.current
     if (!canvas) return
@@ -28,15 +42,13 @@ export default function CTASection() {
     <section className="cta-sect">
       <canvas ref={cvRef} className="cta-canvas" />
       <div className="cta-inner rv">
-        <div className="cta-badge">📋 Admissions Open 2025–26</div>
+        <div className="cta-badge">{admOpen ? '📋 Admissions Open ' + session : '📞 Enquire Now'}</div>
         <h2 className="cta-title">Give Your Child the<br/><em>Best Start</em> in Life</h2>
-        <p className="cta-desc">
-          Join 1,410+ students at Sant Pathik Vidyalaya — where academic excellence meets strong values. CBSE affiliated, experienced faculty, modern facilities. Play Group to Class XII.
-        </p>
+        <p className="cta-desc">{notice}</p>
         <div className="cta-btns">
-          <Link to="/contact" className="btn-w">📋 Apply Now →</Link>
-          <a href="tel:+919198783830" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
-            📞 Call: +91 9198783830
+          <Link to="/contact" className="btn-w">{admOpen ? '📋 Apply Now →' : '📋 Contact Us →'}</Link>
+          <a href={'tel:+91' + phone} className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
+            📞 Call: +91 {phone}
           </a>
           <Link to="/campus-life" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
             🏫 Explore Campus Life

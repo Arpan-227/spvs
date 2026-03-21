@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { enquiryAPI } from '../../api'
 
 var CLASSES = ['Play Group','Nursery','LKG','UKG','Class I','Class II','Class III','Class IV','Class V','Class VI','Class VII','Class VIII','Class IX','Class X','Class XI','Class XII']
 
@@ -7,17 +8,42 @@ export default function AdmissionEnquiryForm() {
   var [form, setForm]       = useState(init)
   var [sent, setSent]       = useState(false)
   var [loading, setLoading] = useState(false)
+  var [error, setError]     = useState('')
 
   function handleChange(e) {
     var key = e.target.name, val = e.target.value
     setForm(function(prev){ var n={}; for(var k in prev) n[k]=prev[k]; n[key]=val; return n })
+    setError('')
   }
   function setHostel(val) {
     setForm(function(prev){ var n={}; for(var k in prev) n[k]=prev[k]; n.hostel=val; return n })
   }
-  function handleSubmit(e) {
-    e.preventDefault(); setLoading(true)
-    setTimeout(function(){ setLoading(false); setSent(true) }, 1400)
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await enquiryAPI.submit({
+        name:    form.parentName,
+        phone:   form.phone,
+        email:   form.email,
+        message: [
+          'Student: '  + form.studentName,
+          'DOB: '      + form.dob,
+          'Gender: '   + form.gender,
+          'Class: '    + form.applyClass,
+          'Hostel: '   + form.hostel,
+          'Address: '  + (form.address || 'N/A'),
+          form.message ? 'Note: ' + form.message : '',
+        ].filter(Boolean).join(' | '),
+        type: 'Admission',
+      })
+      setSent(true)
+    } catch(err) {
+      setError(err.message || 'Failed to submit. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (sent) return (
@@ -47,7 +73,6 @@ export default function AdmissionEnquiryForm() {
         .aef-sel { cursor: pointer; }
         .aef-lbl { font-size: 11px; font-weight: 800; color: var(--txt3); letter-spacing: .6px; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .aef-sec { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--or); padding-bottom: 8px; border-bottom: 1px solid var(--brd); margin-top: 4px; }
-        /* hostel toggle row */
         .aef-hostel { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border-radius: 12px; background: rgba(232,118,26,.05); border: 1.5px solid rgba(232,118,26,.18); }
         .aef-hostel-btns { display: flex; gap: 8px; flex-shrink: 0; }
         @media (max-width: 480px) {
@@ -55,6 +80,12 @@ export default function AdmissionEnquiryForm() {
           .aef-hostel { gap: 10px; }
         }
       `}</style>
+
+      {error && (
+        <div style={{background:'rgba(239,68,68,.06)', border:'1.5px solid rgba(239,68,68,.2)', borderRadius:'10px', padding:'10px 14px', marginBottom:'14px', fontSize:'12.5px', color:'#dc2626', fontWeight:'600'}}>
+          ⚠️ {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', gap:'14px'}}>
 

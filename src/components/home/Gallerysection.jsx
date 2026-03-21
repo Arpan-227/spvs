@@ -1,20 +1,20 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { galleryAPI } from '../../api'
 
-const CATS = ['All', 'Events', 'Sports Day', 'Annual Function', 'Activities']
+var CATS = ['All', 'Events', 'Sports', 'Academic', 'Cultural']
 
-const ITEMS = [
-  { cat:'Events',          em:'🎉', lbl:'Independence Day Celebration' },
-  { cat:'Sports Day',      em:'🏃', lbl:'District Sports Champions'    },
-  { cat:'Annual Function', em:'🎭', lbl:'Annual Function 2024'         },
-  { cat:'Activities',      em:'🎨', lbl:'Art & Craft Exhibition'       },
-  { cat:'Events',          em:'📚', lbl:'Science Exhibition'           },
-  { cat:'Sports Day',      em:'🏆', lbl:'Kabaddi Champions'            },
-  { cat:'Activities',      em:'🎵', lbl:'Music Competition'            },
-  { cat:'Annual Function', em:'🌟', lbl:'Prize Distribution Ceremony'  },
-]
+// Map backend category → display tab
+function mapCat(c) {
+  if (!c) return 'Events'
+  var s = c.toLowerCase()
+  if (s.includes('sport'))   return 'Sports'
+  if (s.includes('lab') || s.includes('academic')) return 'Academic'
+  if (s.includes('cultur'))  return 'Cultural'
+  return 'Events'
+}
 
-const COLORS = [
+var COLORS = [
   'linear-gradient(135deg,#FFF3CC,#FFD94A)',
   'linear-gradient(135deg,#FFE0A0,#E8761A33)',
   'linear-gradient(135deg,#FFF8DC,#F5B80033)',
@@ -22,9 +22,40 @@ const COLORS = [
   'linear-gradient(135deg,#FFF3E0,#FFBB7A33)',
 ]
 
+// Fallback placeholder items while loading or if no photos
+var PLACEHOLDER = [
+  { cat:'Events',   em:'🎉', lbl:'Independence Day Celebration' },
+  { cat:'Sports',   em:'🏃', lbl:'District Sports Champions'    },
+  { cat:'Cultural', em:'🎭', lbl:'Annual Function 2024'         },
+  { cat:'Academic', em:'🎨', lbl:'Art & Craft Exhibition'       },
+  { cat:'Events',   em:'📚', lbl:'Science Exhibition'           },
+  { cat:'Sports',   em:'🏆', lbl:'Kabaddi Champions'            },
+  { cat:'Cultural', em:'🎵', lbl:'Music Competition'            },
+  { cat:'Events',   em:'🌟', lbl:'Prize Distribution Ceremony'  },
+]
+
 export default function GallerySection() {
-  const [active, setActive] = useState('All')
-  const filtered = active === 'All' ? ITEMS : ITEMS.filter(i => i.cat === active)
+  var [active, setActive] = useState('All')
+  var [photos, setPhotos] = useState([])
+  var [loading, setLoading] = useState(true)
+
+  useEffect(function() {
+    galleryAPI.getAll()
+      .then(function(res){
+        setPhotos(res.data || [])
+        setLoading(false)
+      })
+      .catch(function(){ setLoading(false) })
+  }, [])
+
+  // Use real photos if available, else placeholders
+  var source = photos.length > 0 ? photos.map(function(p, i) {
+    return { _id: p._id, cat: mapCat(p.category), lbl: p.title, image: p.image, em: '📷' }
+  }) : PLACEHOLDER
+
+  var filtered = active === 'All' ? source : source.filter(function(i){ return i.cat === active })
+  // Show max 8 on homepage
+  var display = filtered.slice(0, 8)
 
   return (
     <section className="sect" style={{background:'var(--bg)'}}>
@@ -42,39 +73,58 @@ export default function GallerySection() {
 
         {/* Filter tabs */}
         <div className="gallery-filters rv">
-          {CATS.map(c => (
-            <button key={c} onClick={() => setActive(c)} className={'gal-tab' + (active===c ? ' gal-tab-act' : '')}>
-              {c}
-            </button>
-          ))}
+          {CATS.map(function(c) {
+            return (
+              <button key={c} onClick={function(){setActive(c)}} className={'gal-tab' + (active===c ? ' gal-tab-act' : '')}>
+                {c}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Grid — NO rv3d on items (causes opacity:0 bug) */}
+        {/* Grid */}
         <div className="gallery-grid">
-          {filtered.map((item, i) => (
-            <div key={i} className="gallery-item" style={{
-              transitionDelay: `${(i%4)*0.07}s`,
-              background: COLORS[i % COLORS.length],
-            }}>
-              <div className="gallery-item-inner">
-                <div className="gallery-em">{item.em}</div>
-                <div className="gallery-lbl">{item.lbl}</div>
-                <div className="gallery-cat">{item.cat}</div>
-              </div>
-              <div className="gi-ov">
-                <span>{item.lbl}</span>
-              </div>
+          {loading ? (
+            // Skeleton placeholders while loading
+            [0,1,2,3,4,5,6,7].map(function(i){
+              return (
+                <div key={i} className="gallery-item" style={{background:COLORS[i%COLORS.length], animation:'pulse 1.5s ease-in-out infinite'}}>
+                  <div className="gallery-item-inner">
+                    <div className="gallery-em">📷</div>
+                  </div>
+                </div>
+              )
+            })
+          ) : display.length === 0 ? (
+            <div style={{gridColumn:'1/-1', textAlign:'center', padding:'40px', color:'var(--txt3)', fontSize:'14px'}}>
+              No photos yet
             </div>
-          ))}
+          ) : display.map(function(item, i) {
+            return (
+              <div key={item._id || i} className="gallery-item" style={{
+                transitionDelay: (i%4)*0.07 + 's',
+                background: item.image ? 'transparent' : COLORS[i % COLORS.length],
+              }}>
+                {item.image ? (
+                  <img src={item.image} alt={item.lbl} style={{width:'100%', height:'100%', objectFit:'cover', display:'block'}} />
+                ) : (
+                  <div className="gallery-item-inner">
+                    <div className="gallery-em">{item.em}</div>
+                    <div className="gallery-lbl">{item.lbl}</div>
+                    <div className="gallery-cat">{item.cat}</div>
+                  </div>
+                )}
+                <div className="gi-ov">
+                  <span>{item.lbl}</span>
+                </div>
+              </div>
+            )
+          })}
 
-          {/* View all tile — desktop only, hidden on mobile */}
-          <div className="gallery-more">
-            <div style={{fontSize:'32px',marginBottom:'8px'}}>📷</div>
-            <Link to="/gallery" style={{fontSize:'13px',fontWeight:'700',color:'var(--gd2)',textDecoration:'none'}}>View All →</Link>
-          </div>
+
         </div>
 
-        {/* Mobile-only button — sits below grid with clear spacing */}
+        {/* Mobile-only button */}
         <div className="gallery-mob-btn">
           <Link to="/gallery" className="btn-or" style={{width:'100%',justifyContent:'center'}}>
             📷 View Full Gallery →
@@ -84,37 +134,23 @@ export default function GallerySection() {
       </div>
 
       <style>{`
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
         .gallery-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin-bottom: 32px;
-          flex-wrap: wrap;
-          gap: 16px;
+          display: flex; justify-content: space-between; align-items: flex-end;
+          margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
         }
         .gallery-view-btn { flex-shrink: 0; }
-        .gallery-filters {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-          margin-bottom: 28px;
-        }
+        .gallery-filters  { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
         .gal-tab {
-          padding: 7px 16px;
-          border-radius: 50px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12.5px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all .25s;
-          background: transparent;
-          color: var(--txt2);
+          padding: 7px 16px; border-radius: 50px;
+          font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 700;
+          cursor: pointer; transition: all .25s;
+          background: transparent; color: var(--txt2);
           border: 1.5px solid rgba(232,118,26,.2);
         }
         .gal-tab-act {
-          background: var(--or);
-          color: #fff;
-          border-color: var(--or);
+          background: var(--or); color: #fff; border-color: var(--or);
           box-shadow: 0 5px 18px var(--shd);
         }
         .gallery-grid {
@@ -124,18 +160,11 @@ export default function GallerySection() {
           gap: 12px;
         }
         .gallery-item {
-          border-radius: 16px;
-          overflow: hidden;
-          cursor: pointer;
-          position: relative;
-          border: 1.5px solid var(--brd);
+          border-radius: 16px; overflow: hidden; cursor: pointer;
+          position: relative; border: 1.5px solid var(--brd);
           transition: all .4s cubic-bezier(.34,1.56,.64,1);
         }
-        .gallery-item:hover {
-          transform: scale(1.04);
-          z-index: 10;
-          box-shadow: 0 20px 50px var(--shd);
-        }
+        .gallery-item:hover { transform: scale(1.04); z-index: 10; box-shadow: 0 20px 50px var(--shd); }
         .gallery-item:hover .gi-ov { opacity: 1; }
         .gallery-item-inner {
           width: 100%; height: 100%;
@@ -158,52 +187,26 @@ export default function GallerySection() {
           background: linear-gradient(135deg,var(--dark),var(--dark2));
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;
-          cursor: pointer;
-          border: 1.5px solid rgba(245,184,0,.15);
+          cursor: pointer; border: 1.5px solid rgba(245,184,0,.15);
         }
-        /* Mobile button hidden on desktop */
         .gallery-mob-btn { display: none; }
 
-        /* Tablet */
         @media (max-width: 900px) {
-          .gallery-grid {
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: 150px;
-          }
+          .gallery-grid { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 150px; }
         }
-
-        /* Mobile */
         @media (max-width: 768px) {
-          .gallery-header    { flex-direction: column; align-items: flex-start; gap: 12px; }
-          .gallery-view-btn  { display: none; }
-          .gallery-filters   { gap: 6px; }
-          .gal-tab           { font-size: 11.5px; padding: 6px 12px; }
-
-          .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-            grid-auto-rows: 130px;
-            gap: 8px;
-          }
-          .gallery-em  { font-size: 28px; }
-          .gallery-lbl { font-size: 11px; }
-
-          /* Hide the dark "View All" tile inside grid on mobile */
-          .gallery-more { display: none !important; }
-
-          /* Show button below grid with clear gap */
-          .gallery-mob-btn {
-            display: flex;
-            margin-top: 16px;
-            padding: 0 2px;
-          }
+          .gallery-header   { flex-direction: column; align-items: flex-start; gap: 12px; }
+          .gallery-view-btn { display: none; }
+          .gallery-filters  { gap: 6px; }
+          .gal-tab          { font-size: 11.5px; padding: 6px 12px; }
+          .gallery-grid     { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 130px; gap: 8px; }
+          .gallery-em       { font-size: 28px; }
+          .gallery-lbl      { font-size: 11px; }
+          .gallery-more     { display: none !important; }
+          .gallery-mob-btn  { display: flex; margin-top: 16px; padding: 0 2px; }
         }
-
         @media (max-width: 480px) {
-          .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-            grid-auto-rows: 110px;
-            gap: 6px;
-          }
+          .gallery-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 110px; gap: 6px; }
           .gallery-em  { font-size: 24px; }
           .gallery-lbl { font-size: 10px; }
           .gallery-cat { font-size: 9px; }

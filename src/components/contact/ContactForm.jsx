@@ -1,18 +1,36 @@
 import { useState } from 'react'
+import { enquiryAPI } from '../../api'
 
 export default function ContactForm() {
   var init = { name:'', phone:'', email:'', subject:'', message:'' }
   var [form, setForm]       = useState(init)
   var [sent, setSent]       = useState(false)
   var [loading, setLoading] = useState(false)
+  var [error, setError]     = useState('')
 
   function handleChange(e) {
     var key = e.target.name, val = e.target.value
     setForm(function(prev){ var n={}; for(var k in prev) n[k]=prev[k]; n[key]=val; return n })
+    setError('')
   }
-  function handleSubmit(e) {
-    e.preventDefault(); setLoading(true)
-    setTimeout(function(){ setLoading(false); setSent(true) }, 1200)
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await enquiryAPI.submit({
+        name:    form.name,
+        phone:   form.phone,
+        email:   form.email,
+        message: (form.subject ? '[' + form.subject + '] ' : '') + form.message,
+        type:    'General',
+      })
+      setSent(true)
+    } catch(err) {
+      setError(err.message || 'Failed to send. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (sent) return (
@@ -38,10 +56,14 @@ export default function ContactForm() {
         }
         .cf-inp:focus { border-color: var(--or); }
         .cf-lbl { font-size: 11px; font-weight: 800; color: var(--txt3); letter-spacing: .6px; text-transform: uppercase; display: block; margin-bottom: 6px; }
-        @media (max-width: 480px) {
-          .cf-grid-2 { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .cf-grid-2 { grid-template-columns: 1fr; } }
       `}</style>
+
+      {error && (
+        <div style={{background:'rgba(239,68,68,.06)', border:'1.5px solid rgba(239,68,68,.2)', borderRadius:'10px', padding:'10px 14px', marginBottom:'14px', fontSize:'12.5px', color:'#dc2626', fontWeight:'600'}}>
+          ⚠️ {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{display:'flex', flexDirection:'column', gap:'14px'}}>
         <div className="cf-grid-2">
