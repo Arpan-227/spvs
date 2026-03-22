@@ -90,7 +90,7 @@ export default function HeroSection() {
           {/* btn-or, btn-out → index.css: Poppins 600 UPPERCASE */}
           <div className="hero-btns">
             <Link to="/contact" className="btn-or">{admOpen ? ' Enroll Now →' : '📋 Contact Us →'}</Link>
-            <Link to="/about" className="btn-out">🏫 Explore School</Link>
+            <Link to="/about" className="btn-out">Explore School</Link>
           </div>
 
           {/* tr-info, rat-txt → index.css: Poppins 400 */}
