@@ -20,12 +20,12 @@ function useReveal(cls = "", delay = 0) {
 }
 
 var VALUES = [
-  { icon:'📖', title:'Knowledge',      desc:'Education must evolve from mere information to deep wisdom — nurturing curious, critical thinkers ready for tomorrow.' },
-  { icon:'🤲', title:'Integrity',      desc:'Honesty, transparency and moral uprightness form the backbone of every interaction at SPVS.' },
-  { icon:'🌟', title:'Excellence',     desc:'We settle for nothing less than the best — in academics, in character, in every endeavour we undertake.' },
-  { icon:'🤝', title:'Cooperation',    desc:'From competition to collaboration — we teach students that collective success far surpasses individual achievement.' },
+  { icon:'⚖️', title:'Integrity',      desc:'Students are encouraged to practice honesty and ethical behavior in their academic and personal lives.' },
+  { icon:'🙏', title:'Respect',         desc:'The school promotes respect for teachers, parents, peers and society, encouraging students to appreciate diversity and differences.' },
+  { icon:'⏰', title:'Discipline',      desc:'A disciplined environment helps students develop responsibility, punctuality and self-control in their daily lives.' },
+  { icon:'🌟', title:'Excellence',      desc:'Students are motivated to continuously improve and strive for excellence in academics, sports and extracurricular activities.' },
+  { icon:'🤝', title:'Teamwork',        desc:'The school encourages collaboration and cooperation so that students learn the importance of working together to achieve common goals.' },
   { icon:'🇮🇳', title:'Cultural Pride', desc:'Modern education rooted in Indian values — students who are globally competitive yet culturally grounded.' },
-  { icon:'💪', title:'Resilience',     desc:'Failure is part of the journey. We equip students to bounce back stronger, wiser and more determined every time.' },
 ]
 
 const CSS = `
@@ -111,7 +111,7 @@ export default function VisionMissionFull() {
             <div style={{fontSize:'44px',marginBottom:'18px'}}>🔭</div>
             <div className="chip" style={{background:'rgba(245,184,0,.12)',borderColor:'rgba(245,184,0,.25)',color:'#F5B800',marginBottom:'14px'}}>Our Vision</div>
             <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#FFCF40',margin:'0 0 14px',lineHeight:'1.35'}}>Education with Values and Excellence</h3>
-            <p style={{fontSize:'14px',color:'rgba(255,220,150,.72)',lineHeight:'1.78',margin:0}}>We envision a school where every child discovers their fullest potential — not just academically, but as a complete human being. An institution that sends forth confident, compassionate and competent leaders into the world.</p>
+            <p style={{fontSize:'14px',color:'rgba(255,220,150,.72)',lineHeight:'1.78',margin:0}}>Sant Pathik Vidyalaya is guided by the vision of "Education with Values and Excellence." The institution believes that education should not only focus on academic knowledge but also on building strong character, discipline and responsibility among students. The school aims to create an educational environment where students develop intellectual abilities while also learning important life values.</p>
           </div>
 
           {/* Mission */}
@@ -120,8 +120,8 @@ export default function VisionMissionFull() {
             <div style={{position:'absolute',top:'20px',right:'20px',width:'80px',height:'80px',borderRadius:'50%',background:'rgba(255,255,255,.08)'}} />
             <div style={{fontSize:'44px',marginBottom:'18px'}}>🎯</div>
             <div className="chip" style={{background:'rgba(28,10,0,.1)',borderColor:'rgba(28,10,0,.15)',color:'#1C0A00',marginBottom:'14px'}}>Our Mission</div>
-            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 14px',lineHeight:'1.35'}}>Modern Education with Indian Cultural Roots</h3>
-            <p style={{fontSize:'14px',color:'rgba(28,10,0,.68)',lineHeight:'1.78',margin:0}}>To create an environment where children learn modern and quality education alongside Indian cultural values. We move from competition to cooperation, from division to unity, and from "how to earn" to "how to live".</p>
+            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 14px',lineHeight:'1.35'}}>Quality Education with Modern Practices & Indian Values</h3>
+            <p style={{fontSize:'14px',color:'rgba(28,10,0,.68)',lineHeight:'1.78',margin:0}}>The mission of Sant Pathik Vidyalaya is to provide quality education that encourages curiosity, creativity and critical thinking. By combining modern academic practices with traditional Indian cultural values, the school strives to create a learning environment where students feel motivated to explore their interests and develop their abilities in different areas.</p>
           </div>
         </div>
 
@@ -135,7 +135,7 @@ export default function VisionMissionFull() {
         {/* ── Core Values heading ── */}
         <div ref={valHdRef} style={{textAlign:'center',marginBottom:'28px'}}>
           <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:'26px',fontWeight:'700',color:'#1C0A00',margin:'0 0 8px'}}>Core Values</h3>
-          <p style={{fontSize:'14px',color:'#7A4010',margin:0}}>The six pillars that define every SPVS student's journey</p>
+          <p style={{fontSize:'14px',color:'#7A4010',margin:0}}>The pillars that define every SPVS student's journey</p>
         </div>
 
         {/* ── Values grid ── */}

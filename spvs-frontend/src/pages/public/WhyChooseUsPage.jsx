@@ -1,16 +1,16 @@
 import { Link } from 'react-router-dom'
 
 var REASONS = [
-  { em:'🏛️', title:'37 Years of Excellence',       desc:'Established in 1987, SPVS has a proven track record of academic excellence and character building across generations.',          clr:'#E8761A' },
-  { em:'📋', title:'CBSE Affiliated',               desc:'Fully affiliated to CBSE (Affiliation No. 2130176) — ensuring a nationally recognised, standardised curriculum.',              clr:'#6C3FC5' },
-  { em:'👨‍🏫', title:'64+ Expert Faculty',            desc:'14 PGTs, 20 TGTs and 30 PRTs — all qualified, experienced and dedicated to each student\'s individual growth.',               clr:'#22a35a' },
-  { em:'🔬', title:'8 Modern Laboratories',         desc:'Physics, Chemistry, Biology, Computer Science and STEM labs — fully equipped for practical, hands-on learning.',               clr:'#F5B800' },
-  { em:'🚌', title:'22 School Buses',               desc:'Safe, GPS-tracked transport covering all major areas of Bahraich and surrounding regions.',                                    clr:'#E8761A' },
+  { em:'📋', title:'CBSE Curriculum',              desc:'CBSE curriculum aligned with national standards — ensuring quality education recognized across India.',                          clr:'#E8761A' },
+  { em:'🏆', title:'Strong Board Results',          desc:'Consistent strong board results in Classes 10 & 12 — a proven track record of academic excellence every year.',               clr:'#6C3FC5' },
+  { em:'👨‍🏫', title:'Dedicated Teaching Staff',     desc:'Dedicated and supportive teaching staff committed to every student\'s individual growth and overall development.',             clr:'#22a35a' },
+  { em:'🌳', title:'Safe & Green Campus',           desc:'Safe, green and disciplined campus environment that provides the ideal setting for focused learning and personal growth.',      clr:'#F5B800' },
+  { em:'🚌', title:'22 School Buses',               desc:'Safe, reliable transport covering all major areas of Bahraich and surrounding regions for student convenience.',               clr:'#E8761A' },
   { em:'🏠', title:'Boys Hostel Facility',          desc:'Safe and supervised hostel for outstation students with nutritious meals, study hall and recreational facilities.',            clr:'#6C3FC5' },
   { em:'📱', title:'Smart Classrooms',              desc:'Technology-integrated classrooms with digital boards, projectors and e-learning tools for modern education.',                  clr:'#22a35a' },
-  { em:'🌳', title:'10-Acre Green Campus',          desc:'A sprawling, pollution-free campus with playgrounds, gardens and open spaces for holistic development.',                       clr:'#F5B800' },
-  { em:'🏆', title:'100% Board Results',            desc:'Consistently excellent results in CBSE Class X and XII board examinations with multiple distinction holders every year.',       clr:'#E8761A' },
-  { em:'🎨', title:'Co-curricular Excellence',      desc:'Art, music, dance, sports, NCC, NSS — a rich co-curricular programme that develops well-rounded personalities.',              clr:'#6C3FC5' },
+  { em:'🔬', title:'Modern Laboratories',           desc:'Well-equipped laboratories for Physics, Chemistry, Biology, Mathematics, Computer Science and a STEM Tinkering Lab.',          clr:'#F5B800' },
+  { em:'🏛️', title:'37+ Years of Excellence',       desc:'Established in 1987, SPVS has a proven track record of academic excellence and character building across generations.',        clr:'#E8761A' },
+  { em:'🎨', title:'Co-curricular Excellence',      desc:'Sports, cultural activities and competitions organized throughout the year to develop confidence and teamwork skills.',         clr:'#6C3FC5' },
   { em:'💰', title:'Affordable Fee Structure',      desc:'Quality education at reasonable fees — from ₹1,200/month for Nursery to ₹3,300/month for Class XI–XII.',                      clr:'#22a35a' },
   { em:'🤝', title:'Strong Alumni Network',         desc:'Thousands of successful alumni in medicine, engineering, civil services and business — proud ambassadors of SPVS.',           clr:'#F5B800' },
 ]
@@ -156,10 +156,8 @@ export default function WhyChooseUsPage() {
                     onMouseEnter={function(e){e.currentTarget.style.transform='translateY(-5px)';e.currentTarget.style.boxShadow='0 14px 36px '+t.clr+'22';e.currentTarget.style.borderColor=t.clr+'44'}}
                     onMouseLeave={function(e){e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none';e.currentTarget.style.borderColor='var(--brd)'}}
                   >
-                    {/* Quote mark */}
                     <div style={{fontSize:'40px', lineHeight:'1', color:t.clr, opacity:'.4', fontFamily:'Georgia,serif', marginBottom:'-8px'}}>"</div>
                     <div style={{fontSize:'13.5px', color:'var(--txt2)', lineHeight:'1.7', fontStyle:'italic', flex:1}}>{t.text}</div>
-                    {/* Author */}
                     <div style={{display:'flex', alignItems:'center', gap:'12px', paddingTop:'14px', borderTop:'1px solid var(--brd)'}}>
                       <div style={{width:'44px', height:'44px', borderRadius:'12px', background:'linear-gradient(135deg,'+t.clr+','+t.clr+'bb)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:"'DM Sans',sans-serif", fontSize:'14px', fontWeight:'900', color:'#fff', flexShrink:0}}>
                         {t.avatar}

@@ -55,17 +55,17 @@ export default function SchoolIntro() {
 
           <div>
             <div className="chip rv"><span className="chip-dot"></span>About Our School</div>
-            <h2 className="sec-title rv">A Legacy of <span className="hl">Excellence</span> & Values</h2>
+            <h2 className="sec-title rv">37+ Years of Quality Education <span className="hl">in Bahraich</span></h2>
             <div className="s-bar rv"></div>
             <p className="s-desc rv">
-              {name} is a {board} affiliated co-educational Day &amp; Boarding Senior Secondary School, founded in {est} by the visionary Sant Pathik Ji Maharaj. Spread across {area} in Pashupati Nagar, Bahraich, we nurture {students} students from Play Group to Class XII.
+              Founded in {est}, {name} (SPVS) is a {board} Senior Secondary school located in Pashupati Nagar, Bahraich. For more than three decades, the school has focused on strong academics along with moral values. Guided by the motto "Work is Worship," SPVS provides education from Class 1 to Class 12 with discipline and dedication.
             </p>
             <div className="about-pts">
               {[
-                { ic:'🎓', t:board + ' Curriculum', d:'Affiliated since ' + est + ' · Affiliation No. ' + affNo + ' · Science, Commerce & Humanities streams at Senior Secondary level.' },
-                { ic:'🏫', t:'World-Class Infrastructure', d:classrooms + ' classrooms, ' + labs + ' fully-equipped labs, STEM lab, smart digital classrooms with smart boards.' },
-                { ic:'🏡', t:'Boarding Facility', d:'Boys hostel with 24×7 security, visiting doctor, yoga, sports, clean mess and affordable dorms.' },
-                { ic:'🚌', t:'Transport Network', d:buses + ' school buses covering all routes in and around Bahraich. Safe, punctual, GPS-tracked.' },
+                { ic:'🎓', t:board + ' Curriculum', d:'Aligned with national standards · Affiliation No. ' + affNo + ' · Science, Commerce & Humanities streams at Senior Secondary level.' },
+                { ic:'🏆', t:'Consistent Strong Results', d:'Excellent board results in Classes 10 & 12 every year with dedicated and supportive teaching staff.' },
+                { ic:'🌳', t:'Safe & Green Campus', d:'Safe, green and disciplined campus environment spread across ' + area + ' in Pashupati Nagar, Bahraich.' },
+                { ic:'🚌', t:'Transport Network', d:buses + ' school buses covering all routes in and around Bahraich. Safe, punctual and reliable.' },
               ].map((p,i) => (
                 <div className="apt rv3d" key={i} style={{transitionDelay:`${i*0.1}s`}}>
                   <div className="apt-ic">{p.ic}</div>

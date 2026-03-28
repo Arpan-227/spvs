@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import ClassesInfra           from '../../components/academics/ClassesInfra'
 import SubjectList             from '../../components/academics/SubjectList'
 import FeeStructure            from '../../components/academics/FeeStructure'
@@ -13,7 +13,19 @@ const TABS = [
 ]
 
 export default function AcademicsPage() {
-  const [activeTab, setActiveTab] = useState('classes')
+  const location = useLocation()
+  const params   = new URLSearchParams(location.search)
+  const tabParam = params.get('tab')
+
+  const [activeTab, setActiveTab] = useState(
+    TABS.find(t => t.id === tabParam) ? tabParam : 'classes'
+  )
+
+  /* If user navigates to ?tab=fees again, update the tab */
+  useEffect(() => {
+    const p = new URLSearchParams(location.search).get('tab')
+    if (p && TABS.find(t => t.id === p)) setActiveTab(p)
+  }, [location.search])
 
   useEffect(() => {
     const obs = new IntersectionObserver(
