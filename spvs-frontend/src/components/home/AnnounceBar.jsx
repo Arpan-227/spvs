@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { announcementAPI } from '../../api'
+import { FaBell } from 'react-icons/fa'
 
 var FALLBACK = [
-  '🎉 Admissions Open 2025–26 for classes Play Group to XII!',
-  '🏅 KBC Winner Aarav Raghuvansh (Class V) wins ₹3,20,000!',
+  'Admissions Open 2025–26 for classes Play Group to XII!',
+  'KBC Winner Aarav Raghuvansh (Class V) wins ₹3,20,000!',
 ]
 
 export default function AnnounceBar() {
@@ -21,7 +22,7 @@ export default function AnnounceBar() {
   return (
     <div className="ann">
       <div className="ann-in">
-        <span className="ann-bell">🔔</span>
+        <span className="ann-bell"><FaBell size={14}/></span>
         <span className="ann-label">Notice</span>
         <span className="ann-text">
           {display.map(function(a, i) {

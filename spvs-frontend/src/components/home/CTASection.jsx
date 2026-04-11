@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Link } from 'react-router-dom'
 import useSettings from '../../hooks/useSettings'
+import { FaClipboardList, FaPhone, FaSchool, FaBriefcase } from 'react-icons/fa'
 
 export default function CTASection() {
   const cvRef = useRef(null)
@@ -42,19 +43,24 @@ export default function CTASection() {
     <section className="cta-sect">
       <canvas ref={cvRef} className="cta-canvas" />
       <div className="cta-inner rv">
-        <div className="cta-badge">{admOpen ? '📋 Admissions Open ' + session : '📞 Enquire Now'}</div>
+        <div className="cta-badge" style={{display:'inline-flex',alignItems:'center',gap:'7px'}}>
+          <FaClipboardList size={13}/>
+          {admOpen ? 'Admissions Open ' + session : 'Enquire Now'}
+        </div>
         <h2 className="cta-title">Give Your Child the<br/><em>Best Start</em> in Life</h2>
         <p className="cta-desc">{notice}</p>
         <div className="cta-btns">
-          <Link to="/contact" className="btn-w">{admOpen ? '📋 Apply Now →' : '📋 Contact Us →'}</Link>
-          <a href={'tel:+91' + phone} className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
-            📞 Call: +91 {phone}
-          </a>
-          <Link to="/campus-life" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
-            🏫 Explore Campus Life
+          <Link to="/contact" className="btn-w" style={{display:'inline-flex',alignItems:'center',gap:'8px'}}>
+            <FaClipboardList size={14}/> {admOpen ? 'Apply Now →' : 'Contact Us →'}
           </Link>
-          <Link to="/campus-life?tab=jobs" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)'}}>
-            💼 Jobs & Careers
+          <a href={'tel:+91' + phone} className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)',display:'inline-flex',alignItems:'center',gap:'8px'}}>
+            <FaPhone size={13}/> Call: +91 {phone}
+          </a>
+          <Link to="/campus-life" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)',display:'inline-flex',alignItems:'center',gap:'8px'}}>
+            <FaSchool size={14}/> Explore Campus Life
+          </Link>
+          <Link to="/campus-life?tab=jobs" className="btn-w" style={{background:'rgba(255,255,255,.15)',color:'#fff',backdropFilter:'blur(10px)',display:'inline-flex',alignItems:'center',gap:'8px'}}>
+            <FaBriefcase size={13}/> Jobs & Careers
           </Link>
         </div>
       </div>

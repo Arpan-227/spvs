@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { testimonialAPI } from '../../api'
+import { FaStar } from 'react-icons/fa'
 
 var FALLBACK = [
   { message:"The teachers at SPVS are very dedicated. My daughter improved tremendously in academics and also developed her personality. Best school in Bahraich!", name:"Rajesh Kumar", role:"Parent — Class X" },
@@ -37,15 +38,14 @@ export default function Testimonials() {
               src="/images/school_students.jpg"
               alt="SPVS Students"
               className="testi-img"
-              style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block',transition:'transform .5s cubic-bezier(.25,.46,.45,.94)',imageRendering:'auto',WebkitBackfaceVisibility:'hidden',backfaceVisibility:'hidden'}}
+              style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block',transition:'transform .5s cubic-bezier(.25,.46,.45,.94)'}}
               onError={function(e){
                 e.target.style.display='none'
                 e.target.nextSibling.style.display='flex'
               }}
             />
-            {/* Fallback */}
             <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'16px',padding:'40px',background:'linear-gradient(135deg,var(--or),var(--gd))',position:'absolute',inset:0}}>
-              <div style={{fontSize:'60px'}}>⭐</div>
+              <FaStar size={60} color="#fff"/>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'#fff',textAlign:'center',lineHeight:'1.3'}}>"Best School<br/>in Bahraich"</div>
               <div style={{fontSize:'14px',color:'rgba(255,255,255,.8)',textAlign:'center'}}>Rated 4.9/5 by 1000+ families</div>
             </div>
@@ -68,8 +68,10 @@ export default function Testimonials() {
             ) : display.map(function(t, i) {
               return (
                 <div className={'tcard d' + (i+1)} key={t._id||i}>
-                  <div className="tstars">
-                    {[1,2,3,4,5].map(function(s){ return <span key={s} style={{color: s<=(t.rating||5)?'#F5B800':'rgba(232,118,26,.2)'}}>★</span> })}
+                  <div className="tstars" style={{display:'flex',gap:'2px'}}>
+                    {[1,2,3,4,5].map(function(s){
+                      return <FaStar key={s} size={13} color={s<=(t.rating||5)?'#F5B800':'rgba(232,118,26,.2)'}/>
+                    })}
                   </div>
                   <div className="tq">"{t.message}"</div>
                   <div className="tauth">

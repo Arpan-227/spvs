@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react'
 import { academicsAPI } from '../../api'
+import {
+  FaSchool, FaMoneyBillWave, FaBook, FaFileAlt, FaUpload, FaDownload,
+  FaTrash, FaCheckCircle, FaExclamationTriangle, FaSave, FaSpinner,
+  FaTrophy, FaBullseye, FaClipboardList,
+} from 'react-icons/fa'
 
 var INIT_STREAMS = [
   { id:1, name:'Science',    icon:'🔬', clr:'#22a35a', subjects:['Physics','Chemistry','Biology','Mathematics','Computer Science','English Core','Physical Education'], description:'For students aiming at engineering, medicine, and research careers.', eligibility:'Min. 60% in Class X Science & Maths' },
@@ -59,15 +64,17 @@ function SyllabusRow({ level, syllabuses, uploading, onUpload, onDelete }) {
     <div style={{background:'#FFFFFF',borderRadius:'14px',border:'1.5px solid rgba(232,118,26,.12)',padding:'14px 16px',display:'flex',alignItems:'flex-start',gap:'12px',flexWrap:'wrap'}}>
       <div style={{flex:1,minWidth:'140px'}}>
         <div style={{fontSize:'14px',fontWeight:'700',color:'#1C0A00',marginBottom:'3px'}}>{level}</div>
-        <div style={{fontSize:'11.5px',color:hasFile?'#22a35a':'#B87832'}}>{hasFile?'✅ Uploaded — '+(existing.year||'2026-27'):'⚠️ No syllabus uploaded yet'}</div>
+        <div style={{fontSize:'11.5px',color:hasFile?'#22a35a':'#B87832',display:'inline-flex',alignItems:'center',gap:'5px'}}>
+          {hasFile ? <><FaCheckCircle size={11}/> Uploaded — {existing.year||'2026-27'}</> : <><FaExclamationTriangle size={11}/> No syllabus uploaded yet</>}
+        </div>
       </div>
       <div style={{display:'flex',alignItems:'center',gap:'8px',flexWrap:'wrap'}}>
         <label style={{display:'inline-flex',alignItems:'center',gap:'6px',padding:'8px 14px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.25)',background:'rgba(232,118,26,.06)',color:'#E8761A',fontSize:'12px',fontWeight:'700',cursor:isUploading?'not-allowed':'pointer',opacity:isUploading?0.6:1}}>
-          {isUploading?'⏳ Uploading...':hasFile?'🔄 Replace PDF':'📎 Upload PDF'}
+          {isUploading ? <><FaSpinner size={11} style={{animation:'spin .8s linear infinite'}}/> Uploading...</> : hasFile ? <><FaUpload size={11}/> Replace PDF</> : <><FaUpload size={11}/> Upload PDF</>}
           <input type="file" accept="application/pdf" disabled={isUploading} style={{display:'none'}} onChange={function(e){var f=e.target.files[0];if(f)onUpload(level,f)}} />
         </label>
-        {hasFile && <a href={existing.fileUrl} download target="_blank" rel="noreferrer" style={{display:'inline-flex',alignItems:'center',gap:'5px',padding:'8px 14px',borderRadius:'8px',background:'rgba(34,163,90,.08)',border:'1px solid rgba(34,163,90,.2)',color:'#22a35a',fontSize:'12px',fontWeight:'700',textDecoration:'none'}}>📥 Download</a>}
-        {hasFile && <button onClick={function(){onDelete(level)}} style={{display:'inline-flex',alignItems:'center',gap:'5px',padding:'8px 12px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.2)',background:'rgba(220,38,38,.06)',color:'#dc2626',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>🗑 Delete</button>}
+        {hasFile && <a href={existing.fileUrl} download target="_blank" rel="noreferrer" style={{display:'inline-flex',alignItems:'center',gap:'5px',padding:'8px 14px',borderRadius:'8px',background:'rgba(34,163,90,.08)',border:'1px solid rgba(34,163,90,.2)',color:'#22a35a',fontSize:'12px',fontWeight:'700',textDecoration:'none'}}><FaDownload size={11}/> Download</a>}
+        {hasFile && <button onClick={function(){onDelete(level)}} style={{display:'inline-flex',alignItems:'center',gap:'5px',padding:'8px 12px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.2)',background:'rgba(220,38,38,.06)',color:'#dc2626',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}><FaTrash size={11}/> Delete</button>}
       </div>
     </div>
   )
@@ -148,166 +155,49 @@ export default function ManageAcademicsPage() {
   }
 
   if (loading) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'200px',color:'#B87832',fontSize:'14px',fontWeight:'600'}}>
-      ⏳ Loading academics data...
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',height:'200px',color:'#B87832',fontSize:'14px',fontWeight:'600',gap:'10px'}}>
+      <FaSpinner size={16} style={{animation:'spin .8s linear infinite'}}/> Loading academics data...
     </div>
   )
 
   return (
     <div style={{maxWidth:'1100px',width:'100%',boxSizing:'border-box'}}>
       <style>{`
-        /* ── Base ── */
         *, *::before, *::after { box-sizing: border-box; }
-
-        /* ── Header ── */
-        .mac-hdr {
-          display: flex;
-          align-items: flex-start;
-          justify-content: space-between;
-          margin-bottom: 20px;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-        .mac-save {
-          padding: 10px 24px;
-          border-radius: 10px;
-          border: none;
-          font-size: 13px;
-          font-weight: 800;
-          cursor: pointer;
-          white-space: nowrap;
-          transition: all .25s;
-          flex-shrink: 0;
-        }
-
-        /* ── Tabs ── */
-        .mac-tabs {
-          display: flex;
-          gap: 4px;
-          margin-bottom: 18px;
-          background: #fff;
-          padding: 5px;
-          border-radius: 12px;
-          border: 1.5px solid rgba(232,118,26,.12);
-          overflow-x: auto;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-        }
-        .mac-tabs::-webkit-scrollbar { display: none; }
-        .mac-tab-btn {
-          padding: 8px 14px;
-          border-radius: 9px;
-          border: none;
-          cursor: pointer;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 12px;
-          transition: all .18s;
-          white-space: nowrap;
-          flex-shrink: 0;
-        }
-
-        /* ── Streams grid ── */
-        .mac-streams {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 16px;
-        }
-
-        /* ── Curriculum 2-col ── */
-        .mac-currgrid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 16px;
-        }
-
-        /* ── Tables ── */
-        .mac-tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .mac-tbl-wrap table { min-width: 480px; width: 100%; border-collapse: collapse; }
-        .mac-fee-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .mac-fee-wrap table { min-width: 560px; width: 100%; border-collapse: collapse; }
-
-        /* ── Fee card row — stacks on very small screens ── */
-        .mac-fee-inputs { display: flex; align-items: center; gap: 4px; }
-
-        /* ── Syllabus row ── */
-        .mac-syl-row {
-          background: #FFFFFF;
-          border-radius: 14px;
-          border: 1.5px solid rgba(232,118,26,.12);
-          padding: 14px 16px;
-          display: flex;
-          align-items: flex-start;
-          gap: 12px;
-          flex-wrap: wrap;
-        }
-        .mac-syl-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-
-        /* ═══════════════════
-           TABLET  (≤ 900px)
-        ═══════════════════ */
-        @media (max-width: 900px) {
-          .mac-streams { grid-template-columns: 1fr 1fr; }
-        }
-
-        /* ═══════════════════
-           MOBILE  (≤ 640px)
-        ═══════════════════ */
-        @media (max-width: 640px) {
-          .mac-hdr        { flex-direction: column; align-items: stretch; }
-          .mac-save       { width: 100%; text-align: center; }
-          .mac-streams    { grid-template-columns: 1fr; }
-          .mac-currgrid   { grid-template-columns: 1fr; }
-          .mac-tab-btn    { font-size: 11px; padding: 7px 11px; }
-
-          /* classes table inputs smaller */
-          .mac-cls-age    { width: 90px !important; }
-          .mac-cls-stu    { width: 58px !important; }
-          .mac-cls-sec    { width: 48px !important; }
-
-          /* fee table category input full width */
-          .mac-fee-cat    { min-width: 120px !important; }
-          .mac-fee-amt    { width: 68px !important; }
-
-          /* syllabus row stack */
-          .mac-syl-row    { flex-direction: column; }
-          .mac-syl-actions{ width: 100%; }
-        }
-
-        /* ═══════════════════
-           VERY SMALL (≤ 380px)
-        ═══════════════════ */
-        @media (max-width: 380px) {
-          .mac-tab-btn  { font-size: 10.5px; padding: 6px 9px; }
-          .mac-fee-amt  { width: 58px !important; }
-        }
+        @keyframes spin { to { transform:rotate(360deg) } }
+        .mac-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; gap:12px; flex-wrap:wrap; }
+        .mac-save { padding:10px 24px; border-radius:10px; border:none; font-size:13px; font-weight:800; cursor:pointer; white-space:nowrap; transition:all .25s; flex-shrink:0; display:inline-flex; align-items:center; gap:7px; justify-content:center; }
+        .mac-tabs { display:flex; gap:4px; margin-bottom:18px; background:#fff; padding:5px; border-radius:12px; border:1.5px solid rgba(232,118,26,.12); overflow-x:auto; scrollbar-width:none; }
+        .mac-tabs::-webkit-scrollbar { display:none; }
+        .mac-tab-btn { padding:8px 14px; border-radius:9px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:12px; transition:all .18s; white-space:nowrap; flex-shrink:0; }
+        .mac-streams { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
+        .mac-currgrid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+        .mac-tbl-wrap { overflow-x:auto; } .mac-tbl-wrap table { min-width:480px; width:100%; border-collapse:collapse; }
+        .mac-fee-wrap { overflow-x:auto; } .mac-fee-wrap table { min-width:560px; width:100%; border-collapse:collapse; }
+        .mac-fee-inputs { display:flex; align-items:center; gap:4px; }
+        @media (max-width:900px) { .mac-streams { grid-template-columns:1fr 1fr; } }
+        @media (max-width:640px) { .mac-hdr { flex-direction:column; align-items:stretch; } .mac-save { width:100%; } .mac-streams { grid-template-columns:1fr; } .mac-currgrid { grid-template-columns:1fr; } .mac-tab-btn { font-size:11px; padding:7px 11px; } }
       `}</style>
 
-      {/* ── HEADER ── */}
       <div className="mac-hdr">
         <div>
-          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(18px,3vw,22px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 4px'}}>
-            Academics Management
-          </h1>
-          <p style={{fontSize:'13px',color:'#B87832',margin:0}}>
-            Edit streams, classes, fee structure, curriculum and syllabus PDFs
-          </p>
+          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(18px,3vw,22px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 4px'}}>Academics Management</h1>
+          <p style={{fontSize:'13px',color:'#B87832',margin:0}}>Edit streams, classes, fee structure, curriculum and syllabus PDFs</p>
         </div>
         {tab !== 'Syllabus Upload' && (
           <button className="mac-save" onClick={handleSave} disabled={saving}
             style={{background:saved?'linear-gradient(135deg,#22a35a,#16a34a)':'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',opacity:saving?0.7:1,cursor:saving?'not-allowed':'pointer'}}>
-            {saving?'⏳ Saving...':saved?'✓ Saved!':'💾 Save Changes'}
+            {saving ? <><FaSpinner size={13} style={{animation:'spin .8s linear infinite'}}/> Saving...</> : saved ? <><FaCheckCircle size={13}/> Saved!</> : <><FaSave size={13}/> Save Changes</>}
           </button>
         )}
       </div>
 
-      {/* ── ERROR ── */}
       {error && (
-        <div style={{marginBottom:'16px',padding:'12px 16px',borderRadius:'10px',background:'rgba(220,38,38,.08)',border:'1px solid rgba(220,38,38,.2)',color:'#dc2626',fontSize:'13px',fontWeight:'600'}}>
-          ❌ {error}
+        <div style={{marginBottom:'16px',padding:'12px 16px',borderRadius:'10px',background:'rgba(220,38,38,.08)',border:'1px solid rgba(220,38,38,.2)',color:'#dc2626',fontSize:'13px',fontWeight:'600',display:'inline-flex',alignItems:'center',gap:'7px'}}>
+          <FaExclamationTriangle size={13}/> {error}
         </div>
       )}
 
-      {/* ── TABS ── */}
       <div className="mac-tabs">
         {TABS.map(function(t) {
           var active = tab === t
@@ -320,9 +210,6 @@ export default function ManageAcademicsPage() {
         })}
       </div>
 
-      {/* ════════════════════════════
-          TAB: STREAMS
-      ════════════════════════════ */}
       {tab === 'Streams (XI-XII)' && (
         <div className="mac-streams">
           {streams.map(function(stream) {
@@ -336,38 +223,26 @@ export default function ManageAcademicsPage() {
                   </div>
                   <button onClick={function(){ setEditStream(isEdit?null:stream.id) }}
                     style={{padding:'5px 12px',borderRadius:'7px',border:'1.5px solid '+(isEdit?stream.clr+'55':'rgba(232,118,26,.2)'),background:isEdit?stream.clr+'12':'transparent',color:isEdit?stream.clr:'#B87832',fontSize:'11.5px',fontWeight:'800',cursor:'pointer',whiteSpace:'nowrap',flexShrink:0}}>
-                    {isEdit?'✓ Done':'✏ Edit'}
+                    {isEdit?'Done':'Edit'}
                   </button>
                 </div>
                 {isEdit ? (
                   <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
-                    <div>
-                      <label style={s.label}>Description</label>
-                      <textarea value={stream.description} rows={2} onChange={function(e){updateStream(stream.id,'description',e.target.value)}} style={{...s.input,resize:'vertical',lineHeight:'1.5'}} />
-                    </div>
-                    <div>
-                      <label style={s.label}>Eligibility</label>
-                      <input value={stream.eligibility} onChange={function(e){updateStream(stream.id,'eligibility',e.target.value)}} style={s.input} />
-                    </div>
+                    <div><label style={s.label}>Description</label><textarea value={stream.description} rows={2} onChange={function(e){updateStream(stream.id,'description',e.target.value)}} style={{...s.input,resize:'vertical',lineHeight:'1.5'}} /></div>
+                    <div><label style={s.label}>Eligibility</label><input value={stream.eligibility} onChange={function(e){updateStream(stream.id,'eligibility',e.target.value)}} style={s.input} /></div>
                     <div>
                       <label style={s.label}>Subjects</label>
-                      {stream.subjects.map(function(sub,idx){
-                        return <input key={idx} value={sub} onChange={function(e){updateStreamSubject(stream.id,idx,e.target.value)}} style={{...s.input,marginBottom:'5px'}} placeholder={'Subject '+(idx+1)} />
-                      })}
+                      {stream.subjects.map(function(sub,idx){ return <input key={idx} value={sub} onChange={function(e){updateStreamSubject(stream.id,idx,e.target.value)}} style={{...s.input,marginBottom:'5px'}} placeholder={'Subject '+(idx+1)} /> })}
                       <button onClick={function(){setStreams(function(prev){return prev.map(function(s){return s.id===stream.id?{...s,subjects:s.subjects.concat([''])}:s})})}}
-                        style={{marginTop:'4px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>
-                        + Add Subject
-                      </button>
+                        style={{marginTop:'4px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>+ Add Subject</button>
                     </div>
                   </div>
                 ) : (
                   <div>
                     <p style={{fontSize:'12.5px',color:'#7A4010',marginBottom:'10px',lineHeight:'1.6'}}>{stream.description}</p>
-                    <div style={{fontSize:'11.5px',color:'#B87832',marginBottom:'12px'}}>📋 {stream.eligibility}</div>
+                    <div style={{fontSize:'11.5px',color:'#B87832',marginBottom:'12px',display:'inline-flex',alignItems:'center',gap:'5px'}}><FaClipboardList size={11}/> {stream.eligibility}</div>
                     <div style={{display:'flex',flexWrap:'wrap',gap:'5px'}}>
-                      {stream.subjects.map(function(sub){
-                        return <span key={sub} style={{fontSize:'11px',padding:'3px 9px',borderRadius:'50px',background:stream.clr+'12',color:stream.clr,fontWeight:'700'}}>{sub}</span>
-                      })}
+                      {stream.subjects.map(function(sub){ return <span key={sub} style={{fontSize:'11px',padding:'3px 9px',borderRadius:'50px',background:stream.clr+'12',color:stream.clr,fontWeight:'700'}}>{sub}</span> })}
                     </div>
                   </div>
                 )}
@@ -377,38 +252,23 @@ export default function ManageAcademicsPage() {
         </div>
       )}
 
-      {/* ════════════════════════════
-          TAB: CLASSES & SECTIONS
-      ════════════════════════════ */}
       {tab === 'Classes & Sections' && (
         <div style={{...s.card,padding:'0',overflow:'hidden'}}>
           <div style={{padding:'14px 18px',borderBottom:'1px solid rgba(232,118,26,.1)',display:'flex',alignItems:'center',gap:'8px'}}>
-            <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>🏫</div>
+            <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center'}}><FaSchool size={14} color="#E8761A"/></div>
             <div style={s.h2}>Classes & Sections</div>
           </div>
           <div className="mac-tbl-wrap">
             <table>
-              <thead>
-                <tr style={{background:'#FFF6EA'}}>
-                  {['Class','Age Group','Students','Sections'].map(function(h){
-                    return <th key={h} style={{padding:'10px 14px',fontSize:'11px',fontWeight:'800',color:'#B87832',letterSpacing:'.8px',textTransform:'uppercase',textAlign:'left',borderBottom:'1.5px solid rgba(232,118,26,.1)',whiteSpace:'nowrap'}}>{h}</th>
-                  })}
-                </tr>
-              </thead>
+              <thead><tr style={{background:'#FFF6EA'}}>{['Class','Age Group','Students','Sections'].map(function(h){ return <th key={h} style={{padding:'10px 14px',fontSize:'11px',fontWeight:'800',color:'#B87832',letterSpacing:'.8px',textTransform:'uppercase',textAlign:'left',borderBottom:'1.5px solid rgba(232,118,26,.1)',whiteSpace:'nowrap'}}>{h}</th> })}</tr></thead>
               <tbody>
                 {classes.map(function(cls,i){
                   return (
                     <tr key={cls.id} style={{borderBottom:'1px solid rgba(232,118,26,.06)',background:i%2===0?'#fff':'#FFFDF8'}}>
                       <td style={{padding:'7px 14px',fontWeight:'700',fontSize:'13px',color:'#1C0A00',whiteSpace:'nowrap'}}>{cls.name}</td>
-                      <td style={{padding:'7px 14px'}}>
-                        <input className="mac-cls-age" value={cls.age} onChange={function(e){updateClass(cls.id,'age',e.target.value)}} style={{...s.input,width:'110px',padding:'5px 8px',fontSize:'12.5px'}} />
-                      </td>
-                      <td style={{padding:'7px 14px'}}>
-                        <input className="mac-cls-stu" value={cls.students} onChange={function(e){updateClass(cls.id,'students',e.target.value)}} style={{...s.input,width:'70px',padding:'5px 8px',fontSize:'12.5px',textAlign:'center'}} />
-                      </td>
-                      <td style={{padding:'7px 14px'}}>
-                        <input className="mac-cls-sec" value={cls.sections} onChange={function(e){updateClass(cls.id,'sections',e.target.value)}} style={{...s.input,width:'55px',padding:'5px 8px',fontSize:'12.5px',textAlign:'center'}} />
-                      </td>
+                      <td style={{padding:'7px 14px'}}><input className="mac-cls-age" value={cls.age} onChange={function(e){updateClass(cls.id,'age',e.target.value)}} style={{...s.input,width:'110px',padding:'5px 8px',fontSize:'12.5px'}} /></td>
+                      <td style={{padding:'7px 14px'}}><input className="mac-cls-stu" value={cls.students} onChange={function(e){updateClass(cls.id,'students',e.target.value)}} style={{...s.input,width:'70px',padding:'5px 8px',fontSize:'12.5px',textAlign:'center'}} /></td>
+                      <td style={{padding:'7px 14px'}}><input className="mac-cls-sec" value={cls.sections} onChange={function(e){updateClass(cls.id,'sections',e.target.value)}} style={{...s.input,width:'55px',padding:'5px 8px',fontSize:'12.5px',textAlign:'center'}} /></td>
                     </tr>
                   )
                 })}
@@ -418,41 +278,21 @@ export default function ManageAcademicsPage() {
         </div>
       )}
 
-      {/* ════════════════════════════
-          TAB: FEE STRUCTURE
-      ════════════════════════════ */}
       {tab === 'Fee Structure' && (
         <div style={{...s.card,padding:'0',overflow:'hidden'}}>
           <div style={{padding:'14px 18px',borderBottom:'1px solid rgba(232,118,26,.1)',display:'flex',alignItems:'center',gap:'8px'}}>
-            <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(34,163,90,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>💰</div>
+            <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(34,163,90,.1)',display:'flex',alignItems:'center',justifyContent:'center'}}><FaMoneyBillWave size={14} color="#22a35a"/></div>
             <div style={s.h2}>Fee Structure (Monthly, in ₹)</div>
           </div>
           <div className="mac-fee-wrap">
             <table>
-              <thead>
-                <tr style={{background:'#FFF6EA'}}>
-                  {['Category','Tuition/mo','Annual','Admission','Transport/mo'].map(function(h){
-                    return <th key={h} style={{padding:'10px 14px',fontSize:'11px',fontWeight:'800',color:'#B87832',letterSpacing:'.8px',textTransform:'uppercase',textAlign:'left',borderBottom:'1.5px solid rgba(232,118,26,.1)',whiteSpace:'nowrap'}}>{h}</th>
-                  })}
-                </tr>
-              </thead>
+              <thead><tr style={{background:'#FFF6EA'}}>{['Category','Tuition/mo','Annual','Admission','Transport/mo'].map(function(h){ return <th key={h} style={{padding:'10px 14px',fontSize:'11px',fontWeight:'800',color:'#B87832',letterSpacing:'.8px',textTransform:'uppercase',textAlign:'left',borderBottom:'1.5px solid rgba(232,118,26,.1)',whiteSpace:'nowrap'}}>{h}</th> })}</tr></thead>
               <tbody>
                 {fees.map(function(fee,i){
                   return (
                     <tr key={fee.id} style={{borderBottom:'1px solid rgba(232,118,26,.06)',background:i%2===0?'#fff':'#FFFDF8'}}>
-                      <td style={{padding:'7px 14px'}}>
-                        <input className="mac-fee-cat" value={fee.category} onChange={function(e){updateFee(fee.id,'category',e.target.value)}} style={{...s.input,minWidth:'150px',padding:'5px 8px',fontSize:'12.5px'}} />
-                      </td>
-                      {['tuition','annual','admission','transport'].map(function(field){
-                        return (
-                          <td key={field} style={{padding:'7px 14px'}}>
-                            <div className="mac-fee-inputs">
-                              <span style={{fontSize:'12px',color:'#22a35a',fontWeight:'700',flexShrink:0}}>₹</span>
-                              <input className="mac-fee-amt" value={fee[field]} onChange={function(e){updateFee(fee.id,field,e.target.value)}} style={{...s.input,width:'80px',padding:'5px 8px',fontSize:'12.5px',textAlign:'right'}} />
-                            </div>
-                          </td>
-                        )
-                      })}
+                      <td style={{padding:'7px 14px'}}><input className="mac-fee-cat" value={fee.category} onChange={function(e){updateFee(fee.id,'category',e.target.value)}} style={{...s.input,minWidth:'150px',padding:'5px 8px',fontSize:'12.5px'}} /></td>
+                      {['tuition','annual','admission','transport'].map(function(field){ return (<td key={field} style={{padding:'7px 14px'}}><div className="mac-fee-inputs"><span style={{fontSize:'12px',color:'#22a35a',fontWeight:'700',flexShrink:0}}>₹</span><input className="mac-fee-amt" value={fee[field]} onChange={function(e){updateFee(fee.id,field,e.target.value)}} style={{...s.input,width:'80px',padding:'5px 8px',fontSize:'12.5px',textAlign:'right'}} /></div></td>) })}
                     </tr>
                   )
                 })}
@@ -461,85 +301,45 @@ export default function ManageAcademicsPage() {
           </div>
           <div style={{padding:'12px 18px',borderTop:'1px solid rgba(232,118,26,.08)'}}>
             <button onClick={function(){setFees(function(prev){return prev.concat([{id:Date.now(),category:'',tuition:'',annual:'',admission:'',transport:''}])})}}
-              style={{padding:'7px 16px',borderRadius:'8px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>
-              + Add Category
-            </button>
+              style={{padding:'7px 16px',borderRadius:'8px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>+ Add Category</button>
           </div>
         </div>
       )}
 
-      {/* ════════════════════════════
-          TAB: CURRICULUM INFO
-      ════════════════════════════ */}
       {tab === 'Curriculum Info' && (
         <div style={{display:'flex',flexDirection:'column',gap:'16px'}}>
           <div style={{...s.card,padding:'20px'}}>
-            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'14px'}}>
-              <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(108,63,197,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>📖</div>
-              <div style={s.h2}>CBSE Curriculum Note</div>
-            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'14px'}}><div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(108,63,197,.1)',display:'flex',alignItems:'center',justifyContent:'center'}}><FaBook size={14} color="#6C3FC5"/></div><div style={s.h2}>CBSE Curriculum Note</div></div>
             <textarea value={curr.cbseNote} rows={3} onChange={function(e){setCurr(function(p){return{...p,cbseNote:e.target.value}})}} style={{...s.input,resize:'vertical',lineHeight:'1.6'}} />
           </div>
           <div style={{...s.card,padding:'20px'}}>
-            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'14px'}}>
-              <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>📝</div>
-              <div style={s.h2}>Exam Pattern</div>
-            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'14px'}}><div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center'}}><FaFileAlt size={14} color="#E8761A"/></div><div style={s.h2}>Exam Pattern</div></div>
             <textarea value={curr.examPattern} rows={2} onChange={function(e){setCurr(function(p){return{...p,examPattern:e.target.value}})}} style={{...s.input,resize:'vertical',lineHeight:'1.6'}} />
           </div>
           <div className="mac-currgrid">
             <div style={{...s.card,padding:'20px'}}>
-              <div style={{marginBottom:'14px',...s.h2}}>🎯 Co-curricular Activities</div>
-              {curr.activities.map(function(act,i){
-                return (
-                  <div key={i} style={{display:'flex',gap:'6px',marginBottom:'6px',alignItems:'center'}}>
-                    <span style={{color:'#E8761A',fontSize:'12px',flexShrink:0}}>◆</span>
-                    <input value={act} onChange={function(e){setCurr(function(p){var a=p.activities.slice();a[i]=e.target.value;return{...p,activities:a}})}} style={{...s.input,padding:'6px 10px',fontSize:'12.5px'}} />
-                  </div>
-                )
-              })}
-              <button onClick={function(){setCurr(function(p){return{...p,activities:p.activities.concat([''])}})}}
-                style={{marginTop:'6px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>
-                + Add Activity
-              </button>
+              <div style={{marginBottom:'14px',display:'flex',alignItems:'center',gap:'8px'}}><FaBullseye size={14} color="#E8761A"/><div style={s.h2}>Co-curricular Activities</div></div>
+              {curr.activities.map(function(act,i){ return (<div key={i} style={{display:'flex',gap:'6px',marginBottom:'6px',alignItems:'center'}}><span style={{color:'#E8761A',fontSize:'12px',flexShrink:0}}>◆</span><input value={act} onChange={function(e){setCurr(function(p){var a=p.activities.slice();a[i]=e.target.value;return{...p,activities:a}})}} style={{...s.input,padding:'6px 10px',fontSize:'12.5px'}} /></div>) })}
+              <button onClick={function(){setCurr(function(p){return{...p,activities:p.activities.concat([''])}})}} style={{marginTop:'6px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(232,118,26,.3)',background:'transparent',color:'#E8761A',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>+ Add Activity</button>
             </div>
             <div style={{...s.card,padding:'20px'}}>
-              <div style={{marginBottom:'14px',...s.h2}}>🏆 Key Achievements</div>
-              {curr.achievements.map(function(ach,i){
-                return (
-                  <div key={i} style={{display:'flex',gap:'6px',marginBottom:'6px',alignItems:'center'}}>
-                    <span style={{color:'#22a35a',fontSize:'12px',flexShrink:0}}>◆</span>
-                    <input value={ach} onChange={function(e){setCurr(function(p){var a=p.achievements.slice();a[i]=e.target.value;return{...p,achievements:a}})}} style={{...s.input,padding:'6px 10px',fontSize:'12.5px'}} />
-                  </div>
-                )
-              })}
-              <button onClick={function(){setCurr(function(p){return{...p,achievements:p.achievements.concat([''])}})}}
-                style={{marginTop:'6px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(34,163,90,.3)',background:'transparent',color:'#22a35a',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>
-                + Add Achievement
-              </button>
+              <div style={{marginBottom:'14px',display:'flex',alignItems:'center',gap:'8px'}}><FaTrophy size={14} color="#22a35a"/><div style={s.h2}>Key Achievements</div></div>
+              {curr.achievements.map(function(ach,i){ return (<div key={i} style={{display:'flex',gap:'6px',marginBottom:'6px',alignItems:'center'}}><span style={{color:'#22a35a',fontSize:'12px',flexShrink:0}}>◆</span><input value={ach} onChange={function(e){setCurr(function(p){var a=p.achievements.slice();a[i]=e.target.value;return{...p,achievements:a}})}} style={{...s.input,padding:'6px 10px',fontSize:'12.5px'}} /></div>) })}
+              <button onClick={function(){setCurr(function(p){return{...p,achievements:p.achievements.concat([''])}})}} style={{marginTop:'6px',padding:'6px 12px',borderRadius:'7px',border:'1.5px dashed rgba(34,163,90,.3)',background:'transparent',color:'#22a35a',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>+ Add Achievement</button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ════════════════════════════
-          TAB: SYLLABUS UPLOAD
-      ════════════════════════════ */}
       {tab === 'Syllabus Upload' && (
         <div style={{display:'flex',flexDirection:'column',gap:'12px'}}>
           <div style={{...s.card,padding:'20px',marginBottom:'4px'}}>
-            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'8px'}}>
-              <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(108,63,197,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'14px'}}>📄</div>
-              <div style={s.h2}>Syllabus PDFs</div>
-            </div>
+            <div style={{display:'flex',alignItems:'center',gap:'8px',marginBottom:'8px'}}><div style={{width:'30px',height:'30px',borderRadius:'8px',background:'rgba(108,63,197,.1)',display:'flex',alignItems:'center',justifyContent:'center'}}><FaFileAlt size={14} color="#6C3FC5"/></div><div style={s.h2}>Syllabus PDFs</div></div>
             <p style={{fontSize:'12.5px',color:'#B87832',margin:0}}>Upload syllabus PDF for each class level. Students can view and download from the Academics page.</p>
           </div>
-          {SYLLABUS_LEVELS.map(function(level){
-            return <SyllabusRow key={level} level={level} syllabuses={syllabuses} uploading={uploading} onUpload={handleSyllabusUpload} onDelete={handleSyllabusDelete} />
-          })}
+          {SYLLABUS_LEVELS.map(function(level){ return <SyllabusRow key={level} level={level} syllabuses={syllabuses} uploading={uploading} onUpload={handleSyllabusUpload} onDelete={handleSyllabusDelete} /> })}
         </div>
       )}
-
     </div>
   )
 }

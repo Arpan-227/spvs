@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { facultyAPI } from '../../api'
+import { FaUsers, FaGraduationCap, FaBook, FaPencilAlt, FaUserTie, FaPhone, FaSearch } from 'react-icons/fa'
 
 var CAT_STYLE = {
   Director:        { color:'#C45F0A', bg:'rgba(196,95,10,.1)',  grad:'linear-gradient(135deg,#C45F0A,#E8761A)' },
@@ -8,7 +9,7 @@ var CAT_STYLE = {
   'Vice Principal':{ color:'#C45F0A', bg:'rgba(196,95,10,.1)',  grad:'linear-gradient(135deg,#C45F0A,#E8761A)' },
   PGT:             { color:'#6C3FC5', bg:'rgba(108,63,197,.1)', grad:'linear-gradient(135deg,#6C3FC5,#9B59F5)' },
   TGT:             { color:'#22a35a', bg:'rgba(34,163,90,.1)',  grad:'linear-gradient(135deg,#22a35a,#2ecc71)' },
-  PRT:             { color:'#F5B800', bg:'rgba(245,184,0,.1)',  grad:'linear-gradient(135deg,#F5B800,#ffd700)' },
+  PRT:             { color:'#000', bg:'rgba(245,184,0,0.1)',  grad:'linear-gradient(135deg,#F5B800,#ffd700)' },
   Librarian:       { color:'#7A4010', bg:'rgba(122,64,16,.1)',  grad:'linear-gradient(135deg,#7A4010,#C45F0A)' },
   'Sports Coach':  { color:'#22a35a', bg:'rgba(34,163,90,.1)',  grad:'linear-gradient(135deg,#22a35a,#2ecc71)' },
   'Lab Assistant': { color:'#B87832', bg:'rgba(184,120,50,.1)', grad:'linear-gradient(135deg,#B87832,#E8761A)' },
@@ -36,8 +37,12 @@ function FacultyCard({ f }) {
         <div style={{fontFamily:"'Playfair Display',serif",fontSize:'14px',fontWeight:'700',color:'var(--dark)',marginBottom:'4px',lineHeight:'1.3'}}>{f.name}</div>
         <div style={{display:'inline-flex',alignItems:'center',fontSize:'10px',fontWeight:'800',color:st.color,background:st.bg,padding:'2px 9px',borderRadius:'50px',marginBottom:'6px'}}>{f.role} {f.dept ? '— '+f.dept : ''}</div>
         {f.qual && <div style={{fontSize:'12px',color:'var(--txt2)',marginBottom:'2px'}}>{f.qual}</div>}
-        {f.exp  && <div style={{fontSize:'11px',color:'var(--txt3)'}}>🕐 {f.exp}</div>}
-        {f.phone && <a href={'tel:'+f.phone} style={{display:'inline-block',fontSize:'11px',color:'var(--or)',marginTop:'4px',fontWeight:'700',textDecoration:'none'}}>📞 {f.phone}</a>}
+        {f.exp  && <div style={{fontSize:'11px',color:'var(--txt3)'}}>{f.exp}</div>}
+        {f.phone && (
+          <a href={'tel:'+f.phone} style={{display:'inline-flex',alignItems:'center',gap:'5px',fontSize:'11px',color:'var(--or)',marginTop:'4px',fontWeight:'700',textDecoration:'none'}}>
+            <FaPhone size={10}/> {f.phone}
+          </a>
+        )}
       </div>
     </div>
   )
@@ -65,12 +70,19 @@ export default function TeachersQualification({ embedded }) {
     return matchCat && matchSearch
   })
 
-  // Stats from live data
-  var total  = faculty.length
-  var pgts   = faculty.filter(function(f){ return f.role==='PGT' }).length
-  var tgts   = faculty.filter(function(f){ return f.role==='TGT' }).length
-  var prts   = faculty.filter(function(f){ return f.role==='PRT' }).length
-  var mgmt   = faculty.filter(function(f){ return ['Director','Principal','Vice Principal'].includes(f.role) }).length
+  var total = faculty.length
+  var pgts  = faculty.filter(function(f){ return f.role==='PGT' }).length
+  var tgts  = faculty.filter(function(f){ return f.role==='TGT' }).length
+  var prts  = faculty.filter(function(f){ return f.role==='PRT' }).length
+  var mgmt  = faculty.filter(function(f){ return ['Director','Principal','Vice Principal'].includes(f.role) }).length
+
+  var STATS = [
+    [total||'64+', 'Total Staff', <FaUsers size={20} color="#E8761A"/>,       '#E8761A'],
+    [pgts||'16',   'PGTs',        <FaGraduationCap size={20} color="#6C3FC5"/>, '#6C3FC5'],
+    [tgts||'20',   'TGTs',        <FaBook size={20} color="#22a35a"/>,          '#22a35a'],
+    [prts||'10',   'PRTs',        <FaPencilAlt size={20} color="#000"/>,     '#000'],
+    [mgmt||'4',    'Management',  <FaUserTie size={20} color="#E8761A"/>,       '#E8761A'],
+  ]
 
   return (
     <>
@@ -79,12 +91,11 @@ export default function TeachersQualification({ embedded }) {
       {!embedded && (
         <div className="page-banner">
           <div className="pb-inner">
-            <div className="pb-chip">👨‍🏫 Academics</div>
+            <div className="pb-chip">Academics</div>
             <h1 className="pb-title">Teachers & <span style={{color:'var(--gd2)',fontStyle:'italic'}}>Qualifications</span></h1>
             <p className="pb-sub">Meet our {total||'64'}+ dedicated faculty members — experienced, qualified and committed to excellence</p>
             <div className="breadcrumb">
-              <Link to="/">Home</Link><span>›</span>
-              <Link to="/academics">Academics</Link><span>›</span>
+              <Link to="/">Home</Link><span>›</span><Link to="/academics">Academics</Link><span>›</span>
               <span className="bc-cur">Faculty</span>
             </div>
           </div>
@@ -96,16 +107,10 @@ export default function TeachersQualification({ embedded }) {
 
           {/* Stats */}
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(120px,1fr))',gap:'12px',marginBottom:'28px'}}>
-            {[
-              [total||'64+', 'Total Staff',  '👥', '#E8761A'],
-              [pgts||'16',   'PGTs',         '🎓', '#6C3FC5'],
-              [tgts||'20',   'TGTs',         '📚', '#22a35a'],
-              [prts||'10',   'PRTs',         '✏️', '#F5B800'],
-              [mgmt||'4',    'Management',   '👩‍💼', '#E8761A'],
-            ].map(function(item){
+            {STATS.map(function(item){
               return (
                 <div key={item[1]} style={{padding:'16px 10px',borderRadius:'14px',background:'var(--card)',textAlign:'center',border:'1.5px solid var(--brd)'}}>
-                  <div style={{width:'40px',height:'40px',borderRadius:'12px',background:item[3]+'18',border:'1.5px solid '+item[3]+'30',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px',margin:'0 auto 10px'}}>{item[2]}</div>
+                  <div style={{width:'40px',height:'40px',borderRadius:'12px',background:item[3]+'18',border:'1.5px solid '+item[3]+'30',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 10px'}}>{item[2]}</div>
                   <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:item[3],lineHeight:'1'}}>{item[0]}</div>
                   <div style={{fontSize:'10px',color:'var(--txt3)',marginTop:'4px',letterSpacing:'.8px',textTransform:'uppercase'}}>{item[1]}</div>
                 </div>
@@ -115,9 +120,12 @@ export default function TeachersQualification({ embedded }) {
 
           {/* Search + filters */}
           <div style={{marginBottom:'24px'}}>
-            <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="🔍 Search name, department or qualification..."
-              style={{width:'100%',boxSizing:'border-box',padding:'11px 16px',borderRadius:'10px',border:'1.5px solid var(--brd)',background:'var(--bg)',color:'var(--txt)',fontFamily:"'DM Sans',sans-serif",fontSize:'13.5px',outline:'none',marginBottom:'10px'}}
-              onFocus={function(e){e.target.style.borderColor='var(--or)'}} onBlur={function(e){e.target.style.borderColor='var(--brd)'}} />
+            <div style={{position:'relative',marginBottom:'10px'}}>
+              <FaSearch size={13} color="var(--txt3)" style={{position:'absolute',left:'14px',top:'50%',transform:'translateY(-50%)'}}/>
+              <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search name, department or qualification..."
+                style={{width:'100%',boxSizing:'border-box',padding:'11px 16px 11px 38px',borderRadius:'10px',border:'1.5px solid var(--brd)',background:'var(--bg)',color:'var(--txt)',fontFamily:"'DM Sans',sans-serif",fontSize:'13.5px',outline:'none'}}
+                onFocus={function(e){e.target.style.borderColor='var(--or)'}} onBlur={function(e){e.target.style.borderColor='var(--brd)'}} />
+            </div>
             <div style={{display:'flex',gap:'8px',alignItems:'center',flexWrap:'wrap'}}>
               <div style={{display:'flex',gap:'5px',flexWrap:'wrap',flex:1}}>
                 {cats.map(function(c){
@@ -131,15 +139,12 @@ export default function TeachersQualification({ embedded }) {
               </div>
               <div style={{display:'flex',gap:'4px',background:'var(--bg2)',padding:'4px',borderRadius:'10px',border:'1.5px solid var(--brd)',flexShrink:0}}>
                 {[['grid','⊞'],['list','☰']].map(function(pair){
-                  return (
-                    <button key={pair[0]} onClick={function(){setView(pair[0])}} style={{padding:'7px 12px',borderRadius:'8px',border:'none',cursor:'pointer',fontSize:'14px',transition:'all .2s',background:view===pair[0]?'var(--card)':'transparent',color:view===pair[0]?'var(--or)':'var(--txt3)',boxShadow:view===pair[0]?'0 2px 8px rgba(232,118,26,.15)':'none'}}>{pair[1]}</button>
-                  )
+                  return <button key={pair[0]} onClick={function(){setView(pair[0])}} style={{padding:'7px 12px',borderRadius:'8px',border:'none',cursor:'pointer',fontSize:'14px',transition:'all .2s',background:view===pair[0]?'var(--card)':'transparent',color:view===pair[0]?'var(--or)':'var(--txt3)',boxShadow:view===pair[0]?'0 2px 8px rgba(232,118,26,.15)':'none'}}>{pair[1]}</button>
                 })}
               </div>
             </div>
           </div>
 
-          {/* Loading */}
           {loading ? (
             <div style={{textAlign:'center',padding:'60px'}}>
               <div style={{width:'44px',height:'44px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto 14px'}}/>
@@ -169,9 +174,7 @@ export default function TeachersQualification({ embedded }) {
                           onMouseLeave={function(e){e.currentTarget.style.background=i%2===0?'transparent':'rgba(0,0,0,.012)'}}>
                           <td style={{padding:'10px 14px',fontSize:'11px',color:'var(--txt3)',fontWeight:'600'}}>{i+1}</td>
                           <td style={{padding:'10px 14px',fontWeight:'700',color:'var(--dark)',fontSize:'13px',fontFamily:"'Playfair Display',serif",whiteSpace:'nowrap'}}>{f.name}</td>
-                          <td style={{padding:'10px 14px',whiteSpace:'nowrap'}}>
-                            <span style={{fontSize:'10px',fontWeight:'800',color:st.color,background:st.bg,padding:'2px 9px',borderRadius:'50px'}}>{f.role}</span>
-                          </td>
+                          <td style={{padding:'10px 14px',whiteSpace:'nowrap'}}><span style={{fontSize:'10px',fontWeight:'800',color:st.color,background:st.bg,padding:'2px 9px',borderRadius:'50px'}}>{f.role}</span></td>
                           <td style={{padding:'10px 14px',fontSize:'12.5px',color:'var(--txt2)',fontStyle:'italic',whiteSpace:'nowrap'}}>{f.qual}</td>
                           <td style={{padding:'10px 14px',fontSize:'12.5px',color:'var(--txt2)'}}>{f.dept}</td>
                           <td style={{padding:'10px 14px',fontSize:'12px',color:'var(--txt3)'}}>{f.exp||'—'}</td>
@@ -186,7 +189,7 @@ export default function TeachersQualification({ embedded }) {
 
           {!loading && filtered.length===0 && (
             <div style={{textAlign:'center',padding:'60px',color:'var(--txt3)'}}>
-              <div style={{fontSize:'40px',marginBottom:'12px'}}>🔍</div>
+              <FaSearch size={40} color="var(--txt3)" style={{marginBottom:'12px'}}/>
               <div style={{fontSize:'16px',fontWeight:'600',color:'var(--txt2)'}}>No results for "{search}"</div>
             </div>
           )}

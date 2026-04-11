@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Link } from 'react-router-dom'
 import { academicsAPI } from '../../api'
+import { FaSeedling, FaBook, FaDraftingCompass, FaFlask, FaAtom, FaBriefcase, FaGlobe } from 'react-icons/fa'
 
 function make3D(canvas) {
   if (!canvas) return function() {}
@@ -33,19 +34,19 @@ function make3D(canvas) {
 
 var FALLBACK_STREAMS = [
   {
-    em:'⚗️', title:'Science Stream', sub:'Class XI – XII',
+    icon:<FaAtom size={36} color="#E8761A"/>, title:'Science Stream', sub:'Class XI – XII',
     subjects:['Physics','Chemistry','Biology / Maths','English Core','Hindi / CS / PE'],
     color:'#E8761A', bg:'rgba(232,118,26,.06)',
     desc:'PCB & PCM with fully equipped labs. Ideal for medical, engineering and research aspirants.'
   },
   {
-    em:'💼', title:'Commerce Stream', sub:'Class XI – XII',
+    icon:<FaBriefcase size={36} color="#F5B800"/>, title:'Commerce Stream', sub:'Class XI – XII',
     subjects:['Accountancy','Business Studies','Economics','English Core','Hindi / CS / PE'],
     color:'#F5B800', bg:'rgba(245,184,0,.06)',
     desc:'Build the foundation for CA, MBA, banking and entrepreneurship.'
   },
   {
-    em:'🌐', title:'Humanities Stream', sub:'Class XI – XII',
+    icon:<FaGlobe size={36} color="#6C3FC5"/>, title:'Humanities Stream', sub:'Class XI – XII',
     subjects:['History','Political Science','Economics','English Core','Hindi / CS / PE'],
     color:'#6C3FC5', bg:'rgba(108,63,197,.06)',
     desc:'Prepare for law, civil services, journalism and social sciences.'
@@ -53,16 +54,15 @@ var FALLBACK_STREAMS = [
 ]
 
 var FALLBACK_LEVELS = [
-  { em:'🌱', lbl:'Pre-Primary',   tag:'PG – UKG',        students:'160+' },
-  { em:'📖', lbl:'Primary',       tag:'Class I – V',      students:'376+' },
-  { em:'📐', lbl:'Middle',        tag:'Class VI – VIII',  students:'285+' },
-  { em:'🔬', lbl:'Secondary',     tag:'Class IX – X',     students:'315+' },
-  { em:'🎓', lbl:'Sr. Secondary', tag:'Class XI – XII',   students:'274+' },
+  { icon:<FaSeedling size={28} color="#E8761A"/>, lbl:'Pre-Primary',   tag:'PG – UKG',        students:'160+' },
+  { icon:<FaBook size={28} color="#E8761A"/>,     lbl:'Primary',       tag:'Class I – V',      students:'376+' },
+  { icon:<FaDraftingCompass size={28} color="#E8761A"/>, lbl:'Middle', tag:'Class VI – VIII',  students:'285+' },
+  { icon:<FaFlask size={28} color="#E8761A"/>,    lbl:'Secondary',     tag:'Class IX – X',     students:'315+' },
+  { icon:<FaAtom size={28} color="#E8761A"/>,     lbl:'Sr. Secondary', tag:'Class XI – XII',   students:'274+' },
 ]
 
 export default function CurriculumSection() {
   var cvRef = useRef(null)
-
   var [streams, setStreams] = useState(FALLBACK_STREAMS)
   var [levels,  setLevels]  = useState(FALLBACK_LEVELS)
 
@@ -71,46 +71,36 @@ export default function CurriculumSection() {
     return cleanup
   }, [])
 
-  // ── Load from DB ────────────────────────────────────────────────────────────
   useEffect(function() {
     academicsAPI.get()
       .then(function(res) {
         var d = res.data
-
-        // Update streams from DB
         if (d.streams && d.streams.length > 0) {
           setStreams(d.streams.map(function(s) {
             return {
-              em:       s.icon   || '📚',
-              title:    s.name   + ' Stream',
+              icon:     <FaBook size={36} color={s.clr||'#E8761A'}/>,
+              title:    s.name + ' Stream',
               sub:      'Class XI – XII',
               subjects: s.subjects || [],
-              color:    s.clr    || '#E8761A',
-              bg:       (s.clr   || '#E8761A') + '10',
+              color:    s.clr || '#E8761A',
+              bg:       (s.clr || '#E8761A') + '10',
               desc:     s.description || '',
             }
           }))
         }
-
-        // Update levels from DB classes data
         if (d.classes && d.classes.length > 0) {
-          var totalStudents = d.classes.reduce(function(sum, c) {
-            return sum + (Number(c.students) || 0)
-          }, 0)
-
           setLevels([
-            { em:'🌱', lbl:'Pre-Primary',   tag:'PG – UKG',       students: calcStudents(d.classes, ['Play Group','Nursery','KG']) },
-            { em:'📖', lbl:'Primary',       tag:'Class I – V',     students: calcStudents(d.classes, ['Class I','Class II','Class III','Class IV','Class V']) },
-            { em:'📐', lbl:'Middle',        tag:'Class VI – VIII', students: calcStudents(d.classes, ['Class VI','Class VII','Class VIII']) },
-            { em:'🔬', lbl:'Secondary',     tag:'Class IX – X',    students: calcStudents(d.classes, ['Class IX','Class X']) },
-            { em:'🎓', lbl:'Sr. Secondary', tag:'Class XI – XII',  students: calcStudents(d.classes, ['Class XI','Class XII']) },
+            { icon:<FaSeedling size={28} color="#E8761A"/>, lbl:'Pre-Primary',   tag:'PG – UKG',       students: calcStudents(d.classes, ['Play Group','Nursery','KG']) },
+            { icon:<FaBook size={28} color="#E8761A"/>,     lbl:'Primary',       tag:'Class I – V',     students: calcStudents(d.classes, ['Class I','Class II','Class III','Class IV','Class V']) },
+            { icon:<FaDraftingCompass size={28} color="#E8761A"/>, lbl:'Middle', tag:'Class VI – VIII', students: calcStudents(d.classes, ['Class VI','Class VII','Class VIII']) },
+            { icon:<FaFlask size={28} color="#E8761A"/>,    lbl:'Secondary',     tag:'Class IX – X',    students: calcStudents(d.classes, ['Class IX','Class X']) },
+            { icon:<FaAtom size={28} color="#E8761A"/>,     lbl:'Sr. Secondary', tag:'Class XI – XII',  students: calcStudents(d.classes, ['Class XI','Class XII']) },
           ])
         }
       })
       .catch(function() {})
   }, [])
 
-  // Helper — sum students for given class names
   function calcStudents(classes, names) {
     var total = classes
       .filter(function(c) { return names.includes(c.name) })
@@ -119,12 +109,12 @@ export default function CurriculumSection() {
   }
 
   return (
-    <section className="sect" style={{background:'var(--bg2)', position:'relative', overflow:'hidden'}}>
+    <section className="sect" style={{background:'var(--bg2)',position:'relative',overflow:'hidden'}}>
       <canvas ref={cvRef} className="s-canvas" style={{opacity:.3}} />
-      <div className="s-cont" style={{position:'relative', zIndex:3}}>
+      <div className="s-cont" style={{position:'relative',zIndex:3}}>
 
         {/* Header */}
-        <div className="rv" style={{textAlign:'center', marginBottom:'52px'}}>
+        <div className="rv" style={{textAlign:'center',marginBottom:'52px'}}>
           <div className="chip"><span className="chip-dot"></span>Our Curriculum</div>
           <h2 className="sec-title">Comprehensive <span className="hl">Education</span><br/>from Nursery to Class XII</h2>
           <div className="s-bar" style={{margin:'10px auto 18px'}}></div>
@@ -133,7 +123,7 @@ export default function CurriculumSection() {
           </p>
         </div>
 
-        {/* Level pills — live from DB */}
+        {/* Level pills */}
         <div className="rv curr-levels">
           {levels.map(function(l, i) {
             return (
@@ -141,40 +131,40 @@ export default function CurriculumSection() {
                 onMouseEnter={function(e){ e.currentTarget.style.borderColor='var(--or)'; e.currentTarget.style.transform='translateY(-6px)'; e.currentTarget.style.boxShadow='0 14px 36px var(--shd)' }}
                 onMouseLeave={function(e){ e.currentTarget.style.borderColor='var(--brd)'; e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 18px rgba(232,118,26,.07)' }}
               >
-                <div style={{fontSize:'28px', marginBottom:'6px'}}>{l.em}</div>
-                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'13px', fontWeight:'700', color:'var(--dark)', marginBottom:'3px'}}>{l.lbl}</div>
-                <div style={{fontSize:'11px', color:'var(--txt3)', marginBottom:'4px'}}>{l.tag}</div>
-                <div style={{fontSize:'12px', fontWeight:'700', color:'var(--or)'}}>{l.students}</div>
+                <div style={{display:'flex',justifyContent:'center',marginBottom:'6px'}}>{l.icon}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'13px',fontWeight:'700',color:'var(--dark)',marginBottom:'3px'}}>{l.lbl}</div>
+                <div style={{fontSize:'11px',color:'var(--txt3)',marginBottom:'4px'}}>{l.tag}</div>
+                <div style={{fontSize:'12px',fontWeight:'700',color:'var(--or)'}}>{l.students}</div>
               </div>
             )
           })}
         </div>
 
         {/* Streams label */}
-        <div className="rv" style={{textAlign:'center', marginBottom:'28px', marginTop:'52px'}}>
-          <div style={{fontSize:'13px', fontWeight:'700', letterSpacing:'2px', textTransform:'uppercase', color:'var(--txt3)'}}>
+        <div className="rv" style={{textAlign:'center',marginBottom:'28px',marginTop:'52px'}}>
+          <div style={{fontSize:'13px',fontWeight:'700',letterSpacing:'2px',textTransform:'uppercase',color:'var(--txt3)'}}>
             Senior Secondary Streams (Class XI–XII)
           </div>
         </div>
 
-        {/* Streams grid — live from DB */}
+        {/* Streams grid */}
         <div className="curr-streams">
           {streams.map(function(s, i) {
             return (
               <div key={i} className="rv3d curr-stream-card"
-                style={{ transitionDelay:(i*0.12)+'s', background:s.bg, border:'1.5px solid '+s.color+'22' }}
+                style={{transitionDelay:(i*0.12)+'s',background:s.bg,border:'1.5px solid '+s.color+'22'}}
                 onMouseEnter={function(e){ e.currentTarget.style.transform='translateY(-8px) rotateX(3deg)'; e.currentTarget.style.boxShadow='0 20px 50px '+s.color+'25' }}
                 onMouseLeave={function(e){ e.currentTarget.style.transform='translateY(0) rotateX(0)'; e.currentTarget.style.boxShadow='none' }}
               >
-                <div style={{fontSize:'40px', marginBottom:'12px'}}>{s.em}</div>
-                <div style={{fontFamily:"'Playfair Display',serif", fontSize:'20px', fontWeight:'700', color:'var(--dark)', marginBottom:'4px'}}>{s.title}</div>
-                <div style={{fontSize:'11px', fontWeight:'700', color:s.color, letterSpacing:'1px', textTransform:'uppercase', marginBottom:'12px'}}>{s.sub}</div>
-                <p style={{fontSize:'13.5px', color:'var(--txt2)', lineHeight:'1.65', marginBottom:'16px'}}>{s.desc}</p>
-                <div style={{display:'flex', flexDirection:'column', gap:'6px'}}>
+                <div style={{display:'flex',justifyContent:'flex-start',marginBottom:'12px'}}>{s.icon}</div>
+                <div style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'var(--dark)',marginBottom:'4px'}}>{s.title}</div>
+                <div style={{fontSize:'11px',fontWeight:'700',color:s.color,letterSpacing:'1px',textTransform:'uppercase',marginBottom:'12px'}}>{s.sub}</div>
+                <p style={{fontSize:'13.5px',color:'var(--txt2)',lineHeight:'1.65',marginBottom:'16px'}}>{s.desc}</p>
+                <div style={{display:'flex',flexDirection:'column',gap:'6px'}}>
                   {s.subjects.map(function(subj, j) {
                     return (
-                      <div key={j} style={{display:'flex', alignItems:'center', gap:'8px', fontSize:'13px', color:'var(--txt2)'}}>
-                        <div style={{width:'6px', height:'6px', borderRadius:'50%', background:s.color, flexShrink:0}}></div>
+                      <div key={j} style={{display:'flex',alignItems:'center',gap:'8px',fontSize:'13px',color:'var(--txt2)'}}>
+                        <div style={{width:'6px',height:'6px',borderRadius:'50%',background:s.color,flexShrink:0}}></div>
                         {subj}
                       </div>
                     )
@@ -187,8 +177,8 @@ export default function CurriculumSection() {
 
         {/* CTA */}
         <div className="rv curr-cta">
-          <Link to="/academics" className="btn-or">📚 View Full Curriculum →</Link>
-          <Link to="/academics/fees" className="btn-out">📋 Fee Structure</Link>
+          <Link to="/academics" className="btn-or">View Full Curriculum →</Link>
+          <Link to="/academics?tab=fees" className="btn-out">Fee Structure</Link>
         </div>
 
       </div>

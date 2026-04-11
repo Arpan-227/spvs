@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { jobAppAPI } from '../../api'
+import { FaPhone, FaCheckCircle, FaExclamationTriangle, FaPaperclip, FaFileAlt, FaPaperPlane, FaSpinner, FaGift } from 'react-icons/fa'
 
 export default function JobApplyForm({ job, onClose }) {
-  var [form, setForm]           = useState({ name:'', phone:'', email:'', qual:'', exp:'', message:'' })
-  var [resume, setResume]       = useState(null)
+  var [form, setForm]             = useState({ name:'', phone:'', email:'', qual:'', exp:'', message:'' })
+  var [resume, setResume]         = useState(null)
   var [resumeName, setResumeName] = useState('')
-  var [sent, setSent]           = useState(false)
-  var [loading, setLoading]     = useState(false)
-  var [error, setError]         = useState('')
+  var [sent, setSent]             = useState(false)
+  var [loading, setLoading]       = useState(false)
+  var [error, setError]           = useState('')
 
   function handleChange(e) {
     var key=e.target.name, val=e.target.value
@@ -48,7 +49,7 @@ export default function JobApplyForm({ job, onClose }) {
         .jaf-inp      { width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid var(--brd); background:var(--bg); color:var(--txt); font-family:'DM Sans',sans-serif; font-size:13.5px; outline:none; box-sizing:border-box; transition:border-color .2s; }
         .jaf-inp:focus { border-color:var(--or); }
         .jaf-lbl      { font-size:11px; font-weight:800; color:var(--txt3); letter-spacing:.5px; text-transform:uppercase; display:block; margin-bottom:5px; }
-        .jaf-submit   { width:100%; padding:13px; border-radius:50px; border:none; cursor:pointer; background:linear-gradient(135deg,var(--or),var(--gd)); color:#fff; font-family:'DM Sans',sans-serif; font-size:clamp(13px,3vw,14px); font-weight:800; box-shadow:0 6px 24px rgba(232,118,26,.35); transition:all .25s; }
+        .jaf-submit   { width:100%; padding:13px; border-radius:50px; border:none; cursor:pointer; background:linear-gradient(135deg,var(--or),var(--gd)); color:#fff; font-family:'DM Sans',sans-serif; font-size:clamp(13px,3vw,14px); font-weight:800; box-shadow:0 6px 24px rgba(232,118,26,.35); transition:all .25s; display:flex; align-items:center; justify-content:center; gap:8px; }
         .jaf-submit:disabled { opacity:.7; cursor:wait; }
         @media (max-width:480px) { .jaf-modal { padding:22px 16px; border-radius:20px; } .jaf-grid-2 { grid-template-columns:1fr; } }
       `}</style>
@@ -57,12 +58,17 @@ export default function JobApplyForm({ job, onClose }) {
         <div className="jaf-modal">
           {sent ? (
             <div style={{textAlign:'center',padding:'28px 0'}}>
-              <div style={{fontSize:'52px',marginBottom:'14px'}}>🎉</div>
+              <div style={{display:'flex',justifyContent:'center',gap:'10px',marginBottom:'14px'}}>
+                 <FaCheckCircle size={52} color="#22a35a"/>
+                 <FaGift size={40} color="#E8761A"/>
+              </div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'var(--dark)',marginBottom:'10px'}}>Application Submitted!</div>
               <div style={{fontSize:'14px',color:'var(--txt2)',marginBottom:'6px'}}>Thank you for applying for <strong>{job.title}</strong>.</div>
               <div style={{fontSize:'13px',color:'var(--txt3)',marginBottom:'24px'}}>Our HR team will contact you within 3–5 working days.</div>
               <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}}>
-                <a href="tel:+919198783830" style={{padding:'10px 22px',borderRadius:'50px',background:'var(--or)',color:'#fff',textDecoration:'none',fontWeight:'800',fontSize:'13px',fontFamily:"'DM Sans',sans-serif"}}>📞 Call Us</a>
+                <a href="tel:+919198783830" style={{display:'inline-flex',alignItems:'center',gap:'7px',padding:'10px 22px',borderRadius:'50px',background:'var(--or)',color:'#fff',textDecoration:'none',fontWeight:'800',fontSize:'13px',fontFamily:"'DM Sans',sans-serif"}}>
+                  <FaPhone size={13}/> Call Us
+                </a>
                 <button onClick={onClose} style={{padding:'10px 22px',borderRadius:'50px',border:'1.5px solid var(--brd)',cursor:'pointer',background:'transparent',color:'var(--txt2)',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700'}}>Close</button>
               </div>
             </div>
@@ -78,7 +84,9 @@ export default function JobApplyForm({ job, onClose }) {
               </div>
 
               {error && (
-                <div style={{background:'rgba(239,68,68,.06)',border:'1.5px solid rgba(239,68,68,.2)',borderRadius:'10px',padding:'10px 14px',marginBottom:'14px',fontSize:'12.5px',color:'#dc2626',fontWeight:'600'}}>⚠️ {error}</div>
+                <div style={{display:'flex',alignItems:'center',gap:'8px',background:'rgba(239,68,68,.06)',border:'1.5px solid rgba(239,68,68,.2)',borderRadius:'10px',padding:'10px 14px',marginBottom:'14px',fontSize:'12.5px',color:'#dc2626',fontWeight:'600'}}>
+                  <FaExclamationTriangle size={13}/> {error}
+                </div>
               )}
 
               <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:'13px'}}>
@@ -115,16 +123,18 @@ export default function JobApplyForm({ job, onClose }) {
                   <div style={{border:'2px dashed rgba(232,118,26,.25)',borderRadius:'12px',padding:'14px',background:'rgba(232,118,26,.03)'}}>
                     {resumeName ? (
                       <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-                        <div style={{width:'36px',height:'36px',borderRadius:'9px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>📄</div>
+                        <div style={{width:'36px',height:'36px',borderRadius:'9px',background:'rgba(232,118,26,.1)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+                          <FaFileAlt size={18} color="#E8761A"/>
+                        </div>
                         <div style={{flex:1,minWidth:0}}>
                           <div style={{fontSize:'13px',fontWeight:'700',color:'var(--dark)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{resumeName}</div>
-                          <div style={{fontSize:'11.5px',color:'var(--txt3)'}}>Resume uploaded ✅</div>
+                          <div style={{fontSize:'11.5px',color:'var(--txt3)',display:'flex',alignItems:'center',gap:'4px'}}><FaCheckCircle size={10} color="#22a35a"/> Resume uploaded</div>
                         </div>
                         <button type="button" onClick={function(){setResume(null);setResumeName('')}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--txt3)',fontSize:'16px',padding:'4px',flexShrink:0}}>✕</button>
                       </div>
                     ) : (
                       <label style={{display:'flex',flexDirection:'column',alignItems:'center',cursor:'pointer',padding:'8px 0'}}>
-                        <div style={{fontSize:'28px',marginBottom:'6px'}}>📎</div>
+                        <FaPaperclip size={28} color="#E8761A" style={{marginBottom:'6px'}}/>
                         <div style={{fontSize:'13px',fontWeight:'700',color:'var(--or)',marginBottom:'3px'}}>Click to upload Resume / CV</div>
                         <div style={{fontSize:'11.5px',color:'var(--txt3)'}}>PDF, DOC, DOCX — Max 5MB</div>
                         <input type="file" accept=".pdf,.doc,.docx" style={{display:'none'}}
@@ -139,13 +149,17 @@ export default function JobApplyForm({ job, onClose }) {
                 </div>
 
                 <button type="submit" className="jaf-submit" disabled={loading}>
-                  {loading ? '⏳ Submitting...' : '📨 Submit Application →'}
+                  {loading
+                    ? <><FaSpinner size={14} style={{animation:'spin .8s linear infinite'}}/> Submitting...</>
+                    : <><FaPaperPlane size={14}/> Submit Application</>
+                  }
                 </button>
               </form>
             </>
           )}
         </div>
       </div>
+      <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
     </>
   )
 }

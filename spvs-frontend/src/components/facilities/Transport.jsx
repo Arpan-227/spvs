@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { transportAPI } from '../../api'
+import { FaBus, FaMapMarkerAlt, FaUsers, FaPhone, FaSearch, FaBuilding } from 'react-icons/fa'
 
-// Fallback static routes if DB empty
 var FALLBACK = [
   { _id:1,  area:'Bahraich City Centre',   stops:'Gandhi Chowk, Bus Stand, Civil Lines, Court Road, Collectorate',           busNo:'Bus 01', departs:'7:10 AM', status:'Active' },
   { _id:2,  area:'Nanpara Road',            stops:'Nanpara Chowk, ITI Crossing, Petrol Pump, Bypass, Nawabganj',              busNo:'Bus 02', departs:'7:00 AM', status:'Active' },
@@ -23,8 +23,8 @@ function RouteCard({ r, color, isOpen, onToggle }) {
   return (
     <div onClick={onToggle} style={{borderRadius:'16px',border:'1.5px solid '+(isOpen?color:'var(--brd)'),background:isOpen?color+'11':'var(--card)',cursor:'pointer',overflow:'hidden',transition:'all .3s cubic-bezier(.34,1.56,.64,1)',boxShadow:isOpen?'0 10px 30px '+color+'33':'none',transform:isOpen?'translateY(-3px)':'translateY(0)'}}>
       <div style={{padding:'18px',display:'flex',alignItems:'center',gap:'12px'}}>
-        <div style={{width:'46px',height:'46px',borderRadius:'14px',background:'linear-gradient(135deg,'+color+','+color+'99)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'20px',flexShrink:0,boxShadow:'0 4px 14px '+color+'44'}}>
-          🚌
+        <div style={{width:'46px',height:'46px',borderRadius:'14px',background:'linear-gradient(135deg,'+color+','+color+'99)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 4px 14px '+color+'44'}}>
+          <FaBus size={20} color="#fff"/>
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontFamily:"'Playfair Display',serif",fontSize:'14px',fontWeight:'700',color:'var(--dark)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.area}</div>
@@ -48,7 +48,7 @@ function RouteCard({ r, color, isOpen, onToggle }) {
           {r.driver && (
             <div style={{marginTop:'12px',padding:'8px 12px',borderRadius:'10px',background:'var(--bg2)',border:'1px solid var(--brd)',fontSize:'12px',color:'var(--txt2)'}}>
               <span style={{fontWeight:'700',color:'var(--dark)'}}>Driver:</span> {r.driver}
-              {r.driverPhone && <span> · 📞 <a href={'tel:'+r.driverPhone} style={{color:color,fontWeight:'700',textDecoration:'none'}}>{r.driverPhone}</a></span>}
+              {r.driverPhone && <span> · <FaPhone size={10} style={{verticalAlign:'middle',marginRight:'3px'}}/><a href={'tel:'+r.driverPhone} style={{color:color,fontWeight:'700',textDecoration:'none'}}>{r.driverPhone}</a></span>}
             </div>
           )}
         </div>
@@ -89,7 +89,7 @@ export default function Transport({ embedded = false }) {
       {!embedded && (
         <div className="page-banner">
           <div className="pb-inner">
-            <div className="pb-chip">🏗️ Facilities</div>
+            <div className="pb-chip" style={{display:'inline-flex',alignItems:'center',gap:'6px'}}><FaBuilding size={12}/> Facilities</div>
             <h1 className="pb-title">School <span style={{color:'var(--gd2)',fontStyle:'italic'}}>Transport</span></h1>
             <p className="pb-sub">{totalBuses} buses covering all major areas of Bahraich — safe, timely and reliable</p>
             <div className="breadcrumb">
@@ -107,16 +107,16 @@ export default function Transport({ embedded = false }) {
           {/* Stats */}
           <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(130px,1fr))',gap:'12px',marginBottom:'24px'}}>
             {[
-              ['🚌', totalBuses,    'School Buses'],
-              ['🗺️', activeRoutes,  'Active Routes'],
-              ['👥', totalStudents||'600+', 'Students'],
-              ['📞', 'Available',   'Help'],
+              { icon:<FaBus size={22} color="#E8761A"/>,          n:totalBuses,          l:'School Buses' },
+              { icon:<FaMapMarkerAlt size={22} color="#E8761A"/>, n:activeRoutes,         l:'Active Routes' },
+              { icon:<FaUsers size={22} color="#E8761A"/>,        n:totalStudents||'600+',l:'Students' },
+              { icon:<FaPhone size={22} color="#E8761A"/>,        n:'Available',          l:'Help' },
             ].map(function(item){
               return (
-                <div key={item[2]} style={{padding:'16px 12px',borderRadius:'14px',background:'var(--card)',border:'1.5px solid var(--brd)',textAlign:'center'}}>
-                  <div style={{fontSize:'22px',marginBottom:'6px'}}>{item[0]}</div>
-                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:'16px',fontWeight:'700',color:'var(--or)',lineHeight:'1.2'}}>{item[1]}</div>
-                  <div style={{fontSize:'10px',color:'var(--txt3)',marginTop:'4px'}}>{item[2]}</div>
+                <div key={item.l} style={{padding:'16px 12px',borderRadius:'14px',background:'var(--card)',border:'1.5px solid var(--brd)',textAlign:'center'}}>
+                  <div style={{display:'flex',justifyContent:'center',marginBottom:'6px'}}>{item.icon}</div>
+                  <div style={{fontFamily:"'Playfair Display',serif",fontSize:'16px',fontWeight:'700',color:'var(--or)',lineHeight:'1.2'}}>{item.n}</div>
+                  <div style={{fontSize:'10px',color:'var(--txt3)',marginTop:'4px'}}>{item.l}</div>
                 </div>
               )
             })}
@@ -125,23 +125,25 @@ export default function Transport({ embedded = false }) {
           {/* Transport incharge bar */}
           <div style={{padding:'16px 20px',borderRadius:'14px',background:'rgba(232,118,26,.06)',border:'1.5px solid rgba(232,118,26,.2)',marginBottom:'20px'}}>
             <div style={{display:'flex',alignItems:'center',gap:'14px',flexWrap:'wrap'}}>
-              <div style={{fontSize:'24px',flexShrink:0}}>📞</div>
+              <FaPhone size={24} color="#E8761A" style={{flexShrink:0}}/>
               <div style={{flex:1,minWidth:'180px'}}>
                 <div style={{fontWeight:'700',color:'var(--dark)'}}>Transport Incharge: Ravikant Srivastava</div>
                 <div style={{fontSize:'13px',color:'var(--txt2)'}}>For route enquiries, fee and new registration</div>
               </div>
-              <a href="tel:+917985287461" className="btn-or" style={{padding:'10px 18px',fontSize:'13px',flexShrink:0}}>📞 +91 7985287461</a>
+              <a href="tel:+917985287461" className="btn-or" style={{display:'inline-flex',alignItems:'center',gap:'7px',padding:'10px 18px',fontSize:'13px',flexShrink:0}}>
+                <FaPhone size={12}/> +91 7985287461
+              </a>
             </div>
           </div>
 
           {/* Search */}
-          <div style={{marginBottom:'18px'}}>
-            <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="🔍 Search your area or stop name..."
-              style={{width:'100%',padding:'12px 16px',borderRadius:'12px',border:'1.5px solid var(--brd)',background:'var(--bg)',color:'var(--txt)',fontFamily:"'DM Sans',sans-serif",fontSize:'14px',outline:'none',boxSizing:'border-box'}}
+          <div style={{marginBottom:'18px',position:'relative'}}>
+            <FaSearch size={14} color="#B87832" style={{position:'absolute',left:'14px',top:'50%',transform:'translateY(-50%)',pointerEvents:'none'}}/>
+            <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search your area or stop name..."
+              style={{width:'100%',padding:'12px 16px 12px 40px',borderRadius:'12px',border:'1.5px solid var(--brd)',background:'var(--bg)',color:'var(--txt)',fontFamily:"'DM Sans',sans-serif",fontSize:'14px',outline:'none',boxSizing:'border-box'}}
               onFocus={function(e){e.target.style.borderColor='var(--or)'}} onBlur={function(e){e.target.style.borderColor='var(--brd)'}} />
           </div>
 
-          {/* Loading */}
           {loading ? (
             <div style={{textAlign:'center',padding:'60px'}}>
               <div style={{width:'44px',height:'44px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto 14px'}}/>
@@ -157,7 +159,7 @@ export default function Transport({ embedded = false }) {
 
           {!loading && filtered.length===0 && (
             <div style={{textAlign:'center',padding:'48px'}}>
-              <div style={{fontSize:'36px',marginBottom:'12px'}}>🔍</div>
+              <FaSearch size={36} color="var(--txt3)" style={{marginBottom:'12px'}}/>
               <div style={{fontWeight:'600',color:'var(--txt2)'}}>No route found for "{search}"</div>
               <div style={{fontSize:'13px',marginTop:'8px',color:'var(--txt3)'}}>Contact: +91 7985287461</div>
             </div>
@@ -165,7 +167,9 @@ export default function Transport({ embedded = false }) {
 
           <div style={{marginTop:'20px',textAlign:'center',padding:'20px',borderRadius:'16px',background:'var(--bg2)',border:'1.5px solid var(--brd)'}}>
             <div style={{fontSize:'13px',color:'var(--txt2)',marginBottom:'10px'}}>Don't see your area? We may be able to add a stop!</div>
-            <a href="tel:+919198783830" className="btn-or" style={{fontSize:'13px',padding:'10px 22px'}}>📞 Call School Office</a>
+            <a href="tel:+919198783830" className="btn-or" style={{display:'inline-flex',alignItems:'center',gap:'7px',fontSize:'13px',padding:'10px 22px'}}>
+              <FaPhone size={12}/> Call School Office
+            </a>
           </div>
         </div>
       </div>

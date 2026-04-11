@@ -116,7 +116,7 @@ export default function TcCertificate({ data, onBack }) {
               style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: 'clamp(12px,3vw,14px) clamp(18px,4vw,28px)', borderRadius: '14px', background: 'linear-gradient(135deg,#E8761A,#F5B800)', color: '#1C0A00', fontWeight: '900', fontSize: 'clamp(13px,3vw,15px)', border: 'none', cursor: 'pointer', boxShadow: '0 8px 28px rgba(232,118,26,.32)', fontFamily: "'DM Sans',sans-serif", transition: 'all .22s' }}
               onMouseEnter={function (e) { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 36px rgba(232,118,26,.44)' }}
               onMouseLeave={function (e) { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(232,118,26,.32)' }}>
-              📄 View TC
+              View TC
             </button>
             <button onClick={onBack}
               style={{ padding: 'clamp(12px,3vw,14px) clamp(16px,3vw,24px)', borderRadius: '14px', background: 'transparent', color: '#7A4010', fontWeight: '700', fontSize: 'clamp(13px,3vw,14px)', border: '1.5px solid rgba(232,118,26,.28)', cursor: 'pointer', fontFamily: "'DM Sans',sans-serif", transition: 'all .2s' }}

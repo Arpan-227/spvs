@@ -103,7 +103,7 @@ export default function ContactForm() {
         </div>
 
         <button type="submit" disabled={loading} style={{padding:'13px 32px', borderRadius:'50px', border:'none', cursor: loading ? 'wait' : 'pointer', background:'linear-gradient(135deg,var(--or),var(--gd))', color:'#fff', fontFamily:"'DM Sans',sans-serif", fontSize:'14px', fontWeight:'800', boxShadow:'0 6px 24px rgba(232,118,26,.35)', transition:'all .25s', opacity: loading ? '.7' : '1'}}>
-          {loading ? '⏳ Sending...' : '📨 Send Message →'}
+          {loading ? 'Sending...' : 'Send Message →'}
         </button>
       </form>
     </>

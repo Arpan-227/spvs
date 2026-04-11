@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { announcementAPI } from '../../api'
+import { FaBullhorn, FaCheckCircle, FaTimesCircle, FaPencilAlt, FaTrash, FaSpinner, FaPauseCircle, FaSatelliteDish } from 'react-icons/fa'
 
 var CATS     = ['All','General','Exam','Holiday','Event','Admission','Result','Notice','Sports']
 var PRIORITY = ['Normal','Important','Urgent']
@@ -69,11 +70,8 @@ export default function ManageAnnouncementsPage() {
         showToast('Announcement updated!')
       }
       closeModal()
-    } catch(err) {
-      showToast(err.message,'error')
-    } finally {
-      setSaving(false)
-    }
+    } catch(err) { showToast(err.message,'error') }
+    finally { setSaving(false) }
   }
 
   async function handleDelete() {
@@ -92,81 +90,55 @@ export default function ManageAnnouncementsPage() {
     } catch(err) { showToast(err.message,'error') }
   }
 
+  var STATS = [
+    { label:'Total',      value:loading?'...':items.length,         icon:<FaBullhorn size={18} color="#E8761A"/>,      clr:'#E8761A' },
+    { label:'Active',     value:loading?'...':active,                icon:<FaCheckCircle size={18} color="#22a35a"/>,  clr:'#22a35a' },
+    { label:'Inactive',   value:loading?'...':(items.length-active), icon:<FaPauseCircle size={18} color="#C45F0A"/>,  clr:'#C45F0A' },
+    { label:'In Marquee', value:loading?'...':active,                icon:<FaSatelliteDish size={18} color="#6C3FC5"/>,clr:'#6C3FC5' },
+  ]
+
   return (
     <div style={{maxWidth:'1100px', width:'100%', boxSizing:'border-box'}}>
       <style>{`
         *, *::before, *::after { box-sizing: border-box; }
         @keyframes spin    { to{transform:rotate(360deg)} }
         @keyframes slideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
-
-        /* stats */
         .man-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px; }
-
-        /* header */
         .man-hdr { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:24px; gap:16px; flex-wrap:wrap; }
-
-        /* filters */
         .man-filters { display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
         .man-search  { max-width:230px; width:100%; }
-
-        /* category scroll */
         .man-cats-wrap { overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none; }
         .man-cats-wrap::-webkit-scrollbar { display:none; }
         .man-cats { display:flex; gap:6px; width:max-content; }
-
-        /* announcement list item — actions */
         .man-item-inner { display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap; }
         .man-item-info  { flex:1; min-width:180px; }
         .man-item-acts  { display:flex; gap:6px; flex-shrink:0; flex-wrap:wrap; align-items:center; }
-
-        /* modal form grid */
         .man-mgrid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-
-        /* ═══ TABLET ≤ 900px ═══ */
-        @media (max-width:900px) {
-          .man-stats { grid-template-columns:repeat(2,1fr); }
-          .man-mgrid { grid-template-columns:1fr 1fr; }
-        }
-
-        /* ═══ PHONE ≤ 640px ═══ */
-        @media (max-width:640px) {
-          .man-stats   { grid-template-columns:1fr 1fr; gap:8px; }
-          .man-hdr     { flex-direction:column; align-items:stretch; }
-          .man-hdr button { width:100%; }
-          .man-filters { flex-direction:column; align-items:stretch; gap:8px; }
-          .man-search  { max-width:100% !important; }
-          .man-item-acts { width:100%; justify-content:flex-start; }
-          .man-mgrid   { grid-template-columns:1fr; }
-        }
+        @media (max-width:900px) { .man-stats { grid-template-columns:repeat(2,1fr); } .man-mgrid { grid-template-columns:1fr 1fr; } }
+        @media (max-width:640px) { .man-stats { grid-template-columns:1fr 1fr; gap:8px; } .man-hdr { flex-direction:column; align-items:stretch; } .man-hdr button { width:100%; } .man-filters { flex-direction:column; align-items:stretch; gap:8px; } .man-search { max-width:100% !important; } .man-item-acts { width:100%; justify-content:flex-start; } .man-mgrid { grid-template-columns:1fr; } }
       `}</style>
 
-      {/* Toast */}
       {toast && (
-        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease',maxWidth:'calc(100vw - 40px)'}}>
-          {toast.type==='error'?'❌ ':'✅ '}{toast.msg}
+        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease',maxWidth:'calc(100vw - 40px)',display:'inline-flex',alignItems:'center',gap:'7px'}}>
+          {toast.type==='error' ? <FaTimesCircle size={13}/> : <FaCheckCircle size={13}/>} {toast.msg}
         </div>
       )}
 
-      {/* Header */}
       <div className="man-hdr">
         <div>
-          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px'}}>📢 Announcements</h1>
+          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px',display:'inline-flex',alignItems:'center',gap:'10px'}}>
+            <FaBullhorn size={22} color="#E8761A"/> Announcements
+          </h1>
           <p style={{fontSize:'13px',color:'#7A4010',margin:0}}>Manage school notices shown in the marquee and announce bar</p>
         </div>
         <button onClick={openAdd} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 6px 20px rgba(232,118,26,.3)',padding:'12px 20px',fontSize:'14px',whiteSpace:'nowrap'}}>+ New Announcement</button>
       </div>
 
-      {/* Stats */}
       <div className="man-stats">
-        {[
-          { label:'Total',      value:loading?'...':items.length,       icon:'📢', clr:'#E8761A' },
-          { label:'Active',     value:loading?'...':active,              icon:'✅', clr:'#22a35a' },
-          { label:'Inactive',   value:loading?'...':(items.length-active), icon:'⏸️', clr:'#C45F0A' },
-          { label:'In Marquee', value:loading?'...':active,              icon:'📡', clr:'#6C3FC5' },
-        ].map(function(st){
+        {STATS.map(function(st){
           return (
             <div key={st.label} style={{...s.card,display:'flex',alignItems:'center',gap:'12px',padding:'16px'}}>
-              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>{st.icon}</div>
+              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{st.icon}</div>
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'#1C0A00'}}>{st.value}</div>
                 <div style={{fontSize:'11.5px',color:'#7A4010',fontWeight:'600'}}>{st.label}</div>
@@ -176,22 +148,13 @@ export default function ManageAnnouncementsPage() {
         })}
       </div>
 
-      {/* Info banner */}
-      <div style={{padding:'12px 16px',borderRadius:'12px',background:'rgba(108,63,197,.06)',border:'1.5px solid rgba(108,63,197,.15)',marginBottom:'16px',fontSize:'12.5px',color:'#6C3FC5',fontWeight:'600',lineHeight:'1.6'}}>
-        📡 Active announcements automatically appear in the <strong>top marquee bar</strong> and <strong>AnnounceBar</strong> on the homepage.
+      <div style={{padding:'12px 16px',borderRadius:'12px',background:'rgba(108,63,197,.06)',border:'1.5px solid rgba(108,63,197,.15)',marginBottom:'16px',fontSize:'12.5px',color:'#6C3FC5',fontWeight:'600',lineHeight:'1.6',display:'inline-flex',alignItems:'center',gap:'8px',width:'100%',boxSizing:'border-box'}}>
+        <FaSatelliteDish size={14}/> Active announcements automatically appear in the <strong>top marquee bar</strong> and <strong>AnnounceBar</strong> on the homepage.
       </div>
 
-      {/* Filters */}
       <div style={{...s.card,marginBottom:'16px',padding:'14px 16px'}}>
         <div className="man-filters">
-          <input
-            className="man-search"
-            value={search}
-            onChange={function(e){setSearch(e.target.value)}}
-            placeholder="🔍  Search announcements..."
-            style={{...s.inp,padding:'9px 13px'}}
-            onFocus={inf} onBlur={inb}
-          />
+          <input className="man-search" value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search announcements..." style={{...s.inp,padding:'9px 13px'}} onFocus={inf} onBlur={inb} />
           <div className="man-cats-wrap">
             <div className="man-cats">
               {['All','Active','Inactive'].map(function(f){
@@ -208,11 +171,9 @@ export default function ManageAnnouncementsPage() {
         </div>
       </div>
 
-      {/* List */}
       {loading ? (
-        <div style={{...s.card,textAlign:'center',padding:'60px'}}>
-          <div style={{width:'40px',height:'40px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto 12px'}}/>
-          <div style={{color:'#B87832',fontSize:'14px'}}>Loading announcements...</div>
+        <div style={{...s.card,textAlign:'center',padding:'60px',display:'flex',alignItems:'center',justifyContent:'center',gap:'10px'}}>
+          <FaSpinner size={20} color="#E8761A" style={{animation:'spin .8s linear infinite'}}/> Loading announcements...
         </div>
       ) : (
         <div style={{display:'flex',flexDirection:'column',gap:'10px'}}>
@@ -228,19 +189,23 @@ export default function ManageAnnouncementsPage() {
                     <div style={{fontSize:'14px',fontWeight:'700',color:'#1C0A00',marginBottom:'6px'}}>{a.title}</div>
                     <div style={{display:'flex',gap:'6px',flexWrap:'wrap',alignItems:'center'}}>
                       {a.cat && <span style={{padding:'2px 9px',borderRadius:'20px',fontSize:'10.5px',fontWeight:'800',background:cc+'15',color:cc}}>{a.cat}</span>}
-                      {a.link && <a href={a.link} target="_blank" rel="noreferrer" style={{fontSize:'11px',color:'#6C3FC5',fontWeight:'700'}}>🔗 Link</a>}
+                      {a.link && <a href={a.link} target="_blank" rel="noreferrer" style={{fontSize:'11px',color:'#6C3FC5',fontWeight:'700'}}>Link</a>}
                       <span style={{fontSize:'11px',color:'#B87832'}}>{a.date ? new Date(a.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : ''}</span>
                     </div>
                     {a.description && <div style={{fontSize:'12px',color:'#7A4010',marginTop:'6px',lineHeight:'1.5'}}>{a.description}</div>}
                   </div>
                   <div className="man-item-acts">
-                    <button onClick={function(){toggleActive(a)}} style={{padding:'5px 11px',borderRadius:'8px',border:'none',fontSize:'11px',fontWeight:'800',cursor:'pointer',background:a.active?'rgba(34,163,90,.12)':'rgba(196,95,10,.12)',color:a.active?'#22a35a':'#C45F0A',whiteSpace:'nowrap',transition:'all .2s'}}>
-                      {a.active?'✅ Active':'⏸️ Inactive'}
+                    <button onClick={function(){toggleActive(a)}} style={{padding:'5px 11px',borderRadius:'8px',border:'none',fontSize:'11px',fontWeight:'800',cursor:'pointer',background:a.active?'rgba(34,163,90,.12)':'rgba(196,95,10,.12)',color:a.active?'#22a35a':'#C45F0A',whiteSpace:'nowrap',transition:'all .2s',display:'inline-flex',alignItems:'center',gap:'5px'}}>
+                      {a.active ? <><FaCheckCircle size={11}/> Active</> : <><FaPauseCircle size={11}/> Inactive</>}
                     </button>
-                    <button onClick={function(){openEdit(a)}} style={{width:'30px',height:'30px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',fontSize:'13px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s',flexShrink:0}}
-                      onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>✏️</button>
-                    <button onClick={function(){openDel(a._id)}} style={{width:'30px',height:'30px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',fontSize:'13px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s',flexShrink:0}}
-                      onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>🗑️</button>
+                    <button onClick={function(){openEdit(a)}} style={{width:'30px',height:'30px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s',flexShrink:0}}
+                      onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>
+                      <FaPencilAlt size={12} color="#7A4010"/>
+                    </button>
+                    <button onClick={function(){openDel(a._id)}} style={{width:'30px',height:'30px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s',flexShrink:0}}
+                      onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>
+                      <FaTrash size={12} color="#dc2626"/>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -249,63 +214,47 @@ export default function ManageAnnouncementsPage() {
         </div>
       )}
 
-      {/* ADD/EDIT MODAL */}
       {(modal==='add'||modal==='edit') && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(232,118,26,.2)',padding:'clamp(18px,4vw,28px)',width:'100%',maxWidth:'540px',maxHeight:'92vh',overflowY:'auto',boxShadow:'0 24px 64px rgba(28,10,0,.2)'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'20px',gap:'10px'}}>
-              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0}}>{modal==='add'?'+ New Announcement':'✏️ Edit Announcement'}</h2>
+              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0,display:'inline-flex',alignItems:'center',gap:'8px'}}>
+                {modal==='add' ? <><FaBullhorn size={16} color="#E8761A"/> New Announcement</> : <><FaPencilAlt size={16} color="#E8761A"/> Edit Announcement</>}
+              </h2>
               <button onClick={closeModal} style={{background:'none',border:'none',fontSize:'20px',cursor:'pointer',color:'#B87832',flexShrink:0,lineHeight:1}}>✕</button>
             </div>
             <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
               <div>
                 <label style={s.label}>Title * <span style={{color:'#B87832',fontSize:'10px',fontWeight:'600',textTransform:'none',letterSpacing:'0'}}>(shown in marquee)</span></label>
-                <input name="title" value={current.title} onChange={handleChange} placeholder="e.g. 🎉 Admissions Open 2026–27 — Apply Now!" style={s.inp} onFocus={inf} onBlur={inb} />
+                <input name="title" value={current.title} onChange={handleChange} placeholder="e.g. Admissions Open 2026–27 — Apply Now!" style={s.inp} onFocus={inf} onBlur={inb} />
               </div>
-              <div>
-                <label style={s.label}>Link (Optional)</label>
-                <input name="link" value={current.link} onChange={handleChange} placeholder="https://... or /contact" style={s.inp} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Link (Optional)</label><input name="link" value={current.link} onChange={handleChange} placeholder="https://... or /contact" style={s.inp} onFocus={inf} onBlur={inb} /></div>
               <div className="man-mgrid">
-                <div>
-                  <label style={s.label}>Category</label>
-                  <select name="cat" value={current.cat} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {CATS.filter(function(c){return c!=='All'}).map(function(c){ return <option key={c}>{c}</option> })}
-                  </select>
-                </div>
-                <div>
-                  <label style={s.label}>Priority</label>
-                  <select name="priority" value={current.priority} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {PRIORITY.map(function(p){ return <option key={p}>{p}</option> })}
-                  </select>
-                </div>
+                <div><label style={s.label}>Category</label><select name="cat" value={current.cat} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{CATS.filter(function(c){return c!=='All'}).map(function(c){ return <option key={c}>{c}</option> })}</select></div>
+                <div><label style={s.label}>Priority</label><select name="priority" value={current.priority} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{PRIORITY.map(function(p){ return <option key={p}>{p}</option> })}</select></div>
                 <div style={{display:'flex',alignItems:'flex-end',paddingBottom:'2px'}}>
                   <div style={{display:'flex',alignItems:'center',gap:'10px',padding:'11px 14px',borderRadius:'10px',background:'#FFF6EA',border:'1.5px solid rgba(232,118,26,.15)',width:'100%'}}>
                     <input type="checkbox" name="active" id="act" checked={current.active} onChange={handleChange} style={{width:'16px',height:'16px',accentColor:'#E8761A',flexShrink:0}} />
-                    <label htmlFor="act" style={{fontSize:'13px',fontWeight:'600',color:'#7A4010',cursor:'pointer'}}>✅ Active</label>
+                    <label htmlFor="act" style={{fontSize:'13px',fontWeight:'600',color:'#7A4010',cursor:'pointer',display:'inline-flex',alignItems:'center',gap:'5px'}}><FaCheckCircle size={13} color="#22a35a"/> Active</label>
                   </div>
                 </div>
               </div>
-              <div>
-                <label style={s.label}>Description (Optional)</label>
-                <textarea name="description" value={current.description} onChange={handleChange} rows={3} placeholder="Additional details..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Description (Optional)</label><textarea name="description" value={current.description} onChange={handleChange} rows={3} placeholder="Additional details..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} /></div>
             </div>
             <div style={{display:'flex',gap:'10px',justifyContent:'flex-end',marginTop:'20px',flexWrap:'wrap'}}>
               <button onClick={closeModal} style={{...s.btn,background:'#FFF6EA',color:'#7A4010',border:'1.5px solid rgba(232,118,26,.2)'}}>Cancel</button>
-              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1}}>
-                {saving?'⏳ Saving...':modal==='add'?'+ Publish':'💾 Save Changes'}
+              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1,display:'inline-flex',alignItems:'center',gap:'7px'}}>
+                {saving ? <><FaSpinner size={13} style={{animation:'spin .8s linear infinite'}}/> Saving...</> : modal==='add' ? '+ Publish' : 'Save Changes'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {modal==='delete' && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(220,38,38,.2)',padding:'clamp(20px,4vw,28px)',width:'100%',maxWidth:'380px',boxShadow:'0 24px 64px rgba(28,10,0,.2)',textAlign:'center'}}>
-            <div style={{fontSize:'44px',marginBottom:'12px'}}>🗑️</div>
+            <FaTrash size={44} color="#dc2626" style={{marginBottom:'12px'}}/>
             <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 8px'}}>Delete Announcement?</h2>
             <p style={{fontSize:'13px',color:'#7A4010',margin:'0 0 20px'}}>This announcement will be permanently removed from the website.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}}>

@@ -1,3 +1,5 @@
+import { FaUserTie, FaChalkboardTeacher } from 'react-icons/fa'
+
 export default function PrincipalMessage() {
   return (
     <section className="lead-sect sect">
@@ -11,9 +13,9 @@ export default function PrincipalMessage() {
         <div className="lead-grid">
           {/* Manager */}
           <div className="lcard rv d1">
-            <div className="l-av" style={{background:'linear-gradient(135deg,var(--or),var(--gd))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'40px',position:'relative'}}>
+            <div className="l-av" style={{background:'linear-gradient(135deg,var(--or),var(--gd))',display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
               <div className="l-spin"></div>
-              <span>👨‍💼</span>
+              <FaUserTie size={40} color="#fff"/>
             </div>
             <div className="l-name">Sh. Awadhesh Narayan Agarwal</div>
             <div className="l-role">Manager</div>
@@ -21,9 +23,9 @@ export default function PrincipalMessage() {
           </div>
           {/* Principal */}
           <div className="lcard rv d2">
-            <div className="l-av" style={{background:'linear-gradient(135deg,var(--gd),var(--or3))',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'40px',position:'relative'}}>
+            <div className="l-av" style={{background:'linear-gradient(135deg,var(--gd),var(--or3))',display:'flex',alignItems:'center',justifyContent:'center',position:'relative'}}>
               <div className="l-spin"></div>
-              <span>👩‍🏫</span>
+              <FaChalkboardTeacher size={40} color="#fff"/>
             </div>
             <div className="l-name">Mrs. Pooja Agarwal</div>
             <div className="l-role">Principal — M.A. B.Ed</div>
@@ -36,7 +38,9 @@ export default function PrincipalMessage() {
             "The essence of Sant Pathik Vidyalaya lies in its inclusiveness. Our mentors are competent, hardworking, and dedicated. We maintain perfect harmony between school curriculum and extra-curricular activities — and we are fortunate to have a community of parents who are both understanding and supportive."
           </p>
           <div className="ln-auth">
-            <div className="ln-av">👩‍🏫</div>
+            <div className="ln-av" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+              <FaChalkboardTeacher size={22} color="#000"/>
+            </div>
             <div>
               <div className="ln-nm">Mrs. Pooja Agarwal</div>
               <div className="ln-rl">Principal, Sant Pathik Vidyalaya</div>

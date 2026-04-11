@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { alumniAPI } from '../../api'
+import { FaGlobe, FaGraduationCap, FaLandmark, FaUserMd, FaStar } from 'react-icons/fa'
 
-var FIELDS = ['All', 'Medicine', 'Civil Services', 'Engineering', 'Business', 'Education', 'Law', 'Arts & Media', 'Science & Research', 'Armed Forces', 'Other']
+var FIELDS = ['All','Medicine','Civil Services','Engineering','Business','Education','Law','Arts & Media','Science & Research','Armed Forces','Other']
 
 var STATS = [
-  { n:'5000+', l:'Alumni Worldwide',   em:'🌍' },
-  { n:'37+',   l:'Batches Passed Out', em:'🎓' },
-  { n:'100+',  l:'In Civil Services',  em:'🏛️' },
-  { n:'500+',  l:'In Medicine',        em:'⚕️' },
+  { n:'5000+', l:'Alumni Worldwide',   icon:<FaGlobe size={20} color="#fff"/>        },
+  { n:'37+',   l:'Batches Passed Out', icon:<FaGraduationCap size={20} color="#fff"/> },
+  { n:'100+',  l:'In Civil Services',  icon:<FaLandmark size={20} color="#fff"/>      },
+  { n:'500+',  l:'In Medicine',        icon:<FaUserMd size={20} color="#fff"/>        },
 ]
 
 var TESTIMONIALS = [
@@ -28,7 +29,6 @@ export default function AlumniPage() {
       .catch(function(){   setLoading(false) })
   }, [])
 
-  /* ✅ FIXED — show ALL alumni in All tab, filter by field otherwise */
   var display = filter === 'All'
     ? alumni
     : alumni.filter(function(a){ return a.field === filter })
@@ -39,16 +39,12 @@ export default function AlumniPage() {
         @keyframes spin { to { transform:rotate(360deg) } }
         .ap-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:20px; }
         .ap-testi { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
-        @media (max-width:480px) {
-          .ap-cards { grid-template-columns:1fr; }
-          .ap-testi { grid-template-columns:1fr; }
-        }
+        @media (max-width:480px) { .ap-cards { grid-template-columns:1fr; } .ap-testi { grid-template-columns:1fr; } }
       `}</style>
 
-      {/* BANNER */}
       <div className="page-banner">
         <div className="pb-inner">
-          <div className="pb-chip">🎓 Alumni</div>
+          <div className="pb-chip" style={{display:'inline-flex',alignItems:'center',gap:'6px'}}><FaGraduationCap size={12}/> Alumni</div>
           <h1 className="pb-title">Our <span style={{color:'var(--gd2)',fontStyle:'italic'}}>Alumni</span></h1>
           <p className="pb-sub">5000+ proud alumni — doctors, engineers, IAS officers and entrepreneurs — the living legacy of SPVS</p>
           <div className="breadcrumb">
@@ -58,13 +54,12 @@ export default function AlumniPage() {
         </div>
       </div>
 
-      {/* STATS BAR */}
       <div style={{background:'linear-gradient(90deg,var(--or),var(--or3),var(--gd))',padding:'22px 0'}}>
         <div style={{maxWidth:'1280px',margin:'0 auto',padding:'0 20px',display:'flex',justifyContent:'space-around',flexWrap:'wrap',gap:'16px'}}>
           {STATS.map(function(s){
             return (
               <div key={s.l} style={{textAlign:'center',color:'#fff'}}>
-                <div style={{fontSize:'20px',marginBottom:'2px'}}>{s.em}</div>
+                <div style={{display:'flex',justifyContent:'center',marginBottom:'2px'}}>{s.icon}</div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',lineHeight:'1'}}>{s.n}</div>
                 <div style={{fontSize:'11px',fontWeight:'700',opacity:'.8',letterSpacing:'1px',textTransform:'uppercase',marginTop:'3px'}}>{s.l}</div>
               </div>
@@ -76,7 +71,6 @@ export default function AlumniPage() {
       <div style={{background:'var(--bg)',padding:'70px 20px'}}>
         <div style={{maxWidth:'1200px',margin:'0 auto'}}>
 
-          {/* SUCCESS STORIES */}
           <div style={{marginBottom:'80px'}}>
             <div style={{textAlign:'center',marginBottom:'36px'}}>
               <div style={{display:'inline-block',fontSize:'11px',fontWeight:'800',letterSpacing:'2px',textTransform:'uppercase',color:'var(--or)',background:'rgba(232,118,26,.1)',padding:'6px 16px',borderRadius:'50px',marginBottom:'12px'}}>Hall of Fame</div>
@@ -117,7 +111,7 @@ export default function AlumniPage() {
                             <img src={a.image} alt={a.name} style={{width:'62px',height:'62px',borderRadius:'18px',objectFit:'cover',flexShrink:0,border:'2px solid rgba(232,118,26,.2)'}} />
                           ) : (
                             <div style={{width:'62px',height:'62px',borderRadius:'18px',background:'linear-gradient(135deg,'+clr+','+clr+'bb)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 6px 18px '+clr+'40',gap:'2px'}}>
-                              <div style={{fontSize:'24px'}}>{a.icon || '🎓'}</div>
+                              <FaGraduationCap size={24} color="#fff"/>
                               <div style={{fontSize:'9px',fontWeight:'900',color:'rgba(255,255,255,.85)'}}>{a.name.split(' ').map(function(w){return w[0]}).join('').slice(0,2)}</div>
                             </div>
                           )}
@@ -125,12 +119,12 @@ export default function AlumniPage() {
                             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'16px',fontWeight:'700',color:'var(--dark)',marginBottom:'4px',lineHeight:'1.3'}}>{a.name}</div>
                             <div style={{fontSize:'11px',fontWeight:'800',color:clr,background:clr+'12',padding:'3px 10px',borderRadius:'50px',display:'inline-block'}}>{a.field} · {a.batch}</div>
                           </div>
-                          {a.featured && <div style={{fontSize:'16px',flexShrink:0}}>⭐</div>}
+                          {a.featured && <FaStar size={16} color="#F5B800" style={{flexShrink:0}}/>}
                         </div>
                         <div style={{fontSize:'13px',color:'var(--txt2)',fontWeight:'600',marginBottom:'14px',paddingBottom:'14px',borderBottom:'1px solid var(--brd)',lineHeight:'1.5'}}>{a.role}</div>
                         {a.achievement && (
-                          <div style={{fontSize:'12.5px',color:'var(--txt2)',lineHeight:'1.65'}}>
-                            <span style={{fontSize:'16px',marginRight:'6px',verticalAlign:'middle'}}>🏅</span>
+                          <div style={{fontSize:'12.5px',color:'var(--txt2)',lineHeight:'1.65',display:'flex',alignItems:'flex-start',gap:'8px'}}>
+                            <FaStar size={14} color="#F5B800" style={{flexShrink:0,marginTop:'2px'}}/>
                             {a.achievement}
                           </div>
                         )}
@@ -142,7 +136,6 @@ export default function AlumniPage() {
             )}
           </div>
 
-          {/* TESTIMONIALS */}
           <div style={{marginBottom:'80px'}}>
             <div style={{textAlign:'center',marginBottom:'36px'}}>
               <div style={{display:'inline-block',fontSize:'11px',fontWeight:'800',letterSpacing:'2px',textTransform:'uppercase',color:'var(--or)',background:'rgba(232,118,26,.1)',padding:'6px 16px',borderRadius:'50px',marginBottom:'12px'}}>Alumni Speak</div>
@@ -169,7 +162,6 @@ export default function AlumniPage() {
               })}
             </div>
           </div>
-
         </div>
       </div>
     </>

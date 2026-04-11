@@ -1,41 +1,46 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import {
+  FaChartBar, FaNewspaper, FaImages, FaBullhorn, FaChalkboardTeacher,
+  FaGraduationCap, FaTrophy, FaClipboardList, FaBus, FaBook, FaBriefcase,
+  FaEnvelope, FaComments, FaClipboard, FaCog, FaSchool, FaGlobe, FaSignOutAlt,
+} from 'react-icons/fa'
 
 var NAV_GROUPS = [
   {
     group: 'Content',
     items: [
-      { label:'Dashboard',       icon:'📊', path:'/admin/dashboard'    },
-      { label:'Blogs & Updates', icon:'📰', path:'/admin/blogs'        },
-      { label:'Gallery',         icon:'🖼️',  path:'/admin/gallery'      },
-      { label:'Announcements',   icon:'📢', path:'/admin/announcements' },
+      { label:'Dashboard',       icon:<FaChartBar size={16}/>,       path:'/admin/dashboard'    },
+      { label:'Blogs & Updates', icon:<FaNewspaper size={16}/>,      path:'/admin/blogs'        },
+      { label:'Gallery',         icon:<FaImages size={16}/>,         path:'/admin/gallery'      },
+      { label:'Announcements',   icon:<FaBullhorn size={16}/>,       path:'/admin/announcements' },
     ]
   },
   {
     group: 'School',
     items: [
-      { label:'Faculty',         icon:'👨‍🏫', path:'/admin/faculty'      },
-      { label:'Alumni',          icon:'🎓', path:'/admin/alumni'        },
-      { label:'Results',         icon:'🏆', path:'/admin/results'       },
-      { label:'Certificates',    icon:'📋', path:'/admin/certificates'  },
-      { label:'Transport',       icon:'🚌', path:'/admin/transport'     },
+      { label:'Faculty',         icon:<FaChalkboardTeacher size={16}/>, path:'/admin/faculty'    },
+      { label:'Alumni',          icon:<FaGraduationCap size={16}/>,     path:'/admin/alumni'     },
+      { label:'Results',         icon:<FaTrophy size={16}/>,            path:'/admin/results'    },
+      { label:'Certificates',    icon:<FaClipboardList size={16}/>,     path:'/admin/certificates'},
+      { label:'Transport',       icon:<FaBus size={16}/>,               path:'/admin/transport'  },
     ]
   },
   {
     group: 'Manage',
     items: [
-      { label:'Academics',       icon:'📚', path:'/admin/academics'     },
-      { label:'Mandatory Disc.', icon:'📋', path:'/admin/mandatory'     },
-      { label:'Jobs',            icon:'💼', path:'/admin/jobs'          },
-      { label:'Applications',    icon:'📨', path:'/admin/applications'  },
-      { label:'Testimonials',    icon:'💬', path:'/admin/testimonials'  },
+      { label:'Academics',       icon:<FaBook size={16}/>,          path:'/admin/academics'    },
+      { label:'Mandatory Disc.', icon:<FaClipboard size={16}/>,     path:'/admin/mandatory'    },
+      { label:'Jobs',            icon:<FaBriefcase size={16}/>,     path:'/admin/jobs'         },
+      { label:'Applications',    icon:<FaEnvelope size={16}/>,      path:'/admin/applications' },
+      { label:'Testimonials',    icon:<FaComments size={16}/>,      path:'/admin/testimonials' },
     ]
   },
   {
     group: 'Enquiries',
     items: [
-      { label:'Enquiries',       icon:'📩', path:'/admin/enquiries'     },
-      { label:'Settings',        icon:'⚙️',  path:'/admin/settings'      },
+      { label:'Enquiries',       icon:<FaClipboardList size={16}/>, path:'/admin/enquiries'    },
+      { label:'Settings',        icon:<FaCog size={16}/>,           path:'/admin/settings'     },
     ]
   },
 ]
@@ -43,12 +48,12 @@ var NAV_GROUPS = [
 var ALL_NAV = NAV_GROUPS.flatMap(function(g){ return g.items })
 
 export default function AdminLayout({ children }) {
-  var adminRaw   = localStorage.getItem('spvs_admin')
-  var user       = adminRaw ? JSON.parse(adminRaw).username : 'Admin'
-  var location   = useLocation()
-  var navigate   = useNavigate()
-  var [collapsed,  setCollapsed]  = useState(false)
-  var [mobOpen,    setMobOpen]    = useState(false)  // mobile drawer
+  var adminRaw  = localStorage.getItem('spvs_admin')
+  var user      = adminRaw ? JSON.parse(adminRaw).username : 'Admin'
+  var location  = useLocation()
+  var navigate  = useNavigate()
+  var [collapsed, setCollapsed] = useState(false)
+  var [mobOpen,   setMobOpen]   = useState(false)
 
   function handleLogout() {
     localStorage.removeItem('spvs_token')
@@ -60,7 +65,6 @@ export default function AdminLayout({ children }) {
 
   var active = ALL_NAV.find(function(n){ return n.path === location.pathname })
 
-  /* ── Shared sidebar nav content ── */
   function SidebarNav({ isDrawer }) {
     return (
       <>
@@ -73,7 +77,9 @@ export default function AdminLayout({ children }) {
           justifyContent: (!isDrawer && collapsed) ? 'center' : 'flex-start',
           flexShrink:0
         }}>
-          <div style={{width:'36px',height:'36px',borderRadius:'10px',background:'linear-gradient(135deg,#E8761A,#F5B800)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0,boxShadow:'0 4px 14px rgba(232,118,26,.45)'}}>🏫</div>
+          <div style={{width:'36px',height:'36px',borderRadius:'10px',background:'linear-gradient(135deg,#E8761A,#F5B800)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0,boxShadow:'0 4px 14px rgba(232,118,26,.45)'}}>
+            <FaSchool size={18} color="#1C0A00"/>
+          </div>
           {(isDrawer || !collapsed) && (
             <div style={{overflow:'hidden',whiteSpace:'nowrap'}}>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'13.5px',fontWeight:'700',color:'#FFCF40',lineHeight:'1.2'}}>SPVS Admin</div>
@@ -113,7 +119,7 @@ export default function AdminLayout({ children }) {
                       }}
                       onMouseEnter={function(e){if(!isActive){e.currentTarget.style.background='rgba(232,118,26,.1)';e.currentTarget.style.color='rgba(255,207,64,.8)'}}}
                       onMouseLeave={function(e){if(!isActive){e.currentTarget.style.background='transparent';e.currentTarget.style.color='rgba(255,207,64,.5)'}}}>
-                      <span style={{fontSize:'16px',flexShrink:0,width:'20px',textAlign:'center'}}>{item.icon}</span>
+                      <span style={{flexShrink:0,width:'20px',display:'flex',alignItems:'center',justifyContent:'center'}}>{item.icon}</span>
                       {(isDrawer || !collapsed) && <span style={{fontSize:'13px',fontWeight:isActive?'700':'500',flex:1}}>{item.label}</span>}
                       {isActive && (isDrawer || !collapsed) && <div style={{width:'6px',height:'6px',borderRadius:'50%',background:'#F5B800',flexShrink:0,marginRight:'2px'}} />}
                     </Link>
@@ -124,12 +130,12 @@ export default function AdminLayout({ children }) {
           })}
         </nav>
 
-        {/* Collapse / Close */}
+        {/* Collapse / Logout */}
         <div style={{padding:(!isDrawer && collapsed)?'10px 6px':'10px',borderTop:'1px solid rgba(232,118,26,.12)',flexShrink:0}}>
           {isDrawer ? (
             <button onClick={handleLogout}
               style={{width:'100%',padding:'10px',borderRadius:'9px',border:'none',background:'rgba(220,38,38,.12)',cursor:'pointer',color:'rgba(255,100,100,.7)',display:'flex',alignItems:'center',gap:'10px',justifyContent:'flex-start',fontFamily:"'DM Sans',sans-serif",fontSize:'12.5px'}}>
-              <span>⏻</span><span>Logout</span>
+              <FaSignOutAlt size={14}/><span>Logout</span>
             </button>
           ) : (
             <button onClick={function(){setCollapsed(function(c){return !c})}}
@@ -148,84 +154,33 @@ export default function AdminLayout({ children }) {
   return (
     <div style={{display:'flex',minHeight:'100vh',background:'#FFF6EA',fontFamily:"'DM Sans',sans-serif"}}>
       <style>{`
-        /* ── Mobile drawer overlay ── */
-        .adm-overlay {
-          display: none;
-          position: fixed; inset: 0;
-          background: rgba(28,10,0,.55);
-          z-index: 200;
-          backdrop-filter: blur(2px);
-        }
-        .adm-overlay.open { display: block; }
-
-        /* ── Mobile drawer ── */
-        .adm-drawer {
-          position: fixed; top: 0; left: 0; bottom: 0;
-          width: 260px;
-          background: #1C0A00;
-          z-index: 201;
-          display: flex; flex-direction: column;
-          transform: translateX(-100%);
-          transition: transform .28s cubic-bezier(.4,0,.2,1);
-          box-shadow: 4px 0 32px rgba(28,10,0,.35);
-          overflow-y: auto;
-        }
-        .adm-drawer.open { transform: translateX(0); }
-
-        /* ── Desktop sidebar — hidden on mobile ── */
-        .adm-sidebar {
-          display: flex;
-          flex-direction: column;
-        }
-        @media (max-width: 768px) {
-          .adm-sidebar { display: none !important; }
-          .adm-topbar-views { display: none !important; }
-          .adm-topbar-user-name { display: none !important; }
-          .adm-topbar-role { display: none !important; }
-        }
-        @media (min-width: 769px) {
-          .adm-drawer  { display: none !important; }
-          .adm-overlay { display: none !important; }
-          .adm-mob-menu { display: none !important; }
-        }
+        .adm-overlay { display:none; position:fixed; inset:0; background:rgba(28,10,0,.55); z-index:200; backdrop-filter:blur(2px); }
+        .adm-overlay.open { display:block; }
+        .adm-drawer { position:fixed; top:0; left:0; bottom:0; width:260px; background:#1C0A00; z-index:201; display:flex; flex-direction:column; transform:translateX(-100%); transition:transform .28s cubic-bezier(.4,0,.2,1); box-shadow:4px 0 32px rgba(28,10,0,.35); overflow-y:auto; }
+        .adm-drawer.open { transform:translateX(0); }
+        .adm-sidebar { display:flex; flex-direction:column; }
+        @media (max-width:768px) { .adm-sidebar { display:none !important; } .adm-topbar-views { display:none !important; } .adm-topbar-user-name { display:none !important; } .adm-topbar-role { display:none !important; } }
+        @media (min-width:769px) { .adm-drawer { display:none !important; } .adm-overlay { display:none !important; } .adm-mob-menu { display:none !important; } }
       `}</style>
 
-      {/* ── Mobile overlay ── */}
       <div className={'adm-overlay' + (mobOpen?' open':'')} onClick={closeMob} />
+      <div className={'adm-drawer' + (mobOpen?' open':'')}><SidebarNav isDrawer={true} /></div>
 
-      {/* ── Mobile drawer ── */}
-      <div className={'adm-drawer' + (mobOpen?' open':'')}>
-        <SidebarNav isDrawer={true} />
-      </div>
-
-      {/* ── Desktop sidebar ── */}
-      <div className="adm-sidebar" style={{
-        width:collapsed?'64px':'228px',
-        minHeight:'100vh',
-        background:'#1C0A00',
-        transition:'width .25s ease',
-        flexShrink:0, position:'sticky', top:0, height:'100vh',
-        overflowY:'auto', overflowX:'hidden', zIndex:100,
-        boxShadow:'4px 0 24px rgba(28,10,0,.18)'
-      }}>
+      <div className="adm-sidebar" style={{width:collapsed?'64px':'228px',minHeight:'100vh',background:'#1C0A00',transition:'width .25s ease',flexShrink:0,position:'sticky',top:0,height:'100vh',overflowY:'auto',overflowX:'hidden',zIndex:100,boxShadow:'4px 0 24px rgba(28,10,0,.18)'}}>
         <SidebarNav isDrawer={false} />
       </div>
 
-      {/* ── MAIN AREA ── */}
       <div style={{flex:1,display:'flex',flexDirection:'column',minWidth:0}}>
-
         {/* Topbar */}
         <div style={{height:'66px',background:'#FFFFFF',borderBottom:'1.5px solid rgba(232,118,26,.12)',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 clamp(12px,3vw,28px)',flexShrink:0,position:'sticky',top:0,zIndex:50,boxShadow:'0 2px 16px rgba(232,118,26,.07)'}}>
-
           <div style={{display:'flex',alignItems:'center',gap:'10px'}}>
-            {/* Hamburger — mobile only */}
             <button className="adm-mob-menu" onClick={function(){setMobOpen(true)}}
               style={{width:'38px',height:'38px',borderRadius:'9px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'5px',flexShrink:0}}>
               <div style={{width:'16px',height:'2px',background:'#E8761A',borderRadius:'2px'}} />
               <div style={{width:'16px',height:'2px',background:'#E8761A',borderRadius:'2px'}} />
               <div style={{width:'16px',height:'2px',background:'#E8761A',borderRadius:'2px'}} />
             </button>
-            <span style={{fontSize:'18px'}}>{active?active.icon:'📊'}</span>
+            <span style={{color:'#E8761A'}}>{active ? active.icon : <FaChartBar size={18}/>}</span>
             <div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(13px,3vw,16px)',fontWeight:'700',color:'#1C0A00',lineHeight:'1.2'}}>{active?active.label:'Dashboard'}</div>
               <div className="adm-topbar-role" style={{fontSize:'10.5px',color:'#B87832',fontWeight:'600'}}>Sant Pathik Vidyalaya Admin</div>
@@ -234,10 +189,10 @@ export default function AdminLayout({ children }) {
 
           <div style={{display:'flex',alignItems:'center',gap:'8px'}}>
             <a href="/" target="_blank" rel="noreferrer" className="adm-topbar-views"
-              style={{padding:'7px 14px',borderRadius:'9px',border:'1.5px solid rgba(232,118,26,.25)',color:'#E8761A',textDecoration:'none',fontSize:'12.5px',fontWeight:'700',transition:'all .15s',display:'flex',alignItems:'center',gap:'5px',whiteSpace:'nowrap'}}
+              style={{padding:'7px 14px',borderRadius:'9px',border:'1.5px solid rgba(232,118,26,.25)',color:'#E8761A',textDecoration:'none',fontSize:'12.5px',fontWeight:'700',transition:'all .15s',display:'inline-flex',alignItems:'center',gap:'5px',whiteSpace:'nowrap'}}
               onMouseEnter={function(e){e.currentTarget.style.background='rgba(232,118,26,.08)'}}
               onMouseLeave={function(e){e.currentTarget.style.background='transparent'}}>
-              🌐 View Site
+              <FaGlobe size={13}/> View Site
             </a>
             <div style={{display:'flex',alignItems:'center',gap:'7px',padding:'5px 10px 5px 6px',borderRadius:'10px',background:'#FFF6EA',border:'1.5px solid rgba(232,118,26,.18)'}}>
               <div style={{width:'30px',height:'30px',borderRadius:'8px',background:'linear-gradient(135deg,#E8761A,#F5B800)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'13px',fontWeight:'900',color:'#fff',boxShadow:'0 3px 10px rgba(232,118,26,.3)',flexShrink:0}}>
@@ -248,19 +203,21 @@ export default function AdminLayout({ children }) {
                 <div style={{fontSize:'9.5px',color:'#B87832'}}>Administrator</div>
               </div>
               <button onClick={handleLogout} title="Logout"
-                style={{marginLeft:'2px',background:'none',border:'none',cursor:'pointer',color:'#B87832',fontSize:'17px',lineHeight:1,transition:'color .15s',padding:'2px',flexShrink:0}}
+                style={{marginLeft:'2px',background:'none',border:'none',cursor:'pointer',color:'#B87832',fontSize:'17px',lineHeight:1,transition:'color .15s',padding:'2px',flexShrink:0,display:'flex',alignItems:'center'}}
                 onMouseEnter={function(e){e.currentTarget.style.color='#dc2626'}}
-                onMouseLeave={function(e){e.currentTarget.style.color='#B87832'}}>⏻</button>
+                onMouseLeave={function(e){e.currentTarget.style.color='#B87832'}}>
+                <FaSignOutAlt size={15}/>
+              </button>
             </div>
           </div>
         </div>
 
         {/* Breadcrumb */}
         <div style={{padding:'6px clamp(12px,3vw,28px)',background:'#FFFFFF',borderBottom:'1px solid rgba(232,118,26,.08)',display:'flex',alignItems:'center',gap:'6px'}}>
-          <Link to="/admin/dashboard" style={{fontSize:'12px',color:'#B87832',textDecoration:'none',fontWeight:'600',transition:'color .15s'}}
+          <Link to="/admin/dashboard" style={{fontSize:'12px',color:'#B87832',textDecoration:'none',fontWeight:'600',transition:'color .15s',display:'inline-flex',alignItems:'center',gap:'4px'}}
             onMouseEnter={function(e){e.currentTarget.style.color='#E8761A'}}
             onMouseLeave={function(e){e.currentTarget.style.color='#B87832'}}>
-            🏠 Dashboard
+            <FaSchool size={11}/> Dashboard
           </Link>
           {active && active.path !== '/admin/dashboard' && (
             <>

@@ -126,7 +126,7 @@ export default function Footer() {
           </ul>
           {admission.open && (
             <div style={{padding:'10px 14px',borderRadius:'10px',background:'rgba(232,118,26,.15)',border:'1px solid rgba(232,118,26,.25)',marginBottom:'14px',fontSize:'12px',color:'#FFCF40',fontWeight:'600',fontFamily:"'Poppins',sans-serif"}}>
-              🎒 {admission.notice || 'Admissions Open — Apply Now!'}
+               {admission.notice || 'Admissions Open — Apply Now!'}
             </div>
           )}
           <div className="foot-acts">

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { Link } from 'react-router-dom'
 import useSettings from '../../hooks/useSettings'
+import { FaTrophy, FaGraduationCap, FaMedal, FaSchool } from 'react-icons/fa'
 
 function make3D(canvas) {
   if (!canvas) return () => {}
@@ -49,7 +50,6 @@ export default function HeroSection() {
   const est       = school.established || '1987'
   const board     = school.board       || 'CBSE'
   const area      = school.area        || '10 Acres'
-  const classrooms= school.classrooms  || '73'
   const affNo     = school.affNo       || '2130176'
   const schoolNo  = school.schoolNo    || '70178'
   const admOpen   = admission.open !== false
@@ -83,7 +83,6 @@ export default function HeroSection() {
             {name} Senior Secondary School — nurturing curious minds, strong values, and lifelong learners since {est} in Pashupati Nagar, Bahraich.
           </p>
 
-          {/* Desktop buttons */}
           <div className="hero-btns">
             <Link to="/contact" className="btn-or">
               {admOpen ? 'Admission Inquiry' : '📋 Contact Us →'}
@@ -105,7 +104,9 @@ export default function HeroSection() {
               <div className="rat-txt"><strong>4.9/5</strong></div>
             </div>
             <div className="tr-div"></div>
-            <div className="tr-info">🏆 <strong>100%</strong> Pass</div>
+            <div className="tr-info" style={{display:'flex',alignItems:'center',gap:'5px'}}>
+              <FaTrophy size={13} color="#F5B800"/> <strong>100%</strong> Pass
+            </div>
           </div>
         </div>
 
@@ -122,25 +123,25 @@ export default function HeroSection() {
                 }}
               />
               <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'16px',background:'linear-gradient(135deg,#FFF8DC,#FFD94A)',position:'absolute',inset:0}}>
-                <div style={{fontSize:'80px'}}>🏫</div>
+                <FaSchool size={80} color="#E8761A"/>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'var(--dark2)',textAlign:'center',padding:'0 20px'}}>{name}</div>
                 <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'14px',fontWeight:'400',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
               </div>
             </div>
             <div className="hero-img-ov"></div>
             <div className="hero-img-txt">
-              <div className="h-img-badge">🏆 Est. {est} · {area} Campus</div>
+              <div className="h-img-badge">Est. {est} · {area} Campus</div>
               <div className="h-img-t">Where Values Meet Excellence</div>
               <div className="h-img-s">{board} No. {schoolNo} · Affiliation {affNo}</div>
             </div>
           </div>
 
           <div className="fbdg fb1">
-            <div className="fbdg-ic ic-or">🎓</div>
+            <div className="fbdg-ic ic-or"><FaGraduationCap size={22} color="#000"/></div>
             <div><div className="fbdg-n">{students}</div><div className="fbdg-l">Students Enrolled</div></div>
           </div>
           <div className="fbdg fb2">
-            <div className="fbdg-ic ic-gd">🏅</div>
+            <div className="fbdg-ic ic-gd"><FaMedal size={22} color="#000"/></div>
             <div><div className="fbdg-n">100%</div><div className="fbdg-l">Board Results</div></div>
           </div>
         </div>
@@ -178,18 +179,18 @@ export default function HeroSection() {
             }}
           />
           <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'10px',background:'linear-gradient(135deg,#FFF8DC,#FFD94A)',position:'absolute',inset:0}}>
-            <div style={{fontSize:'60px'}}>🏫</div>
+            <FaSchool size={60} color="#E8761A"/>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'18px',fontWeight:'700',color:'var(--dark2)',textAlign:'center',padding:'0 14px'}}>{name}</div>
             <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--txt2)',textAlign:'center'}}>Pashupati Nagar, Bahraich</div>
           </div>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(0deg,rgba(28,10,0,.65) 0%,transparent 55%)'}}/>
           <div style={{position:'absolute',bottom:0,left:0,right:0,padding:'12px 14px'}}>
-            <div style={{fontFamily:"'Poppins',sans-serif",display:'inline-flex',alignItems:'center',gap:'5px',background:'rgba(245,184,0,.9)',padding:'3px 9px',borderRadius:'50px',fontSize:'10px',fontWeight:'600',color:'var(--dark)',marginBottom:'4px'}}>🏆 Est. {est} · {area}</div>
+            <div style={{fontFamily:"'Poppins',sans-serif",display:'inline-flex',alignItems:'center',gap:'5px',background:'rgba(245,184,0,.9)',padding:'3px 9px',borderRadius:'50px',fontSize:'10px',fontWeight:'600',color:'var(--dark)',marginBottom:'4px'}}>Est. {est} · {area}</div>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:'14px',fontWeight:'700',color:'#fff',lineHeight:1.3}}>Where Values Meet Excellence</div>
             <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'10px',fontWeight:'400',color:'rgba(255,255,255,.6)',marginTop:'2px'}}>{board} No. {schoolNo} · Affiliation {affNo}</div>
           </div>
           <div style={{position:'absolute',top:'10px',right:'10px',background:'rgba(255,255,255,.92)',borderRadius:'9px',padding:'6px 10px',display:'flex',alignItems:'center',gap:'6px'}}>
-            <span style={{fontSize:'14px'}}>🎓</span>
+            <FaGraduationCap size={14} color="#E8761A"/>
             <div>
               <div style={{fontFamily:"'Playfair Display',serif",fontSize:'13px',fontWeight:'700',color:'var(--dark)'}}>{students}</div>
               <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'9px',fontWeight:'500',color:'var(--txt3)'}}>Students</div>
@@ -197,7 +198,6 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Stats row */}
         <div className="hm-stats">
           {[[students,'Students'],['100%','Pass Rate'],[est.substring(2)+'yrs','Years'],[(school.classrooms||'73'),'Classes']].map(([n,l],i) => (
             <div key={i} className="hm-stat">
@@ -207,17 +207,15 @@ export default function HeroSection() {
           ))}
         </div>
 
-        {/* Mobile buttons — fixed with hm-btn class */}
         <div className="hm-btns">
           <Link to="/contact" className="btn-or hm-btn">
-            {admOpen ? 'Admission Inquiry' : '📋 Contact Us'}
+            {admOpen ? '📋 Admission Inquiry' : '📋 Contact Us'}
           </Link>
           <Link to="/academics?tab=fees" className="btn-out hm-btn">
             Fee Structure
           </Link>
         </div>
 
-        {/* Trust bar */}
         <div className="hm-trust">
           <div style={{display:'flex',alignItems:'center',gap:'5px'}}>
             <span style={{color:'#F5B800',fontSize:'12px'}}>★★★★★</span>
@@ -226,7 +224,9 @@ export default function HeroSection() {
           <div className="hm-tdiv"/>
           <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--dark2)'}}><strong>{students}</strong> Students</div>
           <div className="hm-tdiv"/>
-          <div style={{fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--dark2)'}}>🏆 <strong>100%</strong> Pass</div>
+          <div style={{display:'flex',alignItems:'center',gap:'4px',fontFamily:"'Poppins',sans-serif",fontSize:'12px',fontWeight:'400',color:'var(--dark2)'}}>
+            <FaTrophy size={11} color="#F5B800"/> <strong>100%</strong> Pass
+          </div>
         </div>
       </div>
 
@@ -235,51 +235,33 @@ export default function HeroSection() {
 
       <style>{`
         .hero-mob { display: none; }
-
         @media (max-width: 768px) {
           .hero-desk   { display: none !important; }
           .scroll-hint { display: none !important; }
           .hero-dots   { display: none !important; }
           .hero        { min-height: auto !important; padding-bottom: 28px; }
           .hero-mob    { display: flex; flex-direction: column; gap: 16px; padding: 24px 16px 4px; position: relative; z-index: 4; }
-
           .hm-badge  { font-size: 10px !important; padding: 5px 12px !important; margin-bottom: 10px !important; display: inline-flex !important; }
           .hm-h1     { font-size: 32px !important; line-height: 1.2 !important; margin-bottom: 8px !important; }
           .hm-sub    { font-size: 13px !important; margin-bottom: 6px !important; }
           .hm-desc   { font-size: 13px !important; line-height: 1.6 !important; margin: 0 !important; }
-
           .hm-card   { border-radius: 18px; overflow: hidden; height: 215px; position: relative; box-shadow: 0 12px 36px rgba(232,118,26,.22); border: 1.5px solid rgba(232,118,26,.2); }
-
           .hm-stats  { display: flex; align-items: center; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border-radius: 14px; padding: 12px 6px; border: 1.5px solid rgba(232,118,26,.14); box-shadow: 0 4px 18px rgba(232,118,26,.08); }
           .hm-stat   { flex: 1; text-align: center; }
           .hm-stat + .hm-stat { border-left: 1px solid rgba(232,118,26,.15); }
-
           .hm-stat-n { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--or); line-height: 1; margin-bottom: 2px; }
           .hm-stat-l { font-family: 'Poppins', sans-serif; font-size: 9px; font-weight: 500; color: var(--txt3); text-transform: uppercase; letter-spacing: 0.4px; }
-
           .hm-btns { display: flex; flex-direction: row; gap: 10px; }
-          .hm-btn  {
-            flex: 1 !important;
-            justify-content: center !important;
-            text-align: center !important;
-            font-size: 12px !important;
-            padding: 12px 6px !important;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-
+          .hm-btn  { flex: 1 !important; justify-content: center !important; text-align: center !important; font-size: 12px !important; padding: 12px 6px !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
           .hm-trust  { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 14px; background: rgba(255,255,255,.85); backdrop-filter: blur(10px); border-radius: 12px; border: 1px solid rgba(232,118,26,.12); margin-bottom: 4px; }
           .hm-tdiv   { width: 1px; height: 16px; background: rgba(232,118,26,.2); flex-shrink: 0; }
         }
-
         @media (max-width: 480px) {
           .hm-h1     { font-size: 27px !important; }
           .hm-card   { height: 185px; }
           .hm-stat-n { font-size: 15px; }
           .hm-btn    { font-size: 11px !important; padding: 11px 4px !important; }
         }
-
         @media (max-width: 360px) {
           .hm-btn    { font-size: 10px !important; padding: 10px 3px !important; }
         }

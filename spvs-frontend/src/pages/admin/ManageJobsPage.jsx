@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { jobAPI } from '../../api'
+import { FaBriefcase, FaCheckCircle, FaLock, FaSpinner, FaTimesCircle, FaPencilAlt, FaTrash, FaSearch } from 'react-icons/fa'
 
 var DEPTS     = ['Science','Mathematics','English','Hindi','Social Science','Computer Science','Physical Education','Arts','Commerce','Administration','Support Staff']
 var JOB_TYPES = ['Full Time','Part Time','Contract','Temporary']
 var STATUSES  = ['Open','Closed']
-
-var STATUS_CLR = { Open:'#22a35a', Closed:'#C45F0A', Draft:'#6C3FC5' }
+var STATUS_CLR = { Open:'#22a35a', Closed:'#C45F0A' }
 var TYPE_CLR   = { 'Full Time':'#E8761A', 'Part Time':'#22a35a', Contract:'#6C3FC5', Temporary:'#C45F0A' }
-
 var EMPTY = { title:'', dept:'Science', type:'Full Time', qual:'', exp:'', status:'Open', description:'', requirements:'' }
 
 var s = {
@@ -48,8 +47,8 @@ export default function ManageJobsPage() {
     return mf && ms
   })
 
-  var open  = jobs.filter(function(j){ return j.status==='Open' }).length
-  var closed= jobs.filter(function(j){ return j.status==='Closed'}).length
+  var open   = jobs.filter(function(j){ return j.status==='Open' }).length
+  var closed = jobs.filter(function(j){ return j.status==='Closed' }).length
 
   function openAdd()   { setCurrent(EMPTY); setModal('add') }
   function openEdit(j) { setCurrent({ title:j.title, dept:j.dept||'Science', type:j.type||'Full Time', qual:j.qual||'', exp:j.exp||'', status:j.status||'Open', description:j.description||'', requirements:j.requirements||'' }); setEditId(j._id); setModal('edit') }
@@ -71,19 +70,15 @@ export default function ManageJobsPage() {
         showToast('Job updated!')
       }
       closeModal()
-    } catch(err) {
-      showToast(err.message,'error')
-    } finally {
-      setSaving(false)
-    }
+    } catch(err) { showToast(err.message,'error') }
+    finally { setSaving(false) }
   }
 
   async function handleDelete() {
     try {
       await jobAPI.delete(delId)
       setJobs(function(p){ return p.filter(function(x){ return x._id!==delId }) })
-      showToast('Job deleted')
-      closeModal()
+      showToast('Job deleted'); closeModal()
     } catch(err) { showToast(err.message,'error') }
   }
 
@@ -95,6 +90,12 @@ export default function ManageJobsPage() {
     } catch(err) { showToast(err.message,'error') }
   }
 
+  var STATS = [
+    { label:'Total Jobs', value:loading?'...':jobs.length, icon:<FaBriefcase size={18} color="#E8761A"/>,    clr:'#E8761A' },
+    { label:'Open',       value:loading?'...':open,        icon:<FaCheckCircle size={18} color="#22a35a"/>,  clr:'#22a35a' },
+    { label:'Closed',     value:loading?'...':closed,      icon:<FaLock size={18} color="#C45F0A"/>,         clr:'#C45F0A' },
+  ]
+
   return (
     <div style={{maxWidth:'1100px'}}>
       <style>{`
@@ -104,38 +105,30 @@ export default function ManageJobsPage() {
         .mjp-tbl    { overflow-x:auto; }
         .mjp-filters{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
         .mjp-mgrid  { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        @media (max-width:640px) {
-          .mjp-stats   { grid-template-columns:1fr 1fr; }
-          .mjp-filters { flex-direction:column; align-items:stretch; }
-          .mjp-mgrid   { grid-template-columns:1fr; }
-        }
+        @media (max-width:640px) { .mjp-stats { grid-template-columns:1fr 1fr; } .mjp-filters { flex-direction:column; align-items:stretch; } .mjp-mgrid { grid-template-columns:1fr; } }
       `}</style>
 
       {toast && (
-        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease'}}>
-          {toast.type==='error'?'❌ ':'✅ '}{toast.msg}
+        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease',display:'inline-flex',alignItems:'center',gap:'7px'}}>
+          {toast.type==='error' ? <FaTimesCircle size={13}/> : <FaCheckCircle size={13}/>} {toast.msg}
         </div>
       )}
 
-      {/* Header */}
       <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'24px',gap:'16px',flexWrap:'wrap'}}>
         <div>
-          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px'}}>💼 Job Postings</h1>
+          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px',display:'inline-flex',alignItems:'center',gap:'10px'}}>
+            <FaBriefcase size={22} color="#E8761A"/> Job Postings
+          </h1>
           <p style={{fontSize:'13px',color:'#7A4010',margin:0}}>Manage vacancies and recruitment listings</p>
         </div>
         <button onClick={openAdd} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 6px 20px rgba(232,118,26,.3)',padding:'12px 20px',fontSize:'14px',whiteSpace:'nowrap'}}>+ Post New Job</button>
       </div>
 
-      {/* Stats */}
       <div className="mjp-stats">
-        {[
-          { label:'Total Jobs', value:loading?'...':jobs.length, icon:'💼', clr:'#E8761A' },
-          { label:'Open',       value:loading?'...':open,        icon:'✅', clr:'#22a35a' },
-          { label:'Closed',     value:loading?'...':closed,      icon:'🔒', clr:'#C45F0A' },
-        ].map(function(st){
+        {STATS.map(function(st){
           return (
             <div key={st.label} style={{...s.card,display:'flex',alignItems:'center',gap:'12px'}}>
-              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>{st.icon}</div>
+              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{st.icon}</div>
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'#1C0A00'}}>{st.value}</div>
                 <div style={{fontSize:'11.5px',color:'#7A4010',fontWeight:'600'}}>{st.label}</div>
@@ -145,10 +138,13 @@ export default function ManageJobsPage() {
         })}
       </div>
 
-      {/* Filters */}
       <div style={{...s.card,marginBottom:'16px',padding:'14px 16px'}}>
         <div className="mjp-filters">
-          <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="🔍  Search jobs..." style={{...s.inp,width:'100%',maxWidth:'210px',padding:'9px 13px'}} onFocus={inf} onBlur={inb} />
+          <div style={{position:'relative'}}>
+            <FaSearch size={13} color="#B87832" style={{position:'absolute',left:'12px',top:'50%',transform:'translateY(-50%)',pointerEvents:'none'}}/>
+            <input value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search jobs..."
+              style={{...s.inp,width:'100%',maxWidth:'210px',padding:'9px 13px 9px 32px'}} onFocus={inf} onBlur={inb} />
+          </div>
           <div style={{display:'flex',gap:'6px',flexWrap:'wrap'}}>
             {['All','Open','Closed'].map(function(f){
               var isA=filter===f
@@ -158,12 +154,10 @@ export default function ManageJobsPage() {
         </div>
       </div>
 
-      {/* Table */}
       <div style={s.card}>
         {loading ? (
-          <div style={{textAlign:'center',padding:'60px'}}>
-            <div style={{width:'40px',height:'40px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto 12px'}}/>
-            <div style={{color:'#B87832',fontSize:'14px'}}>Loading jobs...</div>
+          <div style={{textAlign:'center',padding:'60px',display:'flex',alignItems:'center',justifyContent:'center',gap:'10px'}}>
+            <FaSpinner size={20} color="#E8761A" style={{animation:'spin .8s linear infinite'}}/> Loading jobs...
           </div>
         ) : (
           <div className="mjp-tbl">
@@ -189,16 +183,20 @@ export default function ManageJobsPage() {
                       <td style={{padding:'12px'}}><span style={{padding:'3px 9px',borderRadius:'20px',fontSize:'10.5px',fontWeight:'800',background:tc+'15',color:tc,whiteSpace:'nowrap'}}>{j.type}</span></td>
                       <td style={{padding:'12px',fontSize:'12px',color:'#7A4010',whiteSpace:'nowrap'}}>{fmtDate(j.createdAt)}</td>
                       <td style={{padding:'12px'}}>
-                        <button onClick={function(){toggleStatus(j)}} style={{padding:'4px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'800',border:'none',cursor:'pointer',background:sc+'12',color:sc,transition:'all .2s',whiteSpace:'nowrap'}}>
-                          {j.status==='Open'?'✅ Open':'🔒 Closed'}
+                        <button onClick={function(){toggleStatus(j)}} style={{padding:'4px 12px',borderRadius:'20px',fontSize:'11px',fontWeight:'800',border:'none',cursor:'pointer',background:sc+'12',color:sc,transition:'all .2s',whiteSpace:'nowrap',display:'inline-flex',alignItems:'center',gap:'5px'}}>
+                          {j.status==='Open' ? <><FaCheckCircle size={10}/> Open</> : <><FaLock size={10}/> Closed</>}
                         </button>
                       </td>
                       <td style={{padding:'12px'}}>
                         <div style={{display:'flex',gap:'6px'}}>
-                          <button onClick={function(){openEdit(j)}} style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
-                            onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>✏️</button>
-                          <button onClick={function(){openDel(j._id)}} style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
-                            onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>🗑️</button>
+                          <button onClick={function(){openEdit(j)}} style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
+                            onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>
+                            <FaPencilAlt size={13} color="#7A4010"/>
+                          </button>
+                          <button onClick={function(){openDel(j._id)}} style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
+                            onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>
+                            <FaTrash size={13} color="#dc2626"/>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -210,73 +208,43 @@ export default function ManageJobsPage() {
         )}
       </div>
 
-      {/* ADD/EDIT MODAL */}
       {(modal==='add'||modal==='edit') && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(232,118,26,.2)',padding:'clamp(18px,4vw,30px)',width:'100%',maxWidth:'560px',maxHeight:'92vh',overflowY:'auto',boxShadow:'0 24px 64px rgba(28,10,0,.2)'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'20px'}}>
-              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0}}>{modal==='add'?'+ Post New Job':'✏️ Edit Job'}</h2>
+              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0,display:'inline-flex',alignItems:'center',gap:'8px'}}>
+                {modal==='add' ? <><FaBriefcase size={16} color="#E8761A"/> Post New Job</> : <><FaPencilAlt size={16} color="#E8761A"/> Edit Job</>}
+              </h2>
               <button onClick={closeModal} style={{background:'none',border:'none',fontSize:'20px',cursor:'pointer',color:'#B87832',flexShrink:0}}>✕</button>
             </div>
             <div style={{display:'flex',flexDirection:'column',gap:'14px'}}>
-              <div>
-                <label style={s.label}>Job Title *</label>
-                <input name="title" value={current.title} onChange={handleChange} placeholder="e.g. PGT Mathematics" style={s.inp} onFocus={inf} onBlur={inb} />
+              <div><label style={s.label}>Job Title *</label><input name="title" value={current.title} onChange={handleChange} placeholder="e.g. PGT Mathematics" style={s.inp} onFocus={inf} onBlur={inb} /></div>
+              <div className="mjp-mgrid">
+                <div><label style={s.label}>Department</label><select name="dept" value={current.dept} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{DEPTS.map(function(d){ return <option key={d}>{d}</option> })}</select></div>
+                <div><label style={s.label}>Job Type</label><select name="type" value={current.type} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{JOB_TYPES.map(function(t){ return <option key={t}>{t}</option> })}</select></div>
               </div>
               <div className="mjp-mgrid">
-                <div>
-                  <label style={s.label}>Department</label>
-                  <select name="dept" value={current.dept} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {DEPTS.map(function(d){ return <option key={d}>{d}</option> })}
-                  </select>
-                </div>
-                <div>
-                  <label style={s.label}>Job Type</label>
-                  <select name="type" value={current.type} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {JOB_TYPES.map(function(t){ return <option key={t}>{t}</option> })}
-                  </select>
-                </div>
+                <div><label style={s.label}>Qualification</label><input name="qual" value={current.qual} onChange={handleChange} placeholder="e.g. M.Sc., B.Ed" style={s.inp} onFocus={inf} onBlur={inb} /></div>
+                <div><label style={s.label}>Experience</label><input name="exp" value={current.exp} onChange={handleChange} placeholder="e.g. 2+ years" style={s.inp} onFocus={inf} onBlur={inb} /></div>
               </div>
-              <div className="mjp-mgrid">
-                <div>
-                  <label style={s.label}>Qualification</label>
-                  <input name="qual" value={current.qual} onChange={handleChange} placeholder="e.g. M.Sc., B.Ed" style={s.inp} onFocus={inf} onBlur={inb} />
-                </div>
-                <div>
-                  <label style={s.label}>Experience</label>
-                  <input name="exp" value={current.exp} onChange={handleChange} placeholder="e.g. 2+ years" style={s.inp} onFocus={inf} onBlur={inb} />
-                </div>
-              </div>
-              <div>
-                <label style={s.label}>Status</label>
-                <select name="status" value={current.status} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                  {STATUSES.map(function(st){ return <option key={st}>{st}</option> })}
-                </select>
-              </div>
-              <div>
-                <label style={s.label}>Job Description</label>
-                <textarea name="description" value={current.description} onChange={handleChange} rows={3} placeholder="Role responsibilities..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} />
-              </div>
-              <div>
-                <label style={s.label}>Requirements / Qualifications</label>
-                <textarea name="requirements" value={current.requirements} onChange={handleChange} rows={3} placeholder="Educational qualifications, experience..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Status</label><select name="status" value={current.status} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{STATUSES.map(function(st){ return <option key={st}>{st}</option> })}</select></div>
+              <div><label style={s.label}>Job Description</label><textarea name="description" value={current.description} onChange={handleChange} rows={3} placeholder="Role responsibilities..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} /></div>
+              <div><label style={s.label}>Requirements / Qualifications</label><textarea name="requirements" value={current.requirements} onChange={handleChange} rows={3} placeholder="Educational qualifications, experience..." style={{...s.inp,resize:'vertical'}} onFocus={inf} onBlur={inb} /></div>
             </div>
             <div style={{display:'flex',gap:'10px',justifyContent:'flex-end',marginTop:'20px',flexWrap:'wrap'}}>
               <button onClick={closeModal} style={{...s.btn,background:'#FFF6EA',color:'#7A4010',border:'1.5px solid rgba(232,118,26,.2)'}}>Cancel</button>
-              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1}}>
-                {saving?'⏳ Saving...':modal==='add'?'+ Post Job':'💾 Save Changes'}
+              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1,display:'inline-flex',alignItems:'center',gap:'7px'}}>
+                {saving ? <><FaSpinner size={13} style={{animation:'spin .8s linear infinite'}}/> Saving...</> : modal==='add' ? '+ Post Job' : 'Save Changes'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {modal==='delete' && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(220,38,38,.2)',padding:'28px',width:'100%',maxWidth:'380px',boxShadow:'0 24px 64px rgba(28,10,0,.2)',textAlign:'center'}}>
-            <div style={{fontSize:'44px',marginBottom:'12px'}}>🗑️</div>
+            <FaTrash size={44} color="#dc2626" style={{marginBottom:'12px'}}/>
             <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 8px'}}>Delete Job Posting?</h2>
             <p style={{fontSize:'13px',color:'#7A4010',margin:'0 0 20px'}}>This job listing will be permanently removed.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>

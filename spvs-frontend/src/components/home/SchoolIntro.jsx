@@ -1,4 +1,5 @@
 import useSettings from '../../hooks/useSettings'
+import { FaGraduationCap, FaTrophy, FaTree, FaBus, FaSchool } from 'react-icons/fa'
 
 export default function SchoolIntro() {
   const { settings } = useSettings()
@@ -16,13 +17,18 @@ export default function SchoolIntro() {
   const board      = school.board       || 'CBSE'
   const years      = new Date().getFullYear() - Number(est)
 
+  const POINTS = [
+    { icon:<FaGraduationCap size={22} color="#000"/>, t:board + ' Curriculum', d:'Aligned with national standards · Affiliation No. ' + affNo + ' · Science, Commerce & Humanities streams at Senior Secondary level.' },
+    { icon:<FaTrophy size={22} color="#000"/>,        t:'Consistent Strong Results', d:'Excellent board results in Classes 10 & 12 every year with dedicated and supportive teaching staff.' },
+    { icon:<FaTree size={22} color="#000"/>,          t:'Safe & Green Campus', d:'Safe, green and disciplined campus environment spread across ' + area + ' in Pashupati Nagar, Bahraich.' },
+    { icon:<FaBus size={22} color="#000"/>,           t:'Transport Network', d:buses + ' school buses covering all routes in and around Bahraich. Safe, punctual and reliable.' },
+  ]
+
   return (
     <section className="about-sect sect">
       <div className="s-cont">
         <div className="about-grid">
           <div className="about-vis rv">
-
-            {/* ── IMAGE — about_school.jpg ── */}
             <div className="about-main about-main-img-wrap" style={{overflow:'hidden',padding:0,borderRadius:'24px',border:'3px solid rgba(232,118,26,.25)',boxShadow:'0 20px 60px rgba(232,118,26,.18), 0 0 0 6px rgba(232,118,26,.06)'}}>
               <img
                 src="/images/about_school.jpg"
@@ -34,14 +40,12 @@ export default function SchoolIntro() {
                   e.target.nextSibling.style.display='flex'
                 }}
               />
-              {/* Fallback if image missing */}
               <div style={{display:'none',width:'100%',height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'12px',background:'linear-gradient(135deg,#FFF8DC,#FFE0A0)',position:'absolute',inset:0}}>
-                <div style={{fontSize:'72px'}}>🏫</div>
+                <FaSchool size={72} color="#E8761A"/>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'var(--dark2)',textAlign:'center',padding:'0 16px'}}>{area} Campus</div>
                 <div style={{fontSize:'13px',color:'var(--txt2)',textAlign:'center',padding:'0 20px'}}>{classrooms} Classrooms · {labs} Labs · Sports Stadium</div>
               </div>
             </div>
-
             <div className="about-float">
               <div className="af-n">{years}</div>
               <div className="af-l">Years of<br/>Excellence</div>
@@ -61,17 +65,14 @@ export default function SchoolIntro() {
               Founded in {est}, {name} (SPVS) is a {board} Senior Secondary school located in Pashupati Nagar, Bahraich. For more than three decades, the school has focused on strong academics along with moral values. Guided by the motto "Work is Worship," SPVS provides education from Class 1 to Class 12 with discipline and dedication.
             </p>
             <div className="about-pts">
-              {[
-                { ic:'🎓', t:board + ' Curriculum', d:'Aligned with national standards · Affiliation No. ' + affNo + ' · Science, Commerce & Humanities streams at Senior Secondary level.' },
-                { ic:'🏆', t:'Consistent Strong Results', d:'Excellent board results in Classes 10 & 12 every year with dedicated and supportive teaching staff.' },
-                { ic:'🌳', t:'Safe & Green Campus', d:'Safe, green and disciplined campus environment spread across ' + area + ' in Pashupati Nagar, Bahraich.' },
-                { ic:'🚌', t:'Transport Network', d:buses + ' school buses covering all routes in and around Bahraich. Safe, punctual and reliable.' },
-              ].map((p,i) => (
-                <div className="apt rv3d" key={i} style={{transitionDelay:`${i*0.1}s`}}>
-                  <div className="apt-ic">{p.ic}</div>
-                  <div><div className="apt-t">{p.t}</div><div className="apt-d">{p.d}</div></div>
-                </div>
-              ))}
+              {POINTS.map(function(p,i) {
+                return (
+                  <div className="apt rv3d" key={i} style={{transitionDelay:`${i*0.1}s`}}>
+                    <div className="apt-ic" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>{p.icon}</div>
+                    <div><div className="apt-t">{p.t}</div><div className="apt-d">{p.d}</div></div>
+                  </div>
+                )
+              })}
             </div>
             <div className="about-stats-row rv" style={{transitionDelay:'.4s'}}>
               <div className="asr"><div className="asr-n">{students}</div><div className="asr-l">Students</div></div>
@@ -82,17 +83,9 @@ export default function SchoolIntro() {
         </div>
       </div>
       <style>{`
-        .about-main-img-wrap {
-          border-radius: 24px !important;
-          overflow: hidden !important;
-        }
-        .about-school-img {
-          transition: transform .5s cubic-bezier(.25,.46,.45,.94) !important;
-          border-radius: 0 !important;
-        }
-        .about-main-img-wrap:hover .about-school-img {
-          transform: scale(1.06) !important;
-        }
+        .about-main-img-wrap { border-radius: 24px !important; overflow: hidden !important; }
+        .about-school-img { transition: transform .5s cubic-bezier(.25,.46,.45,.94) !important; border-radius: 0 !important; }
+        .about-main-img-wrap:hover .about-school-img { transform: scale(1.06) !important; }
       `}</style>
     </section>
   )

@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { tcAPI } from '../../api'
+import {
+  FaClipboardList, FaCheckCircle, FaFileAlt, FaPencilAlt, FaTrash,
+  FaSpinner, FaSave, FaExclamationTriangle, FaFilePdf, FaUpload, FaFolder, FaInfoCircle,
+} from 'react-icons/fa'
 
 var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 var WDAYS  = ['Su','Mo','Tu','We','Th','Fr','Sa']
@@ -81,7 +85,9 @@ function AdminCalendarPicker({ labelText, placeholder, value, onChange }) {
     <div ref={ref} style={{ position:'relative', width:'100%' }}>
       <div onClick={function(){ setOpen(function(o){ return !o }) }}
         style={{ display:'flex', alignItems:'center', gap:'12px', padding:'13px 16px', borderRadius:'14px', border:'1.5px solid '+(open?'#E8761A':'rgba(232,118,26,.22)'), background:'#FFFDF8', cursor:'pointer', transition:'border .2s,box-shadow .2s', boxShadow:open?'0 0 0 3px rgba(232,118,26,.12)':'none', userSelect:'none' }}>
-        <div style={{ width:'40px', height:'40px', borderRadius:'10px', background:'linear-gradient(135deg,#E8761A,#F5B800)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'20px', flexShrink:0 }}>📅</div>
+        <div style={{ width:'40px', height:'40px', borderRadius:'10px', background:'linear-gradient(135deg,#E8761A,#F5B800)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+          <FaClipboardList size={20} color="#1C0A00"/>
+        </div>
         <div style={{ flex:1, minWidth:0 }}>
           <div style={{ fontSize:'10px', fontWeight:'800', color:'#B87832', letterSpacing:'1.2px', textTransform:'uppercase', marginBottom:'2px' }}>{labelText}</div>
           <div style={{ fontSize:'14px', fontWeight:parsed?'700':'400', color:parsed?'#1C0A00':'rgba(184,120,50,.55)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
@@ -212,7 +218,6 @@ export default function ManageCertificatePage() {
     if (!current.admissionNo.trim()) { setError('Admission number is required'); return }
     if (!current.dob)                { setError('Date of birth is required'); return }
     if (!editId && !pdfFile)         { setError('Please upload the TC PDF file'); return }
-
     setSaving(true); setError('')
     try {
       var fd = new FormData()
@@ -220,7 +225,6 @@ export default function ManageCertificatePage() {
       fd.append('dob',         current.dob)
       fd.append('status',      current.status)
       if (pdfFile) fd.append('pdf', pdfFile)
-
       if (editId) {
         var res = await tcAPI.update(editId, fd)
         setList(function(p){ return p.map(function(r){ return r._id===editId?res.data:r }) })
@@ -245,13 +249,17 @@ export default function ManageCertificatePage() {
     var ns = r.status==='Published'?'Draft':'Published'
     try {
       var fd = new FormData()
-      fd.append('admissionNo', r.admissionNo)
-      fd.append('dob',         r.dob)
-      fd.append('status',      ns)
+      fd.append('admissionNo', r.admissionNo); fd.append('dob', r.dob); fd.append('status', ns)
       var res = await tcAPI.update(r._id, fd)
       setList(function(p){ return p.map(function(x){ return x._id===r._id?res.data:x }) })
     } catch(e){}
   }
+
+  var STATS = [
+    { label:'Total TCs', value:list.length,       icon:<FaClipboardList size={18} color="#E8761A"/>, clr:'#E8761A' },
+    { label:'Published', value:list.filter(function(r){return r.status==='Published'}).length, icon:<FaCheckCircle size={18} color="#22a35a"/>, clr:'#22a35a' },
+    { label:'Drafts',    value:list.filter(function(r){return r.status==='Draft'}).length,     icon:<FaFileAlt size={18} color="#6C3FC5"/>,     clr:'#6C3FC5' },
+  ]
 
   return (
     <div style={{maxWidth:'1100px',width:'100%',boxSizing:'border-box'}}>
@@ -263,32 +271,24 @@ export default function ManageCertificatePage() {
         .mcp-filters{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
         .mcp-tbl    { overflow-x:auto; }
         .mcp-form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-        @media(max-width:640px){
-          .mcp-stats      { grid-template-columns:1fr 1fr; gap:8px; }
-          .mcp-filters    { flex-direction:column; align-items:stretch; gap:8px; }
-          .mcp-form-grid  { grid-template-columns:1fr; }
-        }
+        @media(max-width:640px){ .mcp-stats { grid-template-columns:1fr 1fr; gap:8px; } .mcp-filters { flex-direction:column; align-items:stretch; gap:8px; } .mcp-form-grid { grid-template-columns:1fr; } }
       `}</style>
 
-      {/* Header */}
       <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'24px',gap:'16px',flexWrap:'wrap'}}>
         <div>
-          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px'}}>📋 Transfer Certificates</h1>
+          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px',display:'inline-flex',alignItems:'center',gap:'10px'}}>
+            <FaClipboardList size={22} color="#E8761A"/> Transfer Certificates
+          </h1>
           <p style={{fontSize:'13px',color:'#7A4010',margin:0}}>Upload TC PDFs — students verify & download instantly</p>
         </div>
         <button onClick={openAdd} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 6px 20px rgba(232,118,26,.3)',padding:'12px 24px',fontSize:'14px',whiteSpace:'nowrap'}}>+ Upload TC</button>
       </div>
 
-      {/* Stats */}
       <div className="mcp-stats">
-        {[
-          {label:'Total TCs', value:list.length, icon:'📋', clr:'#E8761A'},
-          {label:'Published', value:list.filter(function(r){return r.status==='Published'}).length, icon:'✅', clr:'#22a35a'},
-          {label:'Drafts',    value:list.filter(function(r){return r.status==='Draft'}).length,     icon:'📝', clr:'#6C3FC5'},
-        ].map(function(st){
+        {STATS.map(function(st){
           return (
             <div key={st.label} style={{...s.card,display:'flex',alignItems:'center',gap:'12px',padding:'16px'}}>
-              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>{st.icon}</div>
+              <div style={{width:'40px',height:'40px',borderRadius:'11px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{st.icon}</div>
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'#1C0A00'}}>{st.value}</div>
                 <div style={{fontSize:'11.5px',color:'#7A4010',fontWeight:'600'}}>{st.label}</div>
@@ -298,10 +298,9 @@ export default function ManageCertificatePage() {
         })}
       </div>
 
-      {/* Filters */}
       <div style={{...s.card,marginBottom:'16px',padding:'14px 16px'}}>
         <div className="mcp-filters">
-          <input className="mcp-search" value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="🔍 Search by admission no..."
+          <input className="mcp-search" value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search by admission no..."
             style={{...s.inp,maxWidth:'260px',padding:'9px 13px'}} />
           {['All','Published','Draft'].map(function(f){
             var isA=filter===f
@@ -313,11 +312,10 @@ export default function ManageCertificatePage() {
         </div>
       </div>
 
-      {/* Table */}
       <div style={s.card}>
         {loading ? (
-          <div style={{textAlign:'center',padding:'40px'}}>
-            <div style={{width:'36px',height:'36px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto'}} />
+          <div style={{textAlign:'center',padding:'40px',display:'flex',alignItems:'center',justifyContent:'center',gap:'10px'}}>
+            <FaSpinner size={20} color="#E8761A" style={{animation:'spin .8s linear infinite'}}/>
           </div>
         ) : (
           <div className="mcp-tbl">
@@ -347,27 +345,31 @@ export default function ManageCertificatePage() {
                         {r.pdfUrl
                           ? <a href={r.pdfUrl} target="_blank" rel="noreferrer"
                               style={{display:'inline-flex',alignItems:'center',gap:'5px',padding:'4px 10px',borderRadius:'7px',background:'rgba(232,118,26,.08)',color:'#E8761A',fontSize:'12px',fontWeight:'700',textDecoration:'none',border:'1px solid rgba(232,118,26,.2)'}}>
-                              📄 View PDF
+                              <FaFilePdf size={12}/> View PDF
                             </a>
                           : <span style={{color:'#B87832',fontSize:'12px'}}>—</span>
                         }
                       </td>
                       <td style={{padding:'10px 12px'}}>
                         <button onClick={function(){toggleStatus(r)}}
-                          style={{padding:'4px 11px',borderRadius:'20px',fontSize:'11px',fontWeight:'800',border:'none',cursor:'pointer',background:r.status==='Published'?'rgba(34,163,90,.12)':'rgba(108,63,197,.12)',color:r.status==='Published'?'#22a35a':'#6C3FC5',whiteSpace:'nowrap'}}>
-                          {r.status==='Published'?'✅ Published':'📝 Draft'}
+                          style={{padding:'4px 11px',borderRadius:'20px',fontSize:'11px',fontWeight:'800',border:'none',cursor:'pointer',background:r.status==='Published'?'rgba(34,163,90,.12)':'rgba(108,63,197,.12)',color:r.status==='Published'?'#22a35a':'#6C3FC5',whiteSpace:'nowrap',display:'inline-flex',alignItems:'center',gap:'5px'}}>
+                          {r.status==='Published'?<><FaCheckCircle size={10}/> Published</>:<><FaFileAlt size={10}/> Draft</>}
                         </button>
                       </td>
                       <td style={{padding:'10px 12px'}}>
                         <div style={{display:'flex',gap:'6px'}}>
                           <button onClick={function(){openEdit(r)}}
-                            style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center'}}
+                            style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}
                             onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}}
-                            onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>✏️</button>
+                            onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>
+                            <FaPencilAlt size={13} color="#7A4010"/>
+                          </button>
                           <button onClick={function(){setDelId(r._id);setModal('delete')}}
-                            style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center'}}
+                            style={{width:'32px',height:'32px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center'}}
                             onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}}
-                            onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>🗑️</button>
+                            onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>
+                            <FaTrash size={13} color="#dc2626"/>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -379,67 +381,53 @@ export default function ManageCertificatePage() {
         )}
       </div>
 
-      {/* ADD/EDIT MODAL */}
       {modal==='form' && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.5)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}}
           onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(232,118,26,.2)',width:'100%',maxWidth:'540px',maxHeight:'92vh',overflowY:'auto',boxShadow:'0 24px 64px rgba(28,10,0,.25)'}}>
-
-            {/* Modal Header */}
             <div style={{background:'linear-gradient(135deg,#E8761A,#F5B800)',padding:'18px 24px',borderRadius:'18px 18px 0 0',display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:10}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'18px',fontWeight:'700',color:'#1C0A00'}}>
-                {editId?'✏️ Edit TC':'📋 Upload Transfer Certificate'}
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:'18px',fontWeight:'700',color:'#1C0A00',display:'inline-flex',alignItems:'center',gap:'8px'}}>
+                {editId ? <><FaPencilAlt size={16}/> Edit TC</> : <><FaClipboardList size={16}/> Upload Transfer Certificate</>}
               </div>
               <button onClick={closeModal} style={{background:'rgba(0,0,0,.15)',border:'none',borderRadius:'8px',width:'32px',height:'32px',cursor:'pointer',fontSize:'16px',color:'#1C0A00',fontWeight:'700'}}>✕</button>
             </div>
 
             <div style={{padding:'22px 24px',display:'flex',flexDirection:'column',gap:'18px'}}>
-              {error && <div style={{padding:'10px 14px',borderRadius:'10px',background:'rgba(220,38,38,.08)',border:'1px solid rgba(220,38,38,.2)',color:'#dc2626',fontSize:'13px',fontWeight:'600'}}>❌ {error}</div>}
-              {saved  && <div style={{padding:'10px 14px',borderRadius:'10px',background:'rgba(34,163,90,.08)',border:'1px solid rgba(34,163,90,.2)',color:'#22a35a',fontSize:'13px',fontWeight:'600'}}>✅ Saved successfully!</div>}
+              {error && <div style={{padding:'10px 14px',borderRadius:'10px',background:'rgba(220,38,38,.08)',border:'1px solid rgba(220,38,38,.2)',color:'#dc2626',fontSize:'13px',fontWeight:'600',display:'inline-flex',alignItems:'center',gap:'7px'}}><FaExclamationTriangle size={13}/> {error}</div>}
+              {saved  && <div style={{padding:'10px 14px',borderRadius:'10px',background:'rgba(34,163,90,.08)',border:'1px solid rgba(34,163,90,.2)',color:'#22a35a',fontSize:'13px',fontWeight:'600',display:'inline-flex',alignItems:'center',gap:'7px'}}><FaCheckCircle size={13}/> Saved successfully!</div>}
 
-              <div style={{padding:'12px 15px',borderRadius:'12px',background:'rgba(232,118,26,.05)',border:'1.5px solid rgba(232,118,26,.12)',fontSize:'12.5px',color:'#7A4010',lineHeight:'1.7'}}>
-                ℹ️ Student verifies using <strong>Admission No</strong> + <strong>Date of Birth</strong>. Upload the actual TC PDF — student will download it directly.
+              <div style={{padding:'12px 15px',borderRadius:'12px',background:'rgba(232,118,26,.05)',border:'1.5px solid rgba(232,118,26,.12)',fontSize:'12.5px',color:'#7A4010',lineHeight:'1.7',display:'inline-flex',gap:'8px',alignItems:'flex-start'}}>
+                <FaInfoCircle size={14} style={{flexShrink:0,marginTop:'2px'}} color="#E8761A"/>
+                <span>Student verifies using <strong>Admission No</strong> + <strong>Date of Birth</strong>. Upload the actual TC PDF — student will download it directly.</span>
               </div>
 
-              {/* Form fields */}
               <div className="mcp-form-grid">
-                {/* Admission No */}
                 <div>
                   <label style={s.label}>Admission Number *</label>
-                  <input value={current.admissionNo} onChange={function(e){setField('admissionNo',e.target.value)}}
-                    placeholder="e.g. 8753" style={s.inp} />
+                  <input value={current.admissionNo} onChange={function(e){setField('admissionNo',e.target.value)}} placeholder="e.g. 8753" style={s.inp} />
                 </div>
-
-                {/* Status */}
                 <div>
                   <label style={s.label}>Status</label>
                   <select value={current.status} onChange={function(e){setField('status',e.target.value)}} style={s.inp}>
-                    <option value="Draft">📝 Draft</option>
-                    <option value="Published">✅ Published</option>
+                    <option value="Draft">Draft</option>
+                    <option value="Published">Published</option>
                   </select>
                 </div>
               </div>
 
-              {/* DOB Calendar */}
               <div>
                 <label style={s.label}>Date of Birth *</label>
-                <AdminCalendarPicker
-                  labelText="Date of Birth"
-                  placeholder="Select student's date of birth"
-                  value={current.dob||''}
-                  onChange={function(v){ setField('dob',v) }}
-                />
-                {current.dob && <div style={{fontSize:'11px',color:'#22a35a',marginTop:'5px',fontWeight:'600'}}>✓ {current.dob}</div>}
+                <AdminCalendarPicker labelText="Date of Birth" placeholder="Select student's date of birth" value={current.dob||''} onChange={function(v){ setField('dob',v) }} />
+                {current.dob && <div style={{fontSize:'11px',color:'#22a35a',marginTop:'5px',fontWeight:'600',display:'inline-flex',alignItems:'center',gap:'4px'}}><FaCheckCircle size={10}/> {current.dob}</div>}
               </div>
 
-              {/* PDF Upload */}
               <div>
                 <label style={s.label}>Transfer Certificate PDF {!editId && '*'}</label>
                 <div style={{border:'2px dashed rgba(232,118,26,.25)',borderRadius:'14px',padding:'20px',background:'rgba(232,118,26,.02)',textAlign:'center'}}>
                   {pdfFile ? (
                     <div style={{display:'flex',alignItems:'center',gap:'12px',justifyContent:'center',flexWrap:'wrap'}}>
                       <div style={{display:'flex',alignItems:'center',gap:'8px',padding:'10px 16px',borderRadius:'10px',background:'rgba(34,163,90,.08)',border:'1.5px solid rgba(34,163,90,.2)'}}>
-                        <span style={{fontSize:'22px'}}>📄</span>
+                        <FaFilePdf size={22} color="#22a35a"/>
                         <div style={{textAlign:'left'}}>
                           <div style={{fontSize:'12.5px',fontWeight:'700',color:'#166534',maxWidth:'180px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{pdfFile.name}</div>
                           <div style={{fontSize:'11px',color:'#22a35a'}}>{(pdfFile.size/1024/1024).toFixed(2)} MB</div>
@@ -447,12 +435,12 @@ export default function ManageCertificatePage() {
                       </div>
                       <button onClick={function(){setPdfFile(null)}}
                         style={{padding:'6px 14px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.2)',background:'rgba(254,242,242,.7)',color:'#dc2626',fontSize:'12px',fontWeight:'700',cursor:'pointer'}}>
-                        ✕ Remove
+                        Remove
                       </button>
                     </div>
                   ) : (
                     <>
-                      <div style={{fontSize:'36px',marginBottom:'8px'}}>📤</div>
+                      <FaUpload size={36} color="#E8761A" style={{marginBottom:'8px'}}/>
                       <div style={{fontSize:'13px',fontWeight:'700',color:'#7A4010',marginBottom:'4px'}}>Upload TC PDF</div>
                       <div style={{fontSize:'11.5px',color:'#B87832',marginBottom:'14px'}}>Max 10MB • PDF only</div>
                       {editId && <div style={{fontSize:'11px',color:'#B87832',marginBottom:'10px'}}>Leave empty to keep existing PDF</div>}
@@ -460,17 +448,15 @@ export default function ManageCertificatePage() {
                   )}
                   {!pdfFile && (
                     <label style={{display:'inline-flex',alignItems:'center',gap:'8px',padding:'10px 20px',borderRadius:'10px',border:'1.5px solid rgba(232,118,26,.3)',background:'#fff',cursor:'pointer',fontSize:'13px',fontWeight:'700',color:'#E8761A',marginTop:pdfFile?'10px':'0'}}>
-                      📁 {editId?'Replace PDF':'Choose PDF File'}
-                      <input type="file" accept="application/pdf" style={{display:'none'}}
-                        onChange={function(e){ var f=e.target.files&&e.target.files[0]; if(f) setPdfFile(f) }} />
+                      <FaFolder size={13}/> {editId?'Replace PDF':'Choose PDF File'}
+                      <input type="file" accept="application/pdf" style={{display:'none'}} onChange={function(e){ var f=e.target.files&&e.target.files[0]; if(f) setPdfFile(f) }} />
                     </label>
                   )}
                 </div>
               </div>
 
-              {/* Publishing info */}
               <div style={{padding:'14px',borderRadius:'12px',background:'rgba(34,163,90,.05)',border:'1.5px solid rgba(34,163,90,.15)',fontSize:'12.5px',color:'#166534',lineHeight:'1.75'}}>
-                <div style={{fontWeight:'800',marginBottom:'6px'}}>✅ Publishing Checklist</div>
+                <div style={{fontWeight:'800',marginBottom:'6px',display:'inline-flex',alignItems:'center',gap:'6px'}}><FaCheckCircle size={13}/> Publishing Checklist</div>
                 <div>• Admission Number is filled</div>
                 <div>• Date of Birth is selected</div>
                 <div>• TC PDF is uploaded</div>
@@ -478,24 +464,22 @@ export default function ManageCertificatePage() {
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div style={{padding:'16px 24px 20px',borderTop:'1px solid rgba(232,118,26,.1)',display:'flex',gap:'10px',justifyContent:'flex-end',flexWrap:'wrap',position:'sticky',bottom:0,background:'#FFFDF8',borderRadius:'0 0 20px 20px'}}>
               <button onClick={closeModal} style={{...s.btn,background:'#FFF6EA',color:'#7A4010',border:'1.5px solid rgba(232,118,26,.2)'}}>Cancel</button>
               <button onClick={handleSave} disabled={saving}
-                style={{...s.btn,background:saving?'rgba(232,118,26,.4)':'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?0.7:1,padding:'10px 28px'}}>
-                {saving?'⏳ Saving...':editId?'💾 Save Changes':'📤 Upload TC'}
+                style={{...s.btn,background:saving?'rgba(232,118,26,.4)':'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?0.7:1,padding:'10px 28px',display:'inline-flex',alignItems:'center',gap:'7px'}}>
+                {saving?<><FaSpinner size={13} style={{animation:'spin .8s linear infinite'}}/> Saving...</>:editId?<><FaSave size={13}/> Save Changes</>:<><FaUpload size={13}/> Upload TC</>}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {modal==='delete' && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.4)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'20px'}}
           onClick={function(e){if(e.target===e.currentTarget){setModal(null);setDelId(null)}}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',padding:'30px',width:'100%',maxWidth:'380px',textAlign:'center',boxShadow:'0 24px 64px rgba(28,10,0,.2)'}}>
-            <div style={{fontSize:'48px',marginBottom:'14px'}}>🗑️</div>
+            <FaTrash size={48} color="#dc2626" style={{marginBottom:'14px'}}/>
             <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 8px'}}>Delete TC?</h2>
             <p style={{fontSize:'13px',color:'#7A4010',margin:'0 0 22px'}}>This Transfer Certificate will be <strong>permanently deleted</strong>.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center',flexWrap:'wrap'}}>

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react'
 import { alumniAPI } from '../../api'
+import {
+  FaGraduationCap, FaStar, FaLandmark, FaCheckCircle, FaTimesCircle,
+  FaPencilAlt, FaTrash, FaSpinner, FaFolder, FaSearch,
+} from 'react-icons/fa'
 
 var BATCHES = ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024']
 var FIELDS  = ['Medicine','Engineering','Civil Services','Law','Education','Business','Arts & Media','Science & Research','Armed Forces','Other']
@@ -110,56 +114,55 @@ export default function ManageAlumniPage() {
 
   var featuredCount = alumni.filter(function(a){ return a.featured }).length
 
+  var STATS = [
+    { label:'Total Alumni', value:loading?'...':alumni.length, icon:<FaGraduationCap size={18} color="#E8761A"/>, clr:'#E8761A' },
+    { label:'Featured',     value:loading?'...':featuredCount,  icon:<FaStar size={18} color="#F5B800"/>,         clr:'#F5B800' },
+    { label:'Fields',       value:FIELDS.length,                 icon:<FaLandmark size={18} color="#6C3FC5"/>,    clr:'#6C3FC5' },
+  ]
+
   return (
     <div style={{maxWidth:'1100px', width:'100%', boxSizing:'border-box'}}>
       <style>{`
         @keyframes spin    { to { transform:rotate(360deg) } }
         @keyframes slideIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:none} }
-
         .map-stats   { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:20px; }
         .map-grid    { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
         .map-filters { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
         .map-cats    { display:flex; gap:6px; flex-wrap:wrap; }
         .map-mgrid   { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-
         @media (max-width:640px) {
-          .map-stats        { grid-template-columns:1fr 1fr; gap:8px; }
-          .map-grid         { grid-template-columns:1fr; }
-          .map-filters      { flex-direction:column; align-items:stretch; gap:8px; }
-          .map-search       { max-width:100% !important; width:100% !important; box-sizing:border-box; }
-          .map-cats-wrap    { width:100%; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; }
+          .map-stats { grid-template-columns:1fr 1fr; gap:8px; }
+          .map-grid { grid-template-columns:1fr; }
+          .map-filters { flex-direction:column; align-items:stretch; gap:8px; }
+          .map-search { max-width:100% !important; width:100% !important; box-sizing:border-box; }
+          .map-cats-wrap { width:100%; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; }
           .map-cats-wrap::-webkit-scrollbar { display:none; }
-          .map-cats         { flex-wrap:nowrap !important; width:max-content; }
-          .map-mgrid        { grid-template-columns:1fr; }
+          .map-cats { flex-wrap:nowrap !important; width:max-content; }
+          .map-mgrid { grid-template-columns:1fr; }
         }
       `}</style>
 
-      {/* Toast */}
       {toast && (
-        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease'}}>
-          {toast.type==='error'?'❌ ':'✅ '}{toast.msg}
+        <div style={{position:'fixed',top:'20px',right:'20px',zIndex:2000,padding:'12px 20px',borderRadius:'12px',background:toast.type==='error'?'#dc2626':'#22a35a',color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:'13px',fontWeight:'700',boxShadow:'0 8px 24px rgba(0,0,0,.2)',animation:'slideIn .3s ease',display:'inline-flex',alignItems:'center',gap:'7px'}}>
+          {toast.type==='error' ? <FaTimesCircle size={13}/> : <FaCheckCircle size={13}/>} {toast.msg}
         </div>
       )}
 
-      {/* Header */}
       <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',marginBottom:'24px',gap:'16px',flexWrap:'wrap'}}>
         <div>
-          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px'}}>🎓 Alumni Management</h1>
+          <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(20px,4vw,26px)',fontWeight:'700',color:'#1C0A00',margin:'0 0 5px',display:'inline-flex',alignItems:'center',gap:'10px'}}>
+            <FaGraduationCap size={22} color="#E8761A"/> Alumni Management
+          </h1>
           <p style={{fontSize:'13px',color:'#7A4010',margin:0}}>Manage alumni records and success stories</p>
         </div>
         <button onClick={openAdd} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 6px 20px rgba(232,118,26,.3)',padding:'12px 20px',fontSize:'14px',whiteSpace:'nowrap'}}>+ Add Alumni</button>
       </div>
 
-      {/* Stats */}
       <div className="map-stats">
-        {[
-          { label:'Total Alumni', value:loading?'...':alumni.length, icon:'🎓', clr:'#E8761A' },
-          { label:'Featured',     value:loading?'...':featuredCount,  icon:'⭐', clr:'#F5B800' },
-          { label:'Fields',       value:FIELDS.length,                 icon:'🏛️', clr:'#6C3FC5' },
-        ].map(function(st){
+        {STATS.map(function(st){
           return (
             <div key={st.label} style={{...s.card,display:'flex',alignItems:'center',gap:'12px',padding:'16px'}}>
-              <div style={{width:'40px',height:'40px',borderRadius:'12px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'18px',flexShrink:0}}>{st.icon}</div>
+              <div style={{width:'40px',height:'40px',borderRadius:'12px',background:st.clr+'15',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>{st.icon}</div>
               <div>
                 <div style={{fontFamily:"'Playfair Display',serif",fontSize:'22px',fontWeight:'700',color:'#1C0A00'}}>{st.value}</div>
                 <div style={{fontSize:'11px',color:'#7A4010',fontWeight:'600'}}>{st.label}</div>
@@ -169,17 +172,13 @@ export default function ManageAlumniPage() {
         })}
       </div>
 
-      {/* Filters */}
       <div style={{...s.card,marginBottom:'16px',padding:'14px 16px'}}>
         <div className="map-filters">
-          <input
-            className="map-search"
-            value={search}
-            onChange={function(e){setSearch(e.target.value)}}
-            placeholder="🔍  Search alumni..."
-            style={{...s.inp,maxWidth:'220px',padding:'9px 13px'}}
-            onFocus={inf} onBlur={inb}
-          />
+          <div style={{position:'relative'}}>
+            <FaSearch size={13} color="#B87832" style={{position:'absolute',left:'12px',top:'50%',transform:'translateY(-50%)',pointerEvents:'none'}}/>
+            <input className="map-search" value={search} onChange={function(e){setSearch(e.target.value)}} placeholder="Search alumni..."
+              style={{...s.inp,maxWidth:'220px',padding:'9px 13px 9px 32px'}} onFocus={inf} onBlur={inb} />
+          </div>
           <div className="map-cats-wrap">
             <div className="map-cats">
               {['All',...FIELDS].map(function(f){
@@ -196,11 +195,9 @@ export default function ManageAlumniPage() {
         </div>
       </div>
 
-      {/* Grid */}
       {loading ? (
-        <div style={{...s.card,textAlign:'center',padding:'60px'}}>
-          <div style={{width:'40px',height:'40px',border:'4px solid rgba(232,118,26,.2)',borderTopColor:'#E8761A',borderRadius:'50%',animation:'spin .8s linear infinite',margin:'0 auto 12px'}}/>
-          <div style={{color:'#B87832',fontSize:'14px'}}>Loading alumni...</div>
+        <div style={{...s.card,textAlign:'center',padding:'60px',display:'flex',alignItems:'center',justifyContent:'center',gap:'10px'}}>
+          <FaSpinner size={20} color="#E8761A" style={{animation:'spin .8s linear infinite'}}/> Loading alumni...
         </div>
       ) : (
         <div className="map-grid">
@@ -210,7 +207,7 @@ export default function ManageAlumniPage() {
               <div key={a._id} style={{...s.card,position:'relative',transition:'all .25s'}}
                 onMouseEnter={function(e){e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 10px 28px rgba(232,118,26,.12)'}}
                 onMouseLeave={function(e){e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 4px 16px rgba(232,118,26,.06)'}}>
-                {a.featured && <div style={{position:'absolute',top:'14px',right:'14px',fontSize:'14px'}}>⭐</div>}
+                {a.featured && <div style={{position:'absolute',top:'14px',right:'14px'}}><FaStar size={16} color="#F5B800"/></div>}
                 <div style={{display:'flex',gap:'12px',alignItems:'flex-start',marginBottom:'12px'}}>
                   {a.image ? (
                     <img src={a.image} alt={a.name} style={{width:'52px',height:'52px',borderRadius:'14px',objectFit:'cover',flexShrink:0,border:'2px solid rgba(232,118,26,.25)'}} />
@@ -227,13 +224,17 @@ export default function ManageAlumniPage() {
                   </div>
                 </div>
                 <div style={{display:'flex',gap:'6px'}}>
-                  <button onClick={function(){toggleFeatured(a)}} style={{flex:1,padding:'7px',borderRadius:'8px',border:'1.5px solid',borderColor:a.featured?'#F5B800':'rgba(232,118,26,.2)',background:a.featured?'rgba(245,184,0,.1)':'#FFF6EA',color:a.featured?'#C45F0A':'#7A4010',fontSize:'11.5px',fontWeight:'700',cursor:'pointer',transition:'all .15s'}}>
-                    {a.featured?'⭐ Featured':'☆ Feature'}
+                  <button onClick={function(){toggleFeatured(a)}} style={{flex:1,padding:'7px',borderRadius:'8px',border:'1.5px solid',borderColor:a.featured?'#F5B800':'rgba(232,118,26,.2)',background:a.featured?'rgba(245,184,0,.1)':'#FFF6EA',color:a.featured?'#C45F0A':'#7A4010',fontSize:'11.5px',fontWeight:'700',cursor:'pointer',transition:'all .15s',display:'inline-flex',alignItems:'center',justifyContent:'center',gap:'5px'}}>
+                    <FaStar size={11} color={a.featured?'#F5B800':'#B87832'}/> {a.featured?'Featured':'Feature'}
                   </button>
-                  <button onClick={function(){openEdit(a)}} style={{width:'34px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
-                    onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>✏️</button>
-                  <button onClick={function(){openDel(a._id)}} style={{width:'34px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
-                    onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>🗑️</button>
+                  <button onClick={function(){openEdit(a)}} style={{width:'34px',borderRadius:'8px',border:'1.5px solid rgba(232,118,26,.2)',background:'#FFF6EA',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
+                    onMouseEnter={function(e){e.currentTarget.style.background='#E8761A'}} onMouseLeave={function(e){e.currentTarget.style.background='#FFF6EA'}}>
+                    <FaPencilAlt size={13} color="#7A4010"/>
+                  </button>
+                  <button onClick={function(){openDel(a._id)}} style={{width:'34px',borderRadius:'8px',border:'1.5px solid rgba(220,38,38,.15)',background:'rgba(254,242,242,.6)',cursor:'pointer',display:'flex',alignItems:'center',justifyContent:'center',transition:'all .15s'}}
+                    onMouseEnter={function(e){e.currentTarget.style.background='#dc2626'}} onMouseLeave={function(e){e.currentTarget.style.background='rgba(254,242,242,.6)'}}>
+                    <FaTrash size={13} color="#dc2626"/>
+                  </button>
                 </div>
               </div>
             )
@@ -241,56 +242,30 @@ export default function ManageAlumniPage() {
         </div>
       )}
 
-      {/* ADD/EDIT MODAL */}
       {(modal==='add'||modal==='edit') && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(232,118,26,.2)',padding:'clamp(18px,4vw,30px)',width:'100%',maxWidth:'520px',maxHeight:'92vh',overflowY:'auto',boxShadow:'0 24px 64px rgba(28,10,0,.2)'}}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'20px'}}>
-              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0}}>{modal==='add'?'+ Add Alumni':'✏️ Edit Alumni'}</h2>
+              <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'clamp(16px,4vw,20px)',fontWeight:'700',color:'#1C0A00',margin:0,display:'inline-flex',alignItems:'center',gap:'8px'}}>
+                {modal==='add' ? <><FaGraduationCap size={16} color="#E8761A"/> Add Alumni</> : <><FaPencilAlt size={16} color="#E8761A"/> Edit Alumni</>}
+              </h2>
               <button onClick={closeModal} style={{background:'none',border:'none',fontSize:'20px',cursor:'pointer',color:'#B87832',flexShrink:0}}>✕</button>
             </div>
             <div style={{display:'flex',flexDirection:'column',gap:'13px'}}>
-              <div>
-                <label style={s.label}>Full Name *</label>
-                <input name="name" value={current.name} onChange={handleChange} placeholder="Alumni full name..." style={s.inp} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Full Name *</label><input name="name" value={current.name} onChange={handleChange} placeholder="Alumni full name..." style={s.inp} onFocus={inf} onBlur={inb} /></div>
               <div className="map-mgrid">
-                <div>
-                  <label style={s.label}>Batch Year</label>
-                  <select name="batch" value={current.batch} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {BATCHES.map(function(b){ return <option key={b}>{b}</option> })}
-                  </select>
-                </div>
-                <div>
-                  <label style={s.label}>Field</label>
-                  <select name="field" value={current.field} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {FIELDS.map(function(f){ return <option key={f}>{f}</option> })}
-                  </select>
-                </div>
+                <div><label style={s.label}>Batch Year</label><select name="batch" value={current.batch} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{BATCHES.map(function(b){ return <option key={b}>{b}</option> })}</select></div>
+                <div><label style={s.label}>Field</label><select name="field" value={current.field} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{FIELDS.map(function(f){ return <option key={f}>{f}</option> })}</select></div>
               </div>
-              <div>
-                <label style={s.label}>Current Role / Achievement</label>
-                <input name="role" value={current.role} onChange={handleChange} placeholder="e.g. IAS Officer, UP Cadre 2010" style={s.inp} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Current Role / Achievement</label><input name="role" value={current.role} onChange={handleChange} placeholder="e.g. IAS Officer, UP Cadre 2010" style={s.inp} onFocus={inf} onBlur={inb} /></div>
               <div className="map-mgrid">
-                <div>
-                  <label style={s.label}>Icon</label>
-                  <select name="icon" value={current.icon} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>
-                    {ICONS.map(function(ic){ return <option key={ic} value={ic}>{ic}</option> })}
-                  </select>
-                </div>
-                <div>
-                  <label style={s.label}>Phone</label>
-                  <input name="phone" value={current.phone} onChange={handleChange} placeholder="Optional" style={s.inp} onFocus={inf} onBlur={inb} />
-                </div>
+                <div><label style={s.label}>Icon</label><select name="icon" value={current.icon} onChange={handleChange} style={s.inp} onFocus={inf} onBlur={inb}>{ICONS.map(function(ic){ return <option key={ic} value={ic}>{ic}</option> })}</select></div>
+                <div><label style={s.label}>Phone</label><input name="phone" value={current.phone} onChange={handleChange} placeholder="Optional" style={s.inp} onFocus={inf} onBlur={inb} /></div>
               </div>
-              <div>
-                <label style={s.label}>Email</label>
-                <input name="email" value={current.email} onChange={handleChange} placeholder="Optional" style={s.inp} onFocus={inf} onBlur={inb} />
-              </div>
+              <div><label style={s.label}>Email</label><input name="email" value={current.email} onChange={handleChange} placeholder="Optional" style={s.inp} onFocus={inf} onBlur={inb} /></div>
               <div style={{display:'flex',alignItems:'center',gap:'10px',padding:'12px 14px',borderRadius:'10px',background:'#FFF6EA',border:'1.5px solid rgba(232,118,26,.15)'}}>
                 <input type="checkbox" name="featured" id="feat" checked={current.featured} onChange={handleChange} style={{width:'16px',height:'16px',accentColor:'#E8761A'}} />
-                <label htmlFor="feat" style={{fontSize:'13px',fontWeight:'600',color:'#7A4010',cursor:'pointer'}}>⭐ Feature on Alumni Page</label>
+                <label htmlFor="feat" style={{fontSize:'13px',fontWeight:'600',color:'#7A4010',cursor:'pointer',display:'inline-flex',alignItems:'center',gap:'6px'}}><FaStar size={13} color="#F5B800"/> Feature on Alumni Page</label>
               </div>
               <div>
                 <label style={s.label}>Alumni Photo</label>
@@ -298,16 +273,16 @@ export default function ManageAlumniPage() {
                   {(imgFile||current.image) ? (
                     <div style={{display:'flex',alignItems:'center',gap:'12px',marginBottom:'10px'}}>
                       <img src={imgFile?URL.createObjectURL(imgFile):current.image} alt="Preview" style={{width:'60px',height:'60px',objectFit:'cover',borderRadius:'12px',border:'2px solid rgba(232,118,26,.2)',flexShrink:0}} />
-                      <button onClick={function(){setImgFile(null);setCurrent(function(p){return{...p,image:''}})}} style={{padding:'5px 12px',borderRadius:'7px',border:'1.5px solid rgba(220,38,38,.2)',background:'rgba(254,242,242,.7)',color:'#dc2626',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>✕ Remove</button>
+                      <button onClick={function(){setImgFile(null);setCurrent(function(p){return{...p,image:''}})}} style={{padding:'5px 12px',borderRadius:'7px',border:'1.5px solid rgba(220,38,38,.2)',background:'rgba(254,242,242,.7)',color:'#dc2626',fontSize:'11.5px',fontWeight:'700',cursor:'pointer'}}>Remove</button>
                     </div>
                   ) : (
                     <div style={{textAlign:'center',padding:'8px 0 10px'}}>
-                      <div style={{fontSize:'28px',marginBottom:'4px'}}>🎓</div>
+                      <FaGraduationCap size={28} color="#B87832" style={{marginBottom:'4px'}}/>
                       <div style={{fontSize:'12px',color:'#B87832',fontWeight:'600'}}>Upload alumni photo</div>
                     </div>
                   )}
                   <label style={{display:'flex',alignItems:'center',justifyContent:'center',gap:'8px',padding:'9px 14px',borderRadius:'9px',border:'1.5px solid rgba(232,118,26,.25)',background:'#fff',cursor:'pointer',fontSize:'13px',fontWeight:'700',color:'#E8761A',marginBottom:'8px'}}>
-                    📁 Upload Photo
+                    <FaFolder size={13}/> Upload Photo
                     <input type="file" accept="image/*" style={{display:'none'}} onChange={function(e){var f=e.target.files&&e.target.files[0];if(f){setImgFile(f);setCurrent(function(p){return{...p,image:''}})}}} />
                   </label>
                   <input name="image" value={imgFile?'':(current.image||'')} onChange={handleChange} placeholder="Or paste photo URL..." style={{...s.inp,fontSize:'12px'}} onFocus={inf} onBlur={inb} />
@@ -316,19 +291,18 @@ export default function ManageAlumniPage() {
             </div>
             <div style={{display:'flex',gap:'10px',justifyContent:'flex-end',marginTop:'20px',flexWrap:'wrap'}}>
               <button onClick={closeModal} style={{...s.btn,background:'#FFF6EA',color:'#7A4010',border:'1.5px solid rgba(232,118,26,.2)'}}>Cancel</button>
-              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1}}>
-                {saving?'⏳ Saving...':modal==='add'?'+ Add Alumni':'💾 Save Changes'}
+              <button onClick={handleSave} disabled={saving} style={{...s.btn,background:'linear-gradient(135deg,#E8761A,#F5B800)',color:'#fff',boxShadow:'0 4px 14px rgba(232,118,26,.3)',opacity:saving?.7:1,display:'inline-flex',alignItems:'center',gap:'7px'}}>
+                {saving ? <><FaSpinner size={13} style={{animation:'spin .8s linear infinite'}}/> Saving...</> : modal==='add' ? '+ Add Alumni' : 'Save Changes'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* DELETE MODAL */}
       {modal==='delete' && (
         <div style={{position:'fixed',inset:0,background:'rgba(28,10,0,.45)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:1000,padding:'16px'}} onClick={function(e){if(e.target===e.currentTarget)closeModal()}}>
           <div style={{background:'#FFFDF8',borderRadius:'20px',border:'1.5px solid rgba(220,38,38,.2)',padding:'28px',width:'100%',maxWidth:'380px',boxShadow:'0 24px 64px rgba(28,10,0,.2)',textAlign:'center'}}>
-            <div style={{fontSize:'44px',marginBottom:'12px'}}>🗑️</div>
+            <FaTrash size={44} color="#dc2626" style={{marginBottom:'12px'}}/>
             <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:'20px',fontWeight:'700',color:'#1C0A00',margin:'0 0 8px'}}>Remove Alumni?</h2>
             <p style={{fontSize:'13px',color:'#7A4010',margin:'0 0 20px'}}>This alumni record will be permanently deleted.</p>
             <div style={{display:'flex',gap:'10px',justifyContent:'center'}}>
